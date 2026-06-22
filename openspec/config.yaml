@@ -1,0 +1,56 @@
+# openspec/config.yaml
+schema: spec-driven
+
+context: |
+  Project: Nova2D — Lua/Love2D game framework
+  Stack: Lua 5.1+, Love2D 11+
+  Architecture: State-driven (splash/menu/game/pause/credits via hump.gamestate)
+  Dependencies: Custom dependency manager (nova2d.lua + nova2d-lock.lua)
+    Libraries: hump, bump.lua, anim8, lurker, lovebird
+  Conventions:
+    - camelCase for variables and functions
+    - PascalCase for entities and systems
+    - local-only variables except global Game reference
+    - Strict separation between update (logic) and draw (presentation)
+    - One file per entity or system
+  Completed phases: v0.1 Base structure+states (2026-06-22)
+  Plan phases: v0.2 Dependency manager,
+    v0.3 Hot reload, v0.4 Installer, v0.5 Web docs, v1.0 Release
+
+rules:
+  proposal:
+    - Include rollback plan for risky changes
+    - Scope must fit within a single plan phase (v0.1-v1.0)
+  specs:
+    - Use Given/When/Then for scenarios
+    - Use RFC 2119 keywords (MUST, SHALL, SHOULD, MAY)
+  design:
+    - Include module interaction diagrams for complex flows
+    - Document architecture decisions with rationale
+  tasks:
+    - Group by phase, use hierarchical numbering
+    - Keep tasks completable in one session
+  apply:
+    - Follow existing code patterns
+    tdd: false
+    test_command: ""
+  verify:
+    test_command: ""
+    build_command: ""
+    coverage_threshold: 0
+  archive:
+    - Warn before merging destructive deltas
+
+strict_tdd: false
+testing:
+  test_runner: none
+  test_layers:
+    unit: false
+    integration: false
+    e2e: false
+  coverage: false
+  quality:
+    linter: false
+    type_checker: false
+    formatter: false
+  note: "No test infrastructure available. This is a pure Lua/Love2D project with no standard test runner, package.json, go.mod, or pyproject.toml. Testing infrastructure must be added as a separate effort. Strict TDD is disabled."
