@@ -22,3 +22,7 @@ Thumbs.db
 
 # Logs
 *.log
+
+# Development only (not user-facing)
+.atl/
+openspec/page.md
