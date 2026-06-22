@@ -1,82 +1,82 @@
 # Nova2D
 
-> Framework base para Love2D que estandariza la estructura, gestion de dependencias y herramientas de desarrollo para juegos 2D en Lua.
+> Base framework for Love2D that standardizes structure, dependency management, and development tooling for 2D games in Lua.
 
-## Estado del Proyecto
+## Project Status
 
-| Fase | Estado |
+| Phase | Status |
 |---|---|
-| **v0.1** — Base structure + states | Completado |
-| **v0.2** — Dependency manager | Por hacer |
-| **v0.3** — Hot reload | Por hacer |
-| **v0.4** — Installer | Por hacer |
-| **v0.5** — Web documentation | Por hacer |
-| **v1.0** — Public release | Por hacer |
+| **v0.1** — Base structure + states | Complete |
+| **v0.2** — Dependency manager | In progress |
+| **v0.3** — Hot reload | Pending |
+| **v0.4** — Installer | Pending |
+| **v0.5** — Web documentation | Pending |
+| **v1.0** — Public release | Pending |
 
-## Requisitos
+## Requirements
 
 - [Love2D 11.x](https://love2d.org/) (Lua 5.1)
-- `curl` (para el gestor de dependencias, v0.2+)
+- `curl` (for the dependency manager, v0.2+)
 
-## Inicio Rapido
+## Quick Start
 
 ```bash
-git clone https://github.com/MatFon73/Nova2d.git mi-juego
-cd mi-juego
+git clone https://github.com/MatFon73/Nova2d.git my-game
+cd my-game
 love .
 ```
 
-Veras el splash de Nova2D, Menu principal, Pantalla de juego lista para construir.
+You'll see the Nova2D splash, main menu, and an empty game screen ready to build upon.
 
-## Estructura del Proyecto
+## Project Structure
 
 ```
-mi-juego/
-├── main.lua              -- Punto de entrada (no modificar)
-├── conf.lua              -- Configuracion de ventana
-├── nova2d.lua            -- Dependencias del proyecto
-├── nova2d-lock.lua       -- Lockfile generado automaticamente
+my-game/
+├── main.lua              -- Entry point (do not modify)
+├── conf.lua              -- Window configuration
+├── nova2d.lua            -- Project dependencies
+├── nova2d-lock.lua       -- Auto-generated lockfile
 ├── src/
-│   ├── states/           -- Pantallas (splash, menu, game, pause, credits)
-│   ├── entities/         -- Jugador, enemigos, objetos
-│   ├── systems/          -- Fisica, audio, colisiones
+│   ├── states/           -- Screens (splash, menu, game, pause, credits)
+│   ├── entities/         -- Player, enemies, objects
+│   ├── systems/          -- Physics, audio, collisions
 │   └── utils/            -- Helpers
 ├── assets/
-│   ├── images/           -- Sprites, texturas
-│   ├── sounds/           -- Efectos de sonido
-│   └── fonts/            -- Tipografias
-└── libs/                 -- Dependencias externas
+│   ├── images/           -- Sprites, textures
+│   ├── sounds/           -- Sound effects
+│   └── fonts/            -- Fonts
+└── libs/                 -- External dependencies
     └── hump/             -- Gamestate management
 ```
 
-## Pantallas Disponibles (v0.1)
+## Screens (v0.1)
 
-| Pantalla | Descripcion |
+| Screen | Description |
 |---|---|
-| **Splash** | Logo de Nova2D, transicion automatica a los 3s |
-| **Menu Principal** | Nuevo juego, Creditos, Salir - navegacion por teclado y mouse |
-| **Game** | Pantalla vacia lista para tu juego |
-| **Pausa** | Overlay semi-transparente con Escape |
-| **Creditos** | Librerias incluidas y sus autores |
+| **Splash** | Nova2D logo, auto-transitions after 3s |
+| **Main Menu** | New Game, Credits, Quit — keyboard and mouse navigation |
+| **Game** | Empty placeholder ready for your game |
+| **Pause** | Semi-transparent overlay, toggled with Escape |
+| **Credits** | Included libraries and their authors |
 
-## Convenciones
+## Conventions
 
-- `camelCase` para variables y funciones
-- `PascalCase` para entidades y sistemas
-- `local` siempre que sea posible
-- Separacion estricta entre `update()` (logica) y `draw()` (presentacion)
-- Un archivo por entidad o sistema
+- `camelCase` for variables and functions
+- `PascalCase` for entities and systems
+- `local` everywhere where possible
+- Strict separation between `update()` (logic) and `draw()` (rendering)
+- One file per entity or system
 
-## Librerias Incluidas
+## Included Libraries
 
-| Libreria | Proposito |
+| Library | Purpose |
 |---|---|
-| **hump.gamestate** | Manejo de pantallas y escenas |
-| **bump.lua** (v0.2+) | Colisiones AABB |
-| **anim8** (v0.2+) | Animaciones de sprites |
+| **hump.gamestate** | Screen and scene management |
+| **bump.lua** (v0.2+) | AABB collision detection |
+| **anim8** (v0.2+) | Sprite animations |
 | **lurker** (v0.3+) | Hot reload |
-| **lovebird** (v0.2+) | Debug en navegador |
+| **lovebird** (v0.2+) | In-browser debug panel |
 
-## Licencia
+## License
 
 MIT
