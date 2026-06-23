@@ -2,7 +2,7 @@
 
 Nova2D provides a one-command installer that sets up a complete project with a single curl command.
 
-> Status: v0.4 — planned.
+> Status: v0.4 — available since 2026-06-22.
 
 ## One command
 

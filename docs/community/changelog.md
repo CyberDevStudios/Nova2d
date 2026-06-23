@@ -10,6 +10,15 @@
 - OS-specific tool detection with install instructions
 - `nova2d.lua` populated with 5 real dependencies
 
+## v0.4 — Curl Installer (2026-06-22)
+
+- Added `install.sh` — one-command setup via `curl ... | bash`
+- OS detection: Linux, macOS, WSL, Git Bash
+- Love2D detection with OS-specific install instructions
+- Downloads latest release via GitHub API (falls back to archive)
+- Creates project structure and installs default dependencies
+- No dependencies beyond curl and Love2D
+
 ## v0.3 — Hot Reload (2026-06-22)
 
 - Added `src/hotreload.lua` bootstrapper for lurker
