@@ -2,9 +2,9 @@
 -- Initializes lurker for live code reloading.
 -- Called once from splash.lua. Does NOT modify main.lua.
 
--- Extend require path to resolve libs/
+-- Extend require path to resolve libs/ (safety net — conf.lua already does this)
 love.filesystem.setRequirePath(
-    "?.lua;?/init.lua;libs/?.lua;libs/?/init.lua"
+    "?.lua;?/init.lua;libs/?.lua;libs/?/?.lua;libs/?/init.lua"
 )
 
 local lurker = require("lurker")

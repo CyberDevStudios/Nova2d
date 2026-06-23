@@ -15,4 +15,4 @@ function love.conf(t)
 end
 
 -- Extend require path to resolve libs/ dependencies
-package.path = package.path .. ";libs/?.lua;libs/?/init.lua"
+package.path = package.path .. ";libs/?.lua;libs/?/?.lua;libs/?/init.lua"
