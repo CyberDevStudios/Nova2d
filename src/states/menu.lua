@@ -149,21 +149,21 @@ function State:draw()
     end
 
     -- Title (subtle, doesn't compete with logo)
-    love.graphics.setFont(fontTitle)
+    love.graphics.setFont(fontTitle or love.graphics.newFont(22))
     love.graphics.setColor(1, 1, 1, 0.30)
     love.graphics.printf("Nova2D", 0, 130, W, "center")
 
     -- Menu buttons (more spacing, lower position)
     local startY = 230
     local spacing = 72
-    love.graphics.setFont(fontItems)
+    love.graphics.setFont(fontItems or love.graphics.newFont(22))
 
     for i, item in ipairs(menuItems) do
         drawButton(item.label, CX, startY + (i - 1) * spacing, i == selected)
     end
 
     -- Version
-    love.graphics.setFont(fontVersion)
+    love.graphics.setFont(fontVersion or love.graphics.newFont(11))
     love.graphics.setColor(1, 1, 1, 0.12)
     love.graphics.printf("v0.4", 0, H - 22, W, "center")
 
@@ -188,7 +188,7 @@ end
 
 function State:mousepressed(x, y, button)
     if button ~= 1 then return end
-    local startY = 230
+    local startY = 23
     local spacing = 72
     for i in ipairs(menuItems) do
         local cy = startY + (i - 1) * spacing
