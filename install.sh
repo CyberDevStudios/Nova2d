@@ -73,7 +73,14 @@ check_love() {
             fi
             ;;
         windows)
-            if command -v love >/dev/null 2>&1 || command -v love.exe >/dev/null 2>&1; then
+            # Git Bash (MSYS2) may not find .exe via command -v
+            if command -v love >/dev/null 2>&1 \
+                || command -v love.exe >/dev/null 2>&1 \
+                || which love >/dev/null 2>&1 \
+                || which love.exe >/dev/null 2>&1; then
+                found=1
+            elif [ -f "/c/Program Files/LOVE/love.exe" ] \
+                || [ -f "/c/Program Files (x86)/LOVE/love.exe" ]; then
                 found=1
             fi
             ;;
