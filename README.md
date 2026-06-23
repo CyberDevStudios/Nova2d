@@ -1,6 +1,8 @@
-# Nova2D
+<p align="center">
+  <img src="assets/images/logo.png" width="120" alt="Nova2D logo">
+</p>
 
-<img src="assets/images/logo.png" width="120" align="right" alt="Nova2D logo">
+<h1 align="center">Nova2D</h1>
 
 > A base framework for Love2D that standardizes project structure, dependency management, and development tooling for 2D games in Lua.
 
