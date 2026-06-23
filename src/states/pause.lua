@@ -36,7 +36,7 @@ function State:draw()
     -- Options
     local startY = 260
     local spacing = 60
-    love.graphics.setFont(fontItems)
+    love.graphics.setFont(fontItems or love.graphics.newFont(22))
 
     for i, label in ipairs(pauseItems) do
         local y = startY + (i - 1) * spacing
@@ -57,7 +57,7 @@ function State:draw()
     end
 
     -- Hint
-    love.graphics.setFont(fontHint)
+    love.graphics.setFont(fontHint or love.graphics.newFont(14))
     love.graphics.setColor(0.3, 0.3, 0.5, 0.4)
     love.graphics.printf("Navigate: ↑↓  Select: Enter", 0, 380, 800, "center")
 
