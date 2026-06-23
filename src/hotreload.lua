@@ -15,9 +15,19 @@ lurker.postswap = function(name)
     print("[HOTRELOAD] " .. name .. " reloaded")
 end
 
--- Wrap love.update to add lurker polling
-local original_update = love.update
-love.update = function(dt)
-    lurker.update()
-    original_update(dt)
+-- Defer love.update patching until AFTER Gamestate.registerEvents()
+-- has run in love.load(). Capturing love.update during require
+-- is too early — hump hasn't set up its dispatcher yet.
+local function patch_update()
+    local original_update = love.update
+    love.update = function(dt)
+        lurker.update()
+        original_update(dt)
+    end
+end
+
+local orig_load = love.load or function() end
+love.load = function()
+    orig_load()
+    patch_update()
 end
