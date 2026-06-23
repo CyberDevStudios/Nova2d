@@ -62,7 +62,7 @@ check_love() {
     local found=0
 
     case "$OS" in
-        linux)
+        linux|wsl)
             if command -v love >/dev/null 2>&1; then found=1; fi
             ;;
         macos)
