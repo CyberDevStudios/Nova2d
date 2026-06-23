@@ -99,8 +99,8 @@ function State:enter()
     if #nebulaLayers == 0 then buildNebula() end
 
     -- Fonts (one-time)
-    fontInfo   = love.graphics.newFont(14)
-    fontTagline = love.graphics.newFont(11)
+    fontInfo   = love.graphics.newFont(18)
+    fontTagline = love.graphics.newFont(14)
     fontSkip   = love.graphics.newFont(10)
 end
 
@@ -190,12 +190,12 @@ function State:draw()
     -- Version
     love.graphics.setFont(fontInfo)
     love.graphics.setColor(1, 1, 1, 0.20 * ia)
-    love.graphics.printf("v0.4", 0, CENTER_Y + 62, W, "center")
+    love.graphics.printf("v0.4", 0, CENTER_Y + 88, W, "center")
 
     -- Tagline
     love.graphics.setFont(fontTagline)
     love.graphics.setColor(0.486, 0.227, 0.929, 0.20 * ia)
-    love.graphics.printf("A Love2D Framework", 0, CENTER_Y + 80, W, "center")
+    love.graphics.printf("A Love2D Framework", 0, CENTER_Y + 112, W, "center")
 
     -- 7. Skip hint (bottom, pulsing)
     love.graphics.setFont(fontSkip)
