@@ -1,7 +1,7 @@
 -- Nova2D — splash screen state
 -- src/states/splash.lua
 
-require("src.hotreload")
+local hotreload = require("src.hotreload")
 
 local Gamestate = require "hump.gamestate"
 
@@ -11,6 +11,9 @@ local timer = 3.0
 local State = {}
 
 function State:enter()
+    -- Deferred lurker patch: love.update is now hump's dispatcher
+    hotreload.patch()
+
     local ok, img = pcall(love.graphics.newImage, "assets/images/logo.png")
     logo = ok and img or nil
     timer = 3.0

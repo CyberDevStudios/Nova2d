@@ -15,10 +15,9 @@ lurker.postswap = function(name)
     print("[HOTRELOAD] " .. name .. " reloaded")
 end
 
--- Defer love.update patching until AFTER Gamestate.registerEvents()
--- has run in love.load(). Capturing love.update during require
--- is too early — hump hasn't set up its dispatcher yet.
-local function patch_update()
+-- Called from splash.lua's enter() AFTER Gamestate.registerEvents()
+-- has set up love.update. This is the correct timing.
+function patch_update()
     local original_update = love.update
     love.update = function(dt)
         lurker.update()
@@ -26,8 +25,4 @@ local function patch_update()
     end
 end
 
-local orig_load = love.load or function() end
-love.load = function()
-    orig_load()
-    patch_update()
-end
+return { patch = patch_update }
