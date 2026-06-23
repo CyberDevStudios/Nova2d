@@ -8,14 +8,14 @@ local Gamestate = require "hump.gamestate"
 -- Constants
 -- ---------------------------------------------------------------------------
 local W, H = 800, 500
-local CENTER_X = 400
+local CX = 400
 local PURPLE  = {0.486, 0.227, 0.929}
 local INDIGO  = {0.388, 0.400, 0.945}
 local BLUE    = {0.231, 0.510, 0.965}
 
--- Button geometry
-local BTN_W = 260
-local BTN_H = 44
+-- Button geometry (FIXED — never changes between states)
+local BTN_W = 240
+local BTN_H = 42
 local BTN_R = 8
 
 -- ---------------------------------------------------------------------------
@@ -33,7 +33,7 @@ local elapsed = 0
 local logo = nil
 
 local stars = {}
-local fontLogo
+local fontTitle
 local fontItems
 local fontVersion
 
@@ -64,17 +64,19 @@ local function drawNebula()
     love.graphics.circle("fill", -50, 300, 160)
 end
 
--- Draw a single button centered at (cx, cy)
+-- Fixed-size button: rect and bg always the same dimensions.
+-- Selection only changes fill/border colour.
 local function drawButton(label, cx, cy, isSelected)
     local left = cx - BTN_W / 2
     local top  = cy - BTN_H / 2
 
+    -- Common background (neutral, always present)
+    love.graphics.setColor(1, 1, 1, 0.03)
+    love.graphics.rectangle("fill", left, top, BTN_W, BTN_H, BTN_R)
+
     if isSelected then
-        -- Filled background
-        love.graphics.setColor(PURPLE[1], PURPLE[2], PURPLE[3], 0.12)
-        love.graphics.rectangle("fill", left, top, BTN_W, BTN_H, BTN_R)
-        -- Border glow
-        love.graphics.setColor(PURPLE[1], PURPLE[2], PURPLE[3], 0.4)
+        -- Border: bright purple
+        love.graphics.setColor(PURPLE[1], PURPLE[2], PURPLE[3], 0.55)
         love.graphics.setLineWidth(1.5)
         love.graphics.rectangle("line", left, top, BTN_W, BTN_H, BTN_R)
         love.graphics.setLineWidth(1)
@@ -82,14 +84,17 @@ local function drawButton(label, cx, cy, isSelected)
         -- Text: bright white
         love.graphics.setColor(1, 1, 1)
     else
-        -- Subtle border only
-        love.graphics.setColor(0.3, 0.3, 0.45, 0.25)
+        -- Border: subtle gray
+        love.graphics.setColor(0.35, 0.35, 0.50, 0.30)
         love.graphics.rectangle("line", left, top, BTN_W, BTN_H, BTN_R)
-        love.graphics.setColor(0.45, 0.45, 0.55, 0.55)
+
+        -- Text: light gray (not too dim)
+        love.graphics.setColor(0.55, 0.55, 0.70, 0.75)
     end
 
+    -- Vertically centre using font metrics
     local fh = love.graphics.getFont():getHeight()
-    love.graphics.printf(label, 0, cy + fh * 0.2, W, "center")
+    love.graphics.printf(label, 0, cy + fh * 0.1, W, "center")
 end
 
 -- ---------------------------------------------------------------------------
@@ -105,7 +110,7 @@ function State:enter()
     local ok, img = pcall(love.graphics.newImage, "assets/images/logo.png")
     logo = ok and img or nil
 
-    fontLogo    = love.graphics.newFont(30)
+    fontTitle   = love.graphics.newFont(22)
     fontItems   = love.graphics.newFont(22)
     fontVersion = love.graphics.newFont(11)
 end
@@ -135,26 +140,26 @@ function State:draw()
         love.graphics.circle("fill", s.x, s.y, s.r)
     end
 
-    -- Logo
+    -- Logo (bigger — 120×120 max)
     if logo then
         love.graphics.setColor(1, 1, 1)
-        local sx = math.min(90 / logo:getWidth(), 70 / logo:getHeight())
-        love.graphics.draw(logo, CENTER_X, 70, 0, sx, sx,
+        local sx = math.min(120 / logo:getWidth(), 120 / logo:getHeight())
+        love.graphics.draw(logo, CX, 72, 0, sx, sx,
                            logo:getWidth() / 2, logo:getHeight() / 2)
     end
 
-    -- Title
-    love.graphics.setFont(fontLogo)
-    love.graphics.setColor(1, 1, 1, 0.6)
-    love.graphics.printf("Nova2D", 0, 115, W, "center")
+    -- Title (subtle, doesn't compete with logo)
+    love.graphics.setFont(fontTitle)
+    love.graphics.setColor(1, 1, 1, 0.30)
+    love.graphics.printf("Nova2D", 0, 130, W, "center")
 
-    -- Menu buttons
-    local startY = 225
-    local spacing = 64
+    -- Menu buttons (more spacing, lower position)
+    local startY = 230
+    local spacing = 72
     love.graphics.setFont(fontItems)
 
     for i, item in ipairs(menuItems) do
-        drawButton(item.label, CENTER_X, startY + (i - 1) * spacing, i == selected)
+        drawButton(item.label, CX, startY + (i - 1) * spacing, i == selected)
     end
 
     -- Version
@@ -183,11 +188,11 @@ end
 
 function State:mousepressed(x, y, button)
     if button ~= 1 then return end
-    local startY = 225
-    local spacing = 64
+    local startY = 230
+    local spacing = 72
     for i in ipairs(menuItems) do
         local cy = startY + (i - 1) * spacing
-        if math.abs(y - cy) < BTN_H / 2 + 4 then
+        if math.abs(y - cy) < BTN_H / 2 + 6 then
             selected = i
             dispatchAction()
             return

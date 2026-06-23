@@ -84,12 +84,9 @@ end
 function State:enter()
     hotreload.patch()
 
-    -- Set window icon from 64x64 fallback (in case conf.lua didn't pick it up)
-    local iconSet = love.window.setIcon
-    if iconSet and not love.window.getIcon() then
-        local ok, img = pcall(love.image.newImageData, "assets/images/icon.png")
-        if ok then love.window.setIcon(img) end
-    end
+    -- Force window icon (most reliable method across platforms)
+    local ok, img = pcall(love.image.newImageData, "assets/images/icon32.png")
+    if ok then love.window.setIcon(img) end
 
     -- Load white vector logo
     local ok, img = pcall(love.graphics.newImage, "assets/images/logo.png")
