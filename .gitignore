@@ -6,7 +6,9 @@
 
 # Nova2D
 nova2d-lock.lua
+libs/
 libs/*.zip
+*.tmp
 
 # OS
 .DS_Store
