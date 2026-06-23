@@ -1,6 +1,8 @@
 -- Nova2D — splash screen state
 -- src/states/splash.lua
 
+require("src.hotreload")
+
 local Gamestate = require "hump.gamestate"
 
 local logo = nil
@@ -32,7 +34,7 @@ function State:draw()
         love.graphics.setFont(font)
     end
     local infoFont = love.graphics.setNewFont(14)
-    love.graphics.printf("Nova2D v0.1", 0, 400, 800, "center")
+    love.graphics.printf("Nova2D v0.3", 0, 400, 800, "center")
     love.graphics.setFont(infoFont)
 end
 

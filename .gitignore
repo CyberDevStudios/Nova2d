@@ -6,7 +6,6 @@
 
 # Nova2D
 nova2d-lock.lua
-libs/
 libs/*.zip
 *.tmp
 
@@ -27,4 +26,3 @@ Thumbs.db
 
 # Development only (not user-facing)
 .atl/
-openspec/page.md
