@@ -8,10 +8,13 @@
 
 ```bash
 # One command — no git needed
+# (use Git Bash on Windows — PowerShell's curl is an alias for Invoke-WebRequest)
 curl -fsSL https://raw.githubusercontent.com/CyberDevStudios/Nova2d/master/install.sh | bash -s my-game
 cd my-game
 love .
 ```
+
+> **Windows users**: PowerShell has a built-in `curl` alias that maps to `Invoke-WebRequest` and won't work with this script. Use **Git Bash** (comes with Git for Windows), WSL, or the manual clone below.
 
 Or clone manually:
 

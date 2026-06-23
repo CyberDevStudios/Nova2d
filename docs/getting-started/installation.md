@@ -11,8 +11,11 @@
 ## One-command install (v0.4+)
 
 ```bash
+# Windows users: use Git Bash, not PowerShell (curl alias conflict)
 curl -fsSL https://raw.githubusercontent.com/CyberDevStudios/Nova2d/master/install.sh | bash -s my-game
 ```
+
+> **PowerShell gotcha**: PowerShell has a built-in `curl` alias that maps to `Invoke-WebRequest` and doesn't support `-fsSL` flags. Use Git Bash, WSL, or the manual install below.
 
 This will:
 1. Detect your operating system

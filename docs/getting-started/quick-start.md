@@ -10,10 +10,13 @@ Get Nova2D running in under a minute.
 ## Option A: One-command install (recommended)
 
 ```bash
+# Windows: use Git Bash, not PowerShell (curl alias conflict)
 curl -fsSL https://raw.githubusercontent.com/CyberDevStudios/Nova2d/master/install.sh | bash -s my-game
 cd my-game
 love .
 ```
+
+> **Windows users**: PowerShell has a built-in `curl` alias for `Invoke-WebRequest` that won't work with this script. Use **Git Bash** (comes with [Git for Windows](https://git-scm.com/)), WSL, or Option B below.
 
 ## Option B: Manual clone
 
