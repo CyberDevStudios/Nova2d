@@ -88,7 +88,8 @@ local function drawButton(label, cx, cy, isSelected)
         love.graphics.setColor(0.45, 0.45, 0.55, 0.55)
     end
 
-    love.graphics.printf(label, 0, cy - 8, W, "center")
+    local fh = love.graphics.getFont():getHeight()
+    love.graphics.printf(label, 0, cy + fh * 0.35, W, "center")
 end
 
 -- ---------------------------------------------------------------------------

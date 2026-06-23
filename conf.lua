@@ -8,6 +8,7 @@ function love.conf(t)
     t.window.height = 600
     t.window.resizable = true
     t.window.vsync = 1
+    t.window.icon = "assets/images/logo.png"
     t.console = false
     t.modules.audio = false
     t.modules.physics = false

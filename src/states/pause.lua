@@ -52,7 +52,8 @@ function State:draw()
         else
             love.graphics.setColor(0.5, 0.5, 0.6, 0.5)
         end
-        love.graphics.printf(label, 0, y - 8, 800, "center")
+        local fh = love.graphics.getFont():getHeight()
+        love.graphics.printf(label, 0, y + fh * 0.35, 800, "center")
     end
 
     -- Hint
