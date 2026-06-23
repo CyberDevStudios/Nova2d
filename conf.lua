@@ -13,3 +13,6 @@ function love.conf(t)
     t.modules.physics = false
     t.modules.joystick = false
 end
+
+-- Extend require path to resolve libs/ dependencies
+package.path = package.path .. ";libs/?.lua;libs/?/init.lua"
