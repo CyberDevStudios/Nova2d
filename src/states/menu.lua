@@ -89,7 +89,7 @@ local function drawButton(label, cx, cy, isSelected)
     end
 
     local fh = love.graphics.getFont():getHeight()
-    love.graphics.printf(label, 0, cy + fh * 0.35, W, "center")
+    love.graphics.printf(label, 0, cy + fh * 0.2, W, "center")
 end
 
 -- ---------------------------------------------------------------------------
