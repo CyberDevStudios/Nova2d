@@ -33,7 +33,8 @@ my-game/
 │   ├── states/           -- Screen modules
 │   ├── entities/         -- Game objects
 │   ├── systems/          -- Physics, audio, collisions
-│   └── utils/            -- Helper functions
+│   ├── utils/            -- Helper functions
+│   └── hotreload.lua     -- Hot reload bootstrapper (do not modify)
 ├── assets/
 │   ├── images/           -- Sprites and textures
 │   ├── sounds/           -- Audio files

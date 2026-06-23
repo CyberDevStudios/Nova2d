@@ -1,32 +1,49 @@
 # Nova2D
 
-> Base framework for Love2D that standardizes structure, dependency management, and development tooling for 2D games in Lua.
+<img src="assets/images/logo.png" width="120" align="right" alt="Nova2D logo">
+
+> A base framework for Love2D that standardizes project structure, dependency management, and development tooling for 2D games in Lua.
+
+## Quick Start
+
+```bash
+# One command — no git needed
+curl -fsSL https://raw.githubusercontent.com/CyberDevStudios/Nova2d/master/install.sh | bash -s my-game
+cd my-game
+love .
+```
+
+Or clone manually:
+
+```bash
+git clone https://github.com/CyberDevStudios/Nova2d.git my-game
+cd my-game
+love .
+```
 
 ## Project Status
 
 | Phase | Status |
 |---|---|
-| **v0.1** — Base structure + states | Complete |
-| **v0.2** — Dependency manager | In progress |
-| **v0.3** — Hot reload | Pending |
-| **v0.4** — Installer | Pending |
-| **v0.5** — Web documentation | Pending |
-| **v1.0** — Public release | Pending |
+| **v0.1** — Base structure + 5 states | ✅ Complete |
+| **v0.2** — Dependency manager (gestor) | ✅ Complete |
+| **v0.3** — Hot reload (lurker) | ✅ Complete |
+| **v0.4** — One-command installer | ✅ Complete |
+| **v0.5** — Web documentation | 🔜 Pending |
+| **v1.0** — Public release | 🔜 Pending |
 
 ## Requirements
 
 - [Love2D 11.x](https://love2d.org/) (Lua 5.1)
-- `curl` (for the dependency manager, v0.2+)
+- `curl` (for the one-command install / dependency manager)
 
-## Quick Start
+## Features
 
-```bash
-git clone https://github.com/MatFon73/Nova2d.git my-game
-cd my-game
-love .
-```
-
-You'll see the Nova2D splash, main menu, and an empty game screen ready to build upon.
+- **🎮 5 game states** — splash (animated), menu, game, pause (overlay), credits
+- **📦 Dependency manager** — install, update, remove libraries via `nova2d.lua`
+- **♻️ Hot reload** — edit `src/` files and see changes instantly (no restart)
+- **⚡ One-command installer** — `curl ... | bash` setup, no git required
+- **🔒 main.lua frozen** — never modify the entry point
 
 ## Project Structure
 
@@ -34,48 +51,50 @@ You'll see the Nova2D splash, main menu, and an empty game screen ready to build
 my-game/
 ├── main.lua              -- Entry point (do not modify)
 ├── conf.lua              -- Window configuration
-├── nova2d.lua            -- Project dependencies
+├── nova2d.lua            -- Dependency manifest
 ├── nova2d-lock.lua       -- Auto-generated lockfile
 ├── src/
 │   ├── states/           -- Screens (splash, menu, game, pause, credits)
 │   ├── entities/         -- Player, enemies, objects
 │   ├── systems/          -- Physics, audio, collisions
-│   └── utils/            -- Helpers
+│   ├── utils/            -- Helpers
+│   └── hotreload.lua     -- Hot reload bootstrapper
 ├── assets/
 │   ├── images/           -- Sprites, textures
 │   ├── sounds/           -- Sound effects
 │   └── fonts/            -- Fonts
-└── libs/                 -- External dependencies
-    └── hump/             -- Gamestate management
+├── libs/                 -- External dependencies (managed by gestor)
+├── gestor/               -- Dependency manager tool
+└── openspec/             -- SDD artifacts (specs, designs, tasks)
 ```
 
-## Screens (v0.1)
+## Screens
 
 | Screen | Description |
 |---|---|
-| **Splash** | Nova2D logo, auto-transitions after 3s |
+| **Splash** | Animated title with particle effects, auto-transitions after 3s or skip with any key |
 | **Main Menu** | New Game, Credits, Quit — keyboard and mouse navigation |
-| **Game** | Empty placeholder ready for your game |
+| **Game** | Empty placeholder ready for your game code |
 | **Pause** | Semi-transparent overlay, toggled with Escape |
 | **Credits** | Included libraries and their authors |
+
+## Included Libraries
+
+| Library | Purpose | Added |
+|---|---|---|
+| **hump.gamestate** | Screen and scene management | v0.1 |
+| **bump.lua** | AABB collision detection | v0.2 |
+| **anim8** | Sprite animations | v0.2 |
+| **lovebird** | In-browser debug panel | v0.2 |
+| **lurker** | Hot reload | v0.3 |
 
 ## Conventions
 
 - `camelCase` for variables and functions
 - `PascalCase` for entities and systems
-- `local` everywhere where possible
-- Strict separation between `update()` (logic) and `draw()` (rendering)
-- One file per entity or system
-
-## Included Libraries
-
-| Library | Purpose |
-|---|---|
-| **hump.gamestate** | Screen and scene management |
-| **bump.lua** (v0.2+) | AABB collision detection |
-| **anim8** (v0.2+) | Sprite animations |
-| **lurker** (v0.3+) | Hot reload |
-| **lovebird** (v0.2+) | In-browser debug panel |
+- `local` everywhere, no globals except `Gamestate`
+- Strict separation: `update(dt)` for logic, `draw()` for rendering
+- One file per module, each file returns a table
 
 ## License
 

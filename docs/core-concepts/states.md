@@ -25,9 +25,9 @@ Nova2D uses **hump.gamestate** for screen management. Each screen (state) is a s
 ```
 
 ### Splash
-- Shows Nova2D logo
+- Shows Nova2D logo (or animated title with particles when no logo found)
 - Auto-transitions to Menu after 3 seconds
-- First time mandatory (no skip)
+- Press any key to skip to Menu immediately
 
 ### Menu
 - Three options: New Game, Credits, Quit

@@ -7,8 +7,10 @@ Nova2D provides a one-command installer that sets up a complete project with a s
 ## One command
 
 ```bash
-curl -fsSL https://nova2d.dev/install.sh | bash
+curl -fsSL https://raw.githubusercontent.com/CyberDevStudios/Nova2d/master/install.sh | bash -s my-game
 ```
+
+The last argument (`my-game`) is the name of your project directory.
 
 ## What it does
 

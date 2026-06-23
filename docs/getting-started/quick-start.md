@@ -1,25 +1,29 @@
 # Quick Start
 
-Get Nova2D running in under 5 minutes.
+Get Nova2D running in under a minute.
 
 ## Prerequisites
 
 - [Love2D 11.x](https://love2d.org/) installed
+- `curl` (comes with Windows 10+, macOS, and most Linux)
 
-## 1. Clone the project
+## Option A: One-command install (recommended)
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/CyberDevStudios/Nova2d/master/install.sh | bash -s my-game
+cd my-game
+love .
+```
+
+## Option B: Manual clone
 
 ```bash
 git clone https://github.com/CyberDevStudios/Nova2d.git my-game
 cd my-game
-```
-
-## 2. Run it
-
-```bash
 love .
 ```
 
-You should see the Nova2D splash screen, followed by the main menu with New Game, Credits, and Quit options.
+You should see the Nova2D splash screen with animated particle effects, followed by the main menu with New Game, Credits, and Quit options.
 
 ## 3. Create a moving entity
 

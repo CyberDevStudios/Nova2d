@@ -2,21 +2,23 @@
 
 Hot reload lets you edit your source code and see changes instantly without restarting the game. Nova2D uses **lurker** for this.
 
-> Status: v0.3 — available since 2026-06-22.
-
-## How it works
-
-Lurker watches your `src/` directory for file changes. When you save a file, it reloads the Lua module and re-runs the relevant callbacks. No restart needed.
+> Status: ✅ v0.3 — available since 2026-06-22.
 
 ## Setup
 
-Once v0.3 is implemented, hot reload works out of the box. Just run your game:
+Hot reload works out of the box. Just run your game:
 
 ```bash
 love .
 ```
 
 Edit any file in `src/` and save. The changes apply instantly.
+
+## How it works
+
+Lurker watches your `src/` directory for file changes. When you save a file, it reloads the Lua module and re-runs the relevant callbacks.
+
+The patching happens **deferred** — lurker's `love.update` wrapper is installed from `splash.enter()`, which runs after `Gamestate.registerEvents()` has set up hump's callback dispatcher. This avoids the common pitfall of capturing a nil `love.update` during module loading (`require`).
 
 ## What gets reloaded
 

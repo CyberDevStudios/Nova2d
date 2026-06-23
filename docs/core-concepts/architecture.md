@@ -14,7 +14,8 @@ my-game/
 │   ├── states/           -- Screen modules
 │   ├── entities/         -- Game objects
 │   ├── systems/          -- Physics, audio, collisions
-│   └── utils/            -- Helpers
+│   ├── utils/            -- Helpers
+│   └── hotreload.lua     -- Lurker bootstrapper (deferred patch)
 ├── assets/               -- Game assets
 │   ├── images/
 │   ├── sounds/
@@ -43,7 +44,7 @@ love .
   │                           │
   └── Gamestate          ← Routes callbacks to active state
         │
-        ├── Splash       ← 3s auto → Menu
+        ├── Splash       ← 3s auto / any key → Menu
         ├── Menu         ← User selects → Game / Credits / Quit
         ├── Game         ← Your game code
         ├── Pause        ← Esc overlay via push/pop

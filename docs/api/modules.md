@@ -13,6 +13,7 @@ Reference of all Nova2D modules and their public APIs.
 | game | `src/states/game.lua` | Game screen placeholder. |
 | pause | `src/states/pause.lua` | Pause overlay with Escape toggle. |
 | credits | `src/states/credits.lua` | Credits screen. |
+| hotreload | `src/hotreload.lua` | Lurker bootstrapper with deferred patching. |
 
 ## Gestor (dependency manager)
 

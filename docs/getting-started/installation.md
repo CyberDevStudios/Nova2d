@@ -11,7 +11,7 @@
 ## One-command install (v0.4+)
 
 ```bash
-curl -fsSL https://nova2d.dev/install.sh | bash
+curl -fsSL https://raw.githubusercontent.com/CyberDevStudios/Nova2d/master/install.sh | bash -s my-game
 ```
 
 This will:
@@ -34,6 +34,6 @@ love .
 ## Verifying the install
 
 Run `love .` from your project directory. You should see:
-1. The Nova2D splash screen with logo
-2. The main menu after 3 seconds
+1. The Nova2D splash screen with animated logo and particle effects
+2. The main menu after 3 seconds (or press any key to skip)
 3. Working keyboard and mouse navigation
