@@ -1,5 +1,5 @@
 -- Nova2D — main menu state
--- Galaxy theme with logo, particle stars, and animated menu items.
+-- Galaxy theme with logo, particle stars, and button-style menu items.
 -- src/states/menu.lua
 
 local Gamestate = require "hump.gamestate"
@@ -12,6 +12,11 @@ local CENTER_X = 400
 local PURPLE  = {0.486, 0.227, 0.929}
 local INDIGO  = {0.388, 0.400, 0.945}
 local BLUE    = {0.231, 0.510, 0.965}
+
+-- Button geometry
+local BTN_W = 260
+local BTN_H = 44
+local BTN_R = 8
 
 -- ---------------------------------------------------------------------------
 -- State
@@ -28,7 +33,7 @@ local elapsed = 0
 local logo = nil
 
 local stars = {}
-local fontTitle
+local fontLogo
 local fontItems
 local fontVersion
 
@@ -49,7 +54,6 @@ local function spawnStars(count)
 end
 
 local function drawNebula()
-    -- Subtle colour washes behind the menu, same palette as splash.
     love.graphics.setColor(PURPLE[1], PURPLE[2], PURPLE[3], 0.04)
     love.graphics.circle("fill", 160, 180, 200)
     love.graphics.setColor(INDIGO[1], INDIGO[2], INDIGO[3], 0.03)
@@ -58,6 +62,33 @@ local function drawNebula()
     love.graphics.circle("fill", 400, 400, 200)
     love.graphics.setColor(PURPLE[1], PURPLE[2], PURPLE[3], 0.025)
     love.graphics.circle("fill", -50, 300, 160)
+end
+
+-- Draw a single button centered at (cx, cy)
+local function drawButton(label, cx, cy, isSelected)
+    local left = cx - BTN_W / 2
+    local top  = cy - BTN_H / 2
+
+    if isSelected then
+        -- Filled background
+        love.graphics.setColor(PURPLE[1], PURPLE[2], PURPLE[3], 0.12)
+        love.graphics.rectangle("fill", left, top, BTN_W, BTN_H, BTN_R)
+        -- Border glow
+        love.graphics.setColor(PURPLE[1], PURPLE[2], PURPLE[3], 0.4)
+        love.graphics.setLineWidth(1.5)
+        love.graphics.rectangle("line", left, top, BTN_W, BTN_H, BTN_R)
+        love.graphics.setLineWidth(1)
+
+        -- Text: bright white
+        love.graphics.setColor(1, 1, 1)
+    else
+        -- Subtle border only
+        love.graphics.setColor(0.3, 0.3, 0.45, 0.25)
+        love.graphics.rectangle("line", left, top, BTN_W, BTN_H, BTN_R)
+        love.graphics.setColor(0.45, 0.45, 0.55, 0.55)
+    end
+
+    love.graphics.printf(label, 0, cy - 8, W, "center")
 end
 
 -- ---------------------------------------------------------------------------
@@ -70,20 +101,17 @@ function State:enter()
     stars = {}
     spawnStars(60)
 
-    -- Load logo (shared asset with splash)
     local ok, img = pcall(love.graphics.newImage, "assets/images/logo.png")
     logo = ok and img or nil
 
-    -- Cached fonts
-    fontTitle   = love.graphics.newFont(36)
-    fontItems   = love.graphics.newFont(24)
+    fontLogo    = love.graphics.newFont(30)
+    fontItems   = love.graphics.newFont(22)
     fontVersion = love.graphics.newFont(11)
 end
 
 function State:update(dt)
     elapsed = elapsed + dt
 
-    -- Drift stars upward
     for _, s in ipairs(stars) do
         s.y = s.y - s.speed * dt
         if s.y < -5 then
@@ -106,47 +134,26 @@ function State:draw()
         love.graphics.circle("fill", s.x, s.y, s.r)
     end
 
-    -- Logo (smaller, at top)
+    -- Logo
     if logo then
         love.graphics.setColor(1, 1, 1)
-        local sx = math.min(100 / logo:getWidth(), 80 / logo:getHeight())
-        love.graphics.draw(logo, CENTER_X, 80, 0, sx, sx,
+        local sx = math.min(90 / logo:getWidth(), 70 / logo:getHeight())
+        love.graphics.draw(logo, CENTER_X, 70, 0, sx, sx,
                            logo:getWidth() / 2, logo:getHeight() / 2)
     end
 
     -- Title
-    love.graphics.setFont(fontTitle)
-    love.graphics.setColor(1, 1, 1, 0.7)
-    love.graphics.printf("Nova2D", 0, 125, W, "center")
+    love.graphics.setFont(fontLogo)
+    love.graphics.setColor(1, 1, 1, 0.6)
+    love.graphics.printf("Nova2D", 0, 115, W, "center")
 
-    -- Menu items
-    local startY = 240
-    local spacing = 60
+    -- Menu buttons
+    local startY = 225
+    local spacing = 64
     love.graphics.setFont(fontItems)
 
     for i, item in ipairs(menuItems) do
-        local y = startY + (i - 1) * spacing
-        local isSelected = i == selected
-
-        if isSelected then
-            -- Glow indicator (triangle)
-            love.graphics.setColor(PURPLE[1], PURPLE[2], PURPLE[3], 0.5)
-            love.graphics.polygon("fill",
-                CENTER_X - 140, y - 2,
-                CENTER_X - 128, y - 8,
-                CENTER_X - 128, y + 4
-            )
-
-            -- Selected item: bright white with purple glow behind text
-            love.graphics.setColor(PURPLE[1], PURPLE[2], PURPLE[3], 0.10)
-            love.graphics.printf(item.label, 0, y - 1, W, "center")
-            love.graphics.printf(item.label, 0, y + 1, W, "center")
-            love.graphics.setColor(1, 1, 1, 1)
-            love.graphics.printf(item.label, 0, y, W, "center")
-        else
-            love.graphics.setColor(0.5, 0.5, 0.6, 0.6)
-            love.graphics.printf(item.label, 0, y, W, "center")
-        end
+        drawButton(item.label, CENTER_X, startY + (i - 1) * spacing, i == selected)
     end
 
     -- Version
@@ -175,11 +182,11 @@ end
 
 function State:mousepressed(x, y, button)
     if button ~= 1 then return end
-    local startY = 240
-    local spacing = 60
+    local startY = 225
+    local spacing = 64
     for i in ipairs(menuItems) do
         local cy = startY + (i - 1) * spacing
-        if y >= cy - 20 and y <= cy + 20 then
+        if math.abs(y - cy) < BTN_H / 2 + 4 then
             selected = i
             dispatchAction()
             return
