@@ -27,5 +27,4 @@ Thumbs.db
 # Development only (not user-facing)
 .atl/
 
-# AI agent instructions
-AGENTS.md
+*:Zone.Identifier

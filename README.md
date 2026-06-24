@@ -11,7 +11,7 @@
 ```bash
 # One command — no git needed
 # (use Git Bash on Windows — PowerShell's curl is an alias for Invoke-WebRequest)
-curl -fsSL https://raw.githubusercontent.com/CyberDevStudios/Nova2d/master/install.sh | bash -s my-game
+curl -fsSL https://nova2d.pages.dev/install.sh | bash -s my-game
 cd my-game
 love .
 ```
@@ -30,12 +30,12 @@ love .
 
 | Phase | Status |
 |---|---|
-| **v0.1** — Base structure + 5 states | ✅ Complete |
-| **v0.2** — Dependency manager (gestor) | ✅ Complete |
-| **v0.3** — Hot reload (lurker) | ✅ Complete |
-| **v0.4** — One-command installer | ✅ Complete |
-| **v0.5** — Web documentation | 🔜 Pending |
-| **v1.0** — Public release | 🔜 Pending |
+| **v0.1** — Base structure + 5 states | Complete |
+| **v0.2** — Dependency manager (gestor) | Complete |
+| **v0.3** — Hot reload (lurker) | Complete |
+| **v0.4** — One-command installer | Complete |
+| **v0.5** — Web documentation | Pending |
+| **v1.0** — Public release | Pending |
 
 ## Requirements
 
@@ -44,11 +44,11 @@ love .
 
 ## Features
 
-- **🎮 5 game states** — splash (animated), menu, game, pause (overlay), credits
-- **📦 Dependency manager** — install, update, remove libraries via `nova2d.lua`
-- **♻️ Hot reload** — edit `src/` files and see changes instantly (no restart)
-- **⚡ One-command installer** — `curl ... | bash` setup, no git required
-- **🔒 main.lua frozen** — never modify the entry point
+- **5 game states** — splash (animated), menu, game, pause (overlay), credits
+- **Dependency manager** — install, update, remove libraries via `nova2d.lua`
+- **Hot reload** — edit `src/` files and see changes instantly (no restart)
+- **One-command installer** — `curl ... | bash` setup, no git required
+- **main.lua frozen** — never modify the entry point
 
 ## Project Structure
 

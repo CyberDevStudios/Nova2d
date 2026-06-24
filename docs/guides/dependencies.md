@@ -45,6 +45,8 @@ love gestor/ install
 
 This reads `nova2d.lua`, compares with `nova2d-lock.lua`, and downloads any missing or updated dependencies.
 
+The gestor now performs safe shell quoting for URLs and file paths on both Windows and Unix, and uses OS-specific cleanup logic when extracting ZIP libraries.
+
 ## The lockfile
 
 `nova2d-lock.lua` is auto-generated and should not be edited manually:

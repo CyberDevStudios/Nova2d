@@ -36,6 +36,13 @@ local fontItem
 local fontPurpose
 local fontHint
 
+local function ensureFont(font, size)
+    if font then
+        return font
+    end
+    return love.graphics.newFont(size)
+end
+
 -- ---------------------------------------------------------------------------
 -- Helpers
 -- ---------------------------------------------------------------------------
@@ -112,7 +119,7 @@ function State:draw()
     end
 
     -- Title
-    love.graphics.setFont(fontLogo)
+    love.graphics.setFont(ensureFont(fontLogo, 28))
     love.graphics.setColor(1, 1, 1, 0.85)
     love.graphics.printf("Credits", 0, 90, W, "center")
 
@@ -124,7 +131,7 @@ function State:draw()
     -- Library entries
     local y = 138
     local spacing = 48
-    love.graphics.setFont(fontItem)
+    love.graphics.setFont(ensureFont(fontItem, 17))
 
     for i, entry in ipairs(credits) do
         -- Alternating subtle background
@@ -139,19 +146,19 @@ function State:draw()
 
         -- Author (purple)
         love.graphics.setColor(PURPLE[1], PURPLE[2], PURPLE[3], 0.55)
-        love.graphics.setFont(fontPurpose)
+        love.graphics.setFont(ensureFont(fontPurpose, 13))
         love.graphics.printf("by " .. entry.author, 0, y + 18, W, "center")
 
         -- Purpose (gray)
         love.graphics.setColor(0.45, 0.45, 0.55, 0.45)
         love.graphics.printf(entry.purpose, 0, y + 32, W, "center")
 
-        love.graphics.setFont(fontItem)
+        love.graphics.setFont(ensureFont(fontItem, 17))
         y = y + spacing
     end
 
     -- Return hint
-    love.graphics.setFont(fontHint)
+    love.graphics.setFont(ensureFont(fontHint, 12))
     love.graphics.setColor(0.3, 0.3, 0.5, 0.35)
     love.graphics.printf("Press ESC / Enter / Backspace or click to return", 0, H - 24, W, "center")
 

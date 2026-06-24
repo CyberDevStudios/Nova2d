@@ -31,6 +31,9 @@ Downloaded as raw files from `raw.githubusercontent.com`.
 ### Multi-file libraries
 Downloaded as ZIP archives and extracted with `unzip`.
 
+### Windows compatibility
+On Windows, the gestor now uses OS-aware shell quoting and path handling to keep `curl` downloads and ZIP extraction stable across Git Bash, WSL, and Command Prompt environments.
+
 ## Tool requirements
 
 | Tool | Required for | Notes |

@@ -4,9 +4,31 @@
 local util = require("util")
 
 local download = {}
+local is_windows = util.is_windows()
 
 local CURL_FLAGS = "-fsSL --connect-timeout 10 --max-time 30"
 local CURL_FLAGS_ZIP = "-fsSL --connect-timeout 10 --max-time 60"
+
+local function shell_quote(value)
+    if is_windows then
+        return '"' .. value:gsub('"', '\\"') .. '"'
+    end
+    return "'" .. value:gsub("'", "'\\''") .. "'"
+end
+
+local function shell_remove_dir(path)
+    if is_windows then
+        return string.format("rmdir /s /q %s", shell_quote(path))
+    end
+    return string.format("rm -rf %s", shell_quote(path))
+end
+
+local function shell_list_dir(path)
+    if is_windows then
+        return string.format("dir /b %s", shell_quote(path))
+    end
+    return string.format("ls -1 %s 2>/dev/null", shell_quote(path))
+end
 
 function download.single_file(name, dep, libs_path)
     local url = string.format(
@@ -18,7 +40,7 @@ function download.single_file(name, dep, libs_path)
     util.ensure_dir(dest)
 
     local filepath = dest .. "/" .. dep.file
-    local cmd = string.format("curl %s '%s' -o '%s'", CURL_FLAGS, url, filepath)
+    local cmd = string.format("curl %s %s -o %s", CURL_FLAGS, shell_quote(url), shell_quote(filepath))
     local ok, msg = run_curl(cmd, name)
     if not ok then return false, msg end
 
@@ -44,9 +66,10 @@ function download.multi_file(name, dep, libs_path)
 
     local tmp_zip = os.tmpname() .. ".zip"
     local tmp_dir = os.tmpname()
+    util.ensure_dir(tmp_dir)
 
     -- Download zip
-    local cmd = string.format("curl %s '%s' -o '%s'", CURL_FLAGS_ZIP, url, tmp_zip)
+    local cmd = string.format("curl %s %s -o %s", CURL_FLAGS_ZIP, shell_quote(url), shell_quote(tmp_zip))
     local ok, msg = run_curl(cmd, name)
     if not ok then
         os.remove(tmp_zip)
@@ -54,22 +77,22 @@ function download.multi_file(name, dep, libs_path)
     end
 
     -- Extract
-    local extract_cmd = string.format("unzip -o '%s' -d '%s' 2>/dev/null", tmp_zip, tmp_dir)
+    local extract_cmd = string.format("unzip -o %s -d %s", shell_quote(tmp_zip), shell_quote(tmp_dir))
     local extract_ok = os.execute(extract_cmd)
     if extract_ok ~= 0 then
         os.remove(tmp_zip)
-        os.execute("rm -rf '" .. tmp_dir .. "'")
+        os.execute(shell_remove_dir(tmp_dir))
         return false, "Failed to extract archive. unzip may be missing or archive is corrupt."
     end
 
     -- Get extracted directory (GitHub zip creates a single directory)
-    local handle = io.popen("ls -1 '" .. tmp_dir .. "' 2>/dev/null")
+    local handle = io.popen(shell_list_dir(tmp_dir))
     local extracted = handle:read("*l")
     handle:close()
 
     if not extracted or extracted == "" then
         os.remove(tmp_zip)
-        os.execute("rm -rf '" .. tmp_dir .. "'")
+        os.execute(shell_remove_dir(tmp_dir))
         return false, "Archive is empty or invalid."
     end
 
@@ -77,21 +100,21 @@ function download.multi_file(name, dep, libs_path)
     local dest = libs_path .. "/" .. name
     util.ensure_dir(dest)
 
-    if util.is_windows() then
+    if is_windows then
         os.execute(string.format(
             'xcopy /e /i /q "%s\\%s\\*" "%s\\" 2>nul',
             tmp_dir, extracted, dest
         ))
     else
-        os.execute(string.format("cp -r '%s/%s/'* '%s/' 2>/dev/null", tmp_dir, extracted, dest))
+        os.execute(string.format("cp -r %s/* %s/ 2>/dev/null", shell_quote(tmp_dir .. "/" .. extracted), shell_quote(dest)))
     end
 
     -- Cleanup
     os.remove(tmp_zip)
-    os.execute("rm -rf '" .. tmp_dir .. "'")
+    os.execute(shell_remove_dir(tmp_dir))
 
     return true
-}
+end
 
 function run_curl(cmd, dep_name)
     print("> " .. dep_name .. " -> downloading...")

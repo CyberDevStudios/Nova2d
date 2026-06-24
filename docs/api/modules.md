@@ -21,6 +21,6 @@ Reference of all Nova2D modules and their public APIs.
 |---|---|---|
 | cli | `gestor/cli.lua` | Command dispatcher. |
 | manifest | `gestor/manifest.lua` | Reads and validates nova2d.lua. |
-| download | `gestor/download.lua` | Downloads via curl, extracts zips. |
+| download | `gestor/download.lua` | Downloads via curl, extracts zips, and handles Windows/Unix shell quoting. |
 | lock | `gestor/lock.lua` | Manages nova2d-lock.lua. |
 | util | `gestor/util.lua` | OS detection, paths, tool checks. |

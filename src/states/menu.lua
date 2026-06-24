@@ -37,6 +37,13 @@ local fontTitle
 local fontItems
 local fontVersion
 
+local function ensureFont(font, size)
+    if font then
+        return font
+    end
+    return love.graphics.newFont(size)
+end
+
 -- ---------------------------------------------------------------------------
 -- Helpers
 -- ---------------------------------------------------------------------------
@@ -68,7 +75,7 @@ end
 -- Selection only changes fill/border colour.
 local function drawButton(label, cx, cy, isSelected)
     local left = cx - BTN_W / 2
-    local top  = cy - BTN_H / 2
+    local top  = cy - BTN_H / 8
 
     -- Common background (neutral, always present)
     love.graphics.setColor(1, 1, 1, 0.03)
@@ -149,21 +156,21 @@ function State:draw()
     end
 
     -- Title (subtle, doesn't compete with logo)
-    love.graphics.setFont(fontTitle or love.graphics.newFont(22))
+    love.graphics.setFont(ensureFont(fontTitle, 22))
     love.graphics.setColor(1, 1, 1, 0.30)
     love.graphics.printf("Nova2D", 0, 130, W, "center")
 
     -- Menu buttons (more spacing, lower position)
     local startY = 230
     local spacing = 72
-    love.graphics.setFont(fontItems or love.graphics.newFont(22))
+    love.graphics.setFont(ensureFont(fontItems, 22))
 
     for i, item in ipairs(menuItems) do
         drawButton(item.label, CX, startY + (i - 1) * spacing, i == selected)
     end
 
     -- Version
-    love.graphics.setFont(fontVersion or love.graphics.newFont(11))
+    love.graphics.setFont(ensureFont(fontVersion, 11))
     love.graphics.setColor(1, 1, 1, 0.12)
     love.graphics.printf("v0.4", 0, H - 22, W, "center")
 

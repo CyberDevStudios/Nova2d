@@ -2,7 +2,7 @@
 
 Hot reload lets you edit your source code and see changes instantly without restarting the game. Nova2D uses **lurker** for this.
 
-> Status: ✅ v0.3 — available since 2026-06-22.
+> Status: v0.3 — available since 2026-06-22.
 
 ## Setup
 

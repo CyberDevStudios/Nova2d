@@ -6,12 +6,21 @@ local Gamestate = require "hump.gamestate"
 local State = {}
 local pauseItems = { "Resume", "Return to Menu" }
 local selected = 1
+local titleFont
 local fontItems
 local fontHint
+
+local function ensureFont(font, size)
+    if font then
+        return font
+    end
+    return love.graphics.newFont(size)
+end
 
 function State:enter(previous)
     self.previous = previous
     selected = 1
+    titleFont = love.graphics.newFont(42)
     fontItems = love.graphics.newFont(22)
     fontHint  = love.graphics.newFont(14)
 end
@@ -30,13 +39,13 @@ function State:draw()
 
     -- Pause title
     love.graphics.setColor(0.486, 0.227, 0.929, 0.5)
-    local titleFont = love.graphics.setNewFont(42)
+    love.graphics.setFont(ensureFont(titleFont, 42))
     love.graphics.printf("PAUSED", 0, 160, 800, "center")
 
     -- Options
     local startY = 260
     local spacing = 60
-    love.graphics.setFont(fontItems or love.graphics.newFont(22))
+    love.graphics.setFont(ensureFont(fontItems, 22))
 
     for i, label in ipairs(pauseItems) do
         local y = startY + (i - 1) * spacing
@@ -45,9 +54,9 @@ function State:draw()
         if isSel then
             -- Button background
             love.graphics.setColor(0.486, 0.227, 0.929, 0.15)
-            love.graphics.rectangle("fill", 300, y - 16, 200, 36, 6)
+            love.graphics.rectangle("fill", 300, y - 0, 200, 36, 6)
             love.graphics.setColor(0.486, 0.227, 0.929, 0.4)
-            love.graphics.rectangle("line", 300, y - 16, 200, 36, 6)
+            love.graphics.rectangle("line", 300, y - 0, 200, 36, 6)
             love.graphics.setColor(1, 1, 1)
         else
             love.graphics.setColor(0.5, 0.5, 0.6, 0.5)
@@ -57,7 +66,7 @@ function State:draw()
     end
 
     -- Hint
-    love.graphics.setFont(fontHint or love.graphics.newFont(14))
+    love.graphics.setFont(ensureFont(fontHint, 14))
     love.graphics.setColor(0.3, 0.3, 0.5, 0.4)
     love.graphics.printf("Navigate: ↑↓  Select: Enter", 0, 380, 800, "center")
 

@@ -8,6 +8,8 @@
 - Downloads latest release via GitHub API (falls back to archive)
 - Creates project structure and installs default dependencies
 - No dependencies beyond curl and Love2D
+- Fixed Windows dependency download compatibility in `gestor/download.lua`: safe shell quoting, OS-aware ZIP extraction, temp cleanup, and path handling
+- Fixed nil-font crashes in `src/states/pause.lua`, `src/states/menu.lua`, and `src/states/credits.lua` by adding safe font fallback logic
 
 ## v0.3 — Hot Reload (2026-06-22)
 

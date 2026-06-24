@@ -8,11 +8,13 @@
 | curl | any | Included on Windows 10+, macOS, and most Linux distros |
 | unzip | any | Required for multi-file libraries. Included on most systems |
 
+> On Windows, use Git Bash or WSL for gestor commands when possible. The gestor now handles Windows path quoting and archive cleanup safely, but `curl` and `unzip` are still required for dependency installs.
+
 ## One-command install (v0.4+)
 
 ```bash
 # Windows users: use Git Bash, not PowerShell (curl alias conflict)
-curl -fsSL https://raw.githubusercontent.com/CyberDevStudios/Nova2d/master/install.sh | bash -s my-game
+curl -fsSL https://nova2d.pages.dev/install.sh | bash -s my-game
 ```
 
 > **PowerShell gotcha**: PowerShell has a built-in `curl` alias that maps to `Invoke-WebRequest` and doesn't support `-fsSL` flags. Use Git Bash, WSL, or the manual install below.

@@ -11,7 +11,7 @@ Get Nova2D running in under a minute.
 
 ```bash
 # Windows: use Git Bash, not PowerShell (curl alias conflict)
-curl -fsSL https://raw.githubusercontent.com/CyberDevStudios/Nova2d/master/install.sh | bash -s my-game
+curl -fsSL https://nova2d.pages.dev/install.sh | bash -s my-game
 cd my-game
 love .
 ```
