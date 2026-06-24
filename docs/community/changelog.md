@@ -1,5 +1,15 @@
 # Changelog
 
+## v0.5 — Web Documentation (2026-06-23)
+
+- Launched documentation website at [nova2d.pages.dev](https://nova2d.pages.dev/)
+- Full docs site with getting started, guides, API reference, and community pages
+- One-command install URL points to production web
+- Renamed default branch from `master` to `main`
+- Added `beta` branch for pre-release builds
+- Cleaned up emojis from README and local docs
+- Added `*:Zone.Identifier` to `.gitignore` for Windows compat
+
 ## v0.4 — Curl Installer (2026-06-22)
 
 - Added `install.sh` — one-command setup via `curl ... | bash`

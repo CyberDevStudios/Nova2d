@@ -52,13 +52,13 @@ Los siguientes skills del sistema Gentle AI aplican a este proyecto:
 ## Fases del Proyecto
 
 | Fase | Descripción | Estado |
-|---|---|---|
-| v0.1 | Base structure + 5 states | ✅ Completado |
-| v0.2 | Dependency manager (gestor) | ⏳ Pendiente |
-| v0.3 | Hot reload (lurker) | ⏳ Pendiente |
-| v0.4 | Installer script (curl) | ⏳ Pendiente |
-| v0.5 | Documentación web | ⏳ Pendiente |
-| v1.0 | Lanzamiento público | ⏳ Pendiente |
+|---|---|---|---|
+| v0.1 | Base structure + 5 states | Completado |
+| v0.2 | Dependency manager (gestor) | Completado |
+| v0.3 | Hot reload (lurker) | Completado |
+| v0.4 | Installer script (curl) | Completado |
+| v0.5 | Web documentation | Completado ([nova2d.pages.dev](https://nova2d.pages.dev/)) |
+| v1.0 | Public release | Pendiente |
 
 ## Engram
 

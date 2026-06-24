@@ -13,9 +13,12 @@ context: |
     - local-only variables except global Game reference
     - Strict separation between update (logic) and draw (presentation)
     - One file per entity or system
-  Completed phases: v0.1 Base structure+states (2026-06-22)
-  Plan phases: v0.2 Dependency manager,
-    v0.3 Hot reload, v0.4 Installer, v0.5 Web docs, v1.0 Release
+  Completed phases: v0.1 Base structure+states (2026-06-22),
+    v0.2 Dependency manager (gestor) (2026-06-22),
+    v0.3 Hot reload (lurker) (2026-06-22),
+    v0.4 Installer (install.sh) (2026-06-22),
+    v0.5 Web documentation (nova2d.pages.dev) (2026-06-23)
+  Plan phases: v1.0 Release
 
 rules:
   proposal:

@@ -194,7 +194,7 @@ function State:draw()
     -- Version
     love.graphics.setFont(fontInfo)
     love.graphics.setColor(1, 1, 1, 0.20 * ia)
-    love.graphics.printf("v0.4", 0, CENTER_Y + 88, W, "center")
+    love.graphics.printf("v0.5", 0, CENTER_Y + 88, W, "center")
 
     -- Tagline
     love.graphics.setFont(fontTagline)

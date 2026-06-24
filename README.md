@@ -34,7 +34,7 @@ love .
 | **v0.2** — Dependency manager (gestor) | Complete |
 | **v0.3** — Hot reload (lurker) | Complete |
 | **v0.4** — One-command installer | Complete |
-| **v0.5** — Web documentation | Pending |
+| **v0.5** — Web documentation | Complete ([nova2d.pages.dev](https://nova2d.pages.dev/)) |
 | **v1.0** — Public release | Pending |
 
 ## Requirements
