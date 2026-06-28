@@ -1,7 +1,7 @@
 return {
     name    = "Nova2D",
     version = "0.5.0",
-    author  = "Nova2D Contributors",
+    author  = "Cyber Dev Studio",
 
     dependencies = {
         ["bump.lua"] = {
