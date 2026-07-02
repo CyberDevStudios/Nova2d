@@ -1,11 +1,20 @@
 # Changelog
 
+## v0.5.1 — Documentation Content (2026-07-01)
+
+- Rewrote Quick Start with coherent step-by-step flow (steps 1–5, verifiable code)
+- Expanded States docs: added entity wiring pattern, `resize` callback, data passing between states, and all Gamestate API methods with parameter tables
+- Rewrote Entities docs: explains colon syntax and instance table pattern, documents `parent` parameter, multi-instance examples
+- Added Pong tutorial (guides/tutorial-pong.md): 8 steps, each verifiable at runtime
+- Added FAQ & Troubleshooting (guides/faq.md): 20+ entries covering install, runtime, hot reload, gestor, migration, compatibility
+- Expanded API Reference: state-machine.md (switch/push/pop/current, all callbacks with typed params), entity-api.md (lifecycle with explicit parameters), configuration.md (t.identity, t.modules.audio, t.console, t.window.icon)
+- Removed `master` → `main` branch rename (no longer needed)
+
 ## v0.5 — Web Documentation (2026-06-23)
 
 - Launched documentation website at [nova2d.pages.dev](https://nova2d.pages.dev/)
-- Full docs site with getting started, guides, API reference, and community pages
+- Full docs site structure with getting started, guides, API reference, and community pages
 - One-command install URL points to production web
-- Renamed default branch from `master` to `main`
 - Added `beta` branch for pre-release builds
 - Cleaned up emojis from README and local docs
 - Added `*:Zone.Identifier` to `.gitignore` for Windows compat

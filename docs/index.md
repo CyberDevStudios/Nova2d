@@ -15,10 +15,12 @@
 
 ## Guides
 - [Tutorial: 5 Minute Game](guides/tutorial-5min.md)
+- [Tutorial: Build Pong](guides/tutorial-pong.md)
 - [Dependencies](guides/dependencies.md)
 - [Hot Reload](guides/hot-reload.md) *(v0.3)*
 - [Installer](guides/installer.md) *(v0.4)*
 - [Best Practices](guides/best-practices.md)
+- [FAQ & Troubleshooting](guides/faq.md)
 
 ## API Reference
 - [Modules](api/modules.md)
