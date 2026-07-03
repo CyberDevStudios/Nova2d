@@ -15,5 +15,5 @@ function love.conf(t)
     t.modules.joystick = false
 end
 
--- Extend require path to resolve libs/ dependencies
-package.path = package.path .. ";libs/?.lua;libs/?/?.lua;libs/?/init.lua"
+-- Extend require path to resolve libs/ and src/ dependencies
+package.path = package.path .. ";libs/?.lua;libs/?/?.lua;libs/?/init.lua;src/?.lua;src/?/?.lua;src/?/init.lua"
