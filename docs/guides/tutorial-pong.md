@@ -27,7 +27,7 @@ everything you need.
 
 The `Game` state is an empty placeholder. Replace it with our Pong skeleton.
 
-Edit `src/states/game.lua`:
+Replace the entire content of `src/states/game.lua` with:
 
 ```lua
 local Gamestate = require("hump.gamestate")
@@ -103,7 +103,7 @@ end
 return Paddle
 ```
 
-Now update `src/states/game.lua` to use the paddle:
+Now update `src/states/game.lua` to use the paddle. Replace the entire content with (note the new `Paddle` entity on line 3):
 
 ```lua
 local Gamestate = require("hump.gamestate")
@@ -194,7 +194,7 @@ end
 return Ball
 ```
 
-Update `game.lua` to include the ball:
+Update `src/states/game.lua` to include the ball. Replace the entire content with (note the new `Ball` entity on line 4):
 
 ```lua
 local Gamestate = require("hump.gamestate")
@@ -255,8 +255,7 @@ function Ball.checkCollision(ax, ay, aw, ah, bx, by, bw, bh)
 end
 ```
 
-And add the collision in `Ball:update(dt)`, after the vertical bounce, before the
-out-of-bounds check:
+And add the collision block **inside** `Ball:update(dt)`, **after** the `end` that closes the vertical bounce (`-- Vertical bounce (ceiling and floor)` block) and **before** the `-- If it goes off left or right` comment:
 
 ```lua
     -- Inside Ball:update(dt), after vertical bounce
@@ -317,7 +316,7 @@ randomness on the bounce.
 
 ## Step 6: Enemy paddle (AI)
 
-Add a second paddle in `game.lua`. Modify `Game:enter()`:
+In `src/states/game.lua`, replace the entire `Game:enter()` function with (note the new `self.enemy` block):
 
 ```lua
 function Game:enter()
@@ -332,7 +331,7 @@ function Game:enter()
 end
 ```
 
-And in `Game:update(dt)` and `Game:draw()`:
+Then replace the `Game:update(dt)` and `Game:draw()` functions in the same file with:
 
 ```lua
 function Game:update(dt)
@@ -350,7 +349,7 @@ end
 ```
 
 **Verify**: there are two paddles, the right one stays still. Now we add AI
-behavior. Add this method to `src/entities/paddle.lua`:
+behavior. Add this method to `src/entities/paddle.lua`, **after** the `Paddle:update(dt)` function (after the `end` on line 96) and **before** the `Paddle:draw()` function (before `function Paddle:draw()` on line 98):
 
 ```lua
 function Paddle:aiUpdate(dt, ballY)
@@ -369,7 +368,7 @@ function Paddle:aiUpdate(dt, ballY)
 end
 ```
 
-And in `Game:update()`, replace `Paddle:update(self.enemy, dt)` with:
+And in `src/states/game.lua`, inside `Game:update(dt)`, find the line `Paddle:update(self.enemy, dt)` and change it to:
 
 ```lua
     Paddle:aiUpdate(self.enemy, dt, self.ball.y)
@@ -382,7 +381,10 @@ zone so it can be beaten.
 
 ## Step 7: Score
 
-Add score to the Game state and an `onPoint` method. Modify `Game:enter()`:
+Add score to the Game state and an `onPoint` method. In `src/states/game.lua`:
+
+- **Replace** `Game:enter()` with the version below (note the `self.playerScore` and `self.enemyScore` at the top)
+- **Add** the new `Game:onPoint()` function **after** `Game:enter()` and **before** `Game:update(dt)`
 
 ```lua
 function Game:enter()
@@ -411,7 +413,7 @@ function Game:onPoint(scoringSide)
 end
 ```
 
-And add the score in `Game:draw()`:
+Then replace the entire `Game:draw()` function with:
 
 ```lua
 function Game:draw()
@@ -441,7 +443,7 @@ center after each point.
 
 Add simple sound effects generated with Love2D (no external files):
 
-In `Game:enter()`:
+In `src/states/game.lua`, **inside** `Game:enter()`, **after** `Ball:enter(self.ball, self)` (the last line before the `end`), add:
 
 ```lua
     -- Generate procedural sounds
@@ -454,7 +456,10 @@ In `Game:enter()`:
     self.beep = love.audio.newSource(beepData, "static")
 ```
 
-In `Ball:update(dt)`, after a paddle or wall bounce:
+In `src/entities/ball.lua`, **inside** `Ball:update(dt)`, add this block in **two places**:
+
+1. **After** the `end` that closes the vertical bounce block, **before** the paddle collision block
+2. **After** the `end` that closes the paddle collision block, **before** the `-- Out of bounds` check
 
 ```lua
     if self.parent and self.parent.beep then
@@ -462,8 +467,6 @@ In `Ball:update(dt)`, after a paddle or wall bounce:
         self.parent.beep:play()
     end
 ```
-
-Add it after the vertical bounce and after the paddle collision.
 
 > If you don't hear anything, check that `t.modules.audio = false` isn't in your
 > `conf.lua`. Nova2D ships with it disabled by default — you need to change it to `true`.
