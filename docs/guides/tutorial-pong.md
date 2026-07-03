@@ -156,47 +156,50 @@ local Ball = {}
 local SIZE = 10
 local SPEED = 300
 
-function Ball:enter(parent)
-    self.x = 400 - SIZE / 2
-    self.y = 300 - SIZE / 2
-    self.size = SIZE
-    self.parent = parent
+-- DOT syntax so each ball instance has its own state.
+-- The ball table is passed explicitly as the first argument.
+
+function Ball.enter(ball, parent)
+    ball.x = 400 - SIZE / 2
+    ball.y = 300 - SIZE / 2
+    ball.size = SIZE
+    ball.parent = parent
 
     -- Random initial direction
     local angle = math.random() * math.pi * 2
-    self.vx = math.cos(angle) * SPEED
-    self.vy = math.sin(angle) * SPEED
+    ball.vx = math.cos(angle) * SPEED
+    ball.vy = math.sin(angle) * SPEED
 
     -- Make sure it doesn't go perfectly horizontal
-    if math.abs(self.vx) < SPEED * 0.3 then
-        self.vx = (self.vx >= 0 and 1 or -1) * SPEED * 0.3
+    if math.abs(ball.vx) < SPEED * 0.3 then
+        ball.vx = (ball.vx >= 0 and 1 or -1) * SPEED * 0.3
     end
 end
 
-function Ball:update(dt)
-    self.x = self.x + self.vx * dt
-    self.y = self.y + self.vy * dt
+function Ball.update(ball, dt)
+    ball.x = ball.x + ball.vx * dt
+    ball.y = ball.y + ball.vy * dt
 
     -- Vertical bounce (ceiling and floor)
-    if self.y <= 0 then
-        self.y = 0
-        self.vy = -self.vy
-    elseif self.y >= 600 - self.size then
-        self.y = 600 - self.size
-        self.vy = -self.vy
+    if ball.y <= 0 then
+        ball.y = 0
+        ball.vy = -ball.vy
+    elseif ball.y >= 600 - ball.size then
+        ball.y = 600 - ball.size
+        ball.vy = -ball.vy
     end
 
     -- If it goes off left or right, notify the state
-    if self.x < -self.size or self.x > 800 + self.size then
-        if self.parent and self.parent.onPoint then
-            self.parent:onPoint(self.x < 0 and "right" or "left")
+    if ball.x < -ball.size or ball.x > 800 + ball.size then
+        if ball.parent and ball.parent.onPoint then
+            ball.parent:onPoint(ball.x < 0 and "right" or "left")
         end
     end
 end
 
-function Ball:draw()
+function Ball.draw(ball)
     love.graphics.setColor(1, 1, 1)
-    love.graphics.rectangle("fill", self.x, self.y, self.size, self.size)
+    love.graphics.rectangle("fill", ball.x, ball.y, ball.size, ball.size)
 end
 
 return Ball
@@ -217,18 +220,18 @@ function Game:enter()
     Paddle.enter(self.player, "left")
 
     self.ball = {}
-    Ball:enter(self.ball, self)
+    Ball.enter(self.ball, self)
 end
 
 function Game:update(dt)
     Paddle.update(self.player, dt)
-    Ball:update(self.ball, dt)
+    Ball.update(self.ball, dt)
 end
 
 function Game:draw()
     love.graphics.clear()
     Paddle.draw(self.player)
-    Ball:draw(self.ball)
+    Ball.draw(self.ball)
 end
 
 function Game:keyreleased(key)
@@ -263,19 +266,18 @@ function Ball.checkCollision(ax, ay, aw, ah, bx, by, bw, bh)
 end
 ```
 
-And add the collision block **inside** `Ball:update(dt)`, **after** the `end` that closes the vertical bounce (`-- Vertical bounce (ceiling and floor)` block) and **before** the `-- If it goes off left or right` comment:
+And add the collision block **inside** `Ball.update(ball, dt)`, **after** the `end` that closes the vertical bounce block and **before** the `-- If it goes off left or right` comment:
 
 ```lua
-    -- Inside Ball:update(dt), after vertical bounce
     -- Paddle collision
-    if self.parent then
-        local p = self.parent.player
-        if p and Ball.checkCollision(self.x, self.y, self.size, self.size,
+    if ball.parent then
+        local p = ball.parent.player
+        if p and Ball.checkCollision(ball.x, ball.y, ball.size, ball.size,
                                       p.x, p.y, p.w, p.h) then
-            self.x = p.x + p.w  -- push ball out of paddle
-            self.vx = -self.vx  -- reverse horizontal direction
-            self.vx = self.vx * 1.05  -- speed up by 5%
-            self.vy = self.vy + (love.math.random() - 0.5) * 50  -- add a bit of randomness
+            ball.x = p.x + p.w  -- push ball out of paddle
+            ball.vx = -ball.vx  -- reverse horizontal direction
+            ball.vx = ball.vx * 1.05  -- speed up by 5%
+            ball.vy = ball.vy + (love.math.random() - 0.5) * 50  -- add a bit of randomness
         end
     end
 ```
@@ -283,35 +285,35 @@ And add the collision block **inside** `Ball:update(dt)`, **after** the `end` th
 The full `update()` in Ball should look like this:
 
 ```lua
-function Ball:update(dt)
-    self.x = self.x + self.vx * dt
-    self.y = self.y + self.vy * dt
+function Ball.update(ball, dt)
+    ball.x = ball.x + ball.vx * dt
+    ball.y = ball.y + ball.vy * dt
 
     -- Vertical bounce (ceiling and floor)
-    if self.y <= 0 then
-        self.y = 0
-        self.vy = -self.vy
-    elseif self.y >= 600 - self.size then
-        self.y = 600 - self.size
-        self.vy = -self.vy
+    if ball.y <= 0 then
+        ball.y = 0
+        ball.vy = -ball.vy
+    elseif ball.y >= 600 - ball.size then
+        ball.y = 600 - ball.size
+        ball.vy = -ball.vy
     end
 
     -- Paddle collision
-    if self.parent then
-        local p = self.parent.player
-        if p and Ball.checkCollision(self.x, self.y, self.size, self.size,
+    if ball.parent then
+        local p = ball.parent.player
+        if p and Ball.checkCollision(ball.x, ball.y, ball.size, ball.size,
                                       p.x, p.y, p.w, p.h) then
-            self.x = p.x + p.w
-            self.vx = -self.vx
-            self.vx = self.vx * 1.05
-            self.vy = self.vy + (love.math.random() - 0.5) * 50
+            ball.x = p.x + p.w
+            ball.vx = -ball.vx
+            ball.vx = ball.vx * 1.05
+            ball.vy = ball.vy + (love.math.random() - 0.5) * 50
         end
     end
 
     -- Out of bounds
-    if self.x < -self.size or self.x > 800 + self.size then
-        if self.parent and self.parent.onPoint then
-            self.parent:onPoint(self.x < 0 and "right" or "left")
+    if ball.x < -ball.size or ball.x > 800 + ball.size then
+        if ball.parent and ball.parent.onPoint then
+            ball.parent:onPoint(ball.x < 0 and "right" or "left")
         end
     end
 end
@@ -335,7 +337,7 @@ function Game:enter()
     Paddle.enter(self.enemy, "right")
 
     self.ball = {}
-    Ball:enter(self.ball, self)
+    Ball.enter(self.ball, self)
 end
 ```
 
@@ -345,14 +347,14 @@ Then replace the `Game:update(dt)` and `Game:draw()` functions in the same file 
 function Game:update(dt)
     Paddle.update(self.player, dt)
     Paddle.update(self.enemy, dt)  -- for now it stays still
-    Ball:update(self.ball, dt)
+    Ball.update(self.ball, dt)
 end
 
 function Game:draw()
     love.graphics.clear()
     Paddle.draw(self.player)
     Paddle.draw(self.enemy)
-    Ball:draw(self.ball)
+    Ball.draw(self.ball)
 end
 ```
 
@@ -406,7 +408,7 @@ function Game:enter()
     Paddle.enter(self.enemy, "right")
 
     self.ball = {}
-    Ball:enter(self.ball, self)
+    Ball.enter(self.ball, self)
 end
 
 function Game:onPoint(scoringSide)
@@ -417,7 +419,7 @@ function Game:onPoint(scoringSide)
     end
     -- Reset ball
     self.ball = {}
-    Ball:enter(self.ball, self)
+    Ball.enter(self.ball, self)
 end
 ```
 
@@ -428,7 +430,7 @@ function Game:draw()
     love.graphics.clear()
     Paddle.draw(self.player)
     Paddle.draw(self.enemy)
-    Ball:draw(self.ball)
+    Ball.draw(self.ball)
 
     -- Score
     love.graphics.setColor(1, 1, 1, 0.3)
@@ -451,7 +453,7 @@ center after each point.
 
 Add simple sound effects generated with Love2D (no external files):
 
-In `src/states/game.lua`, **inside** `Game:enter()`, **after** `Ball:enter(self.ball, self)` (the last line before the `end`), add:
+In `src/states/game.lua`, **inside** `Game:enter()`, **after** `Ball.enter(self.ball, self)` (the last line before the `end`), add:
 
 ```lua
     -- Generate procedural sounds
@@ -464,15 +466,15 @@ In `src/states/game.lua`, **inside** `Game:enter()`, **after** `Ball:enter(self.
     self.beep = love.audio.newSource(beepData, "static")
 ```
 
-In `src/entities/ball.lua`, **inside** `Ball:update(dt)`, add this block in **two places**:
+In `src/entities/ball.lua`, **inside** `Ball.update(ball, dt)`, add this block in **two places**:
 
 1. **After** the `end` that closes the vertical bounce block, **before** the paddle collision block
 2. **After** the `end` that closes the paddle collision block, **before** the `-- Out of bounds` check
 
 ```lua
-    if self.parent and self.parent.beep then
-        self.parent.beep:stop()
-        self.parent.beep:play()
+    if ball.parent and ball.parent.beep then
+        ball.parent.beep:stop()
+        ball.parent.beep:play()
     end
 ```
 
@@ -522,20 +524,20 @@ function Game:enter()
     Paddle.enter(self.enemy, "right")
 
     self.ball = {}
-    Ball:enter(self.ball, self)
+    Ball.enter(self.ball, self)
 end
 
 function Game:update(dt)
     Paddle.update(self.player, dt)
     Paddle.aiUpdate(self.enemy, dt, self.ball.y)
-    Ball:update(self.ball, dt)
+    Ball.update(self.ball, dt)
 end
 
 function Game:draw()
     love.graphics.clear()
     Paddle.draw(self.player)
     Paddle.draw(self.enemy)
-    Ball:draw(self.ball)
+    Ball.draw(self.ball)
 
     love.graphics.setColor(1, 1, 1, 0.3)
     love.graphics.printf(tostring(self.playerScore), 0, 40, 350, "right")
@@ -553,7 +555,7 @@ function Game:onPoint(scoringSide)
         self.enemyScore = self.enemyScore + 1
     end
     self.ball = {}
-    Ball:enter(self.ball, self)
+    Ball.enter(self.ball, self)
 end
 
 function Game:keyreleased(key)
@@ -619,51 +621,51 @@ function Ball.checkCollision(ax, ay, aw, ah, bx, by, bw, bh)
         and ay < by + bh and ay + ah > by
 end
 
-function Ball:enter(parent)
-    self.x = 400 - SIZE / 2
-    self.y = 300 - SIZE / 2
-    self.size = SIZE
-    self.parent = parent
+function Ball.enter(ball, parent)
+    ball.x = 400 - SIZE / 2
+    ball.y = 300 - SIZE / 2
+    ball.size = SIZE
+    ball.parent = parent
 
     local angle = math.random() * math.pi * 2
-    self.vx = math.cos(angle) * SPEED
-    self.vy = math.sin(angle) * SPEED
-    if math.abs(self.vx) < SPEED * 0.3 then
-        self.vx = (self.vx >= 0 and 1 or -1) * SPEED * 0.3
+    ball.vx = math.cos(angle) * SPEED
+    ball.vy = math.sin(angle) * SPEED
+    if math.abs(ball.vx) < SPEED * 0.3 then
+        ball.vx = (ball.vx >= 0 and 1 or -1) * SPEED * 0.3
     end
 end
 
-function Ball:update(dt)
-    self.x = self.x + self.vx * dt
-    self.y = self.y + self.vy * dt
+function Ball.update(ball, dt)
+    ball.x = ball.x + ball.vx * dt
+    ball.y = ball.y + ball.vy * dt
 
-    if self.y <= 0 then
-        self.y = 0; self.vy = -self.vy
-    elseif self.y >= 600 - self.size then
-        self.y = 600 - self.size; self.vy = -self.vy
+    if ball.y <= 0 then
+        ball.y = 0; ball.vy = -ball.vy
+    elseif ball.y >= 600 - ball.size then
+        ball.y = 600 - ball.size; ball.vy = -ball.vy
     end
 
-    if self.parent then
-        local p = self.parent.player
-        if p and Ball.checkCollision(self.x, self.y, self.size, self.size,
+    if ball.parent then
+        local p = ball.parent.player
+        if p and Ball.checkCollision(ball.x, ball.y, ball.size, ball.size,
                                       p.x, p.y, p.w, p.h) then
-            self.x = p.x + p.w
-            self.vx = -self.vx
-            self.vx = self.vx * 1.05
-            self.vy = self.vy + (love.math.random() - 0.5) * 50
+            ball.x = p.x + p.w
+            ball.vx = -ball.vx
+            ball.vx = ball.vx * 1.05
+            ball.vy = ball.vy + (love.math.random() - 0.5) * 50
         end
     end
 
-    if self.x < -self.size or self.x > 800 + self.size then
-        if self.parent and self.parent.onPoint then
-            self.parent:onPoint(self.x < 0 and "right" or "left")
+    if ball.x < -ball.size or ball.x > 800 + ball.size then
+        if ball.parent and ball.parent.onPoint then
+            ball.parent:onPoint(ball.x < 0 and "right" or "left")
         end
     end
 end
 
-function Ball:draw()
+function Ball.draw(ball)
     love.graphics.setColor(1, 1, 1)
-    love.graphics.rectangle("fill", self.x, self.y, self.size, self.size)
+    love.graphics.rectangle("fill", ball.x, ball.y, ball.size, ball.size)
 end
 
 return Ball
