@@ -432,10 +432,11 @@ function Game:draw()
     Paddle.draw(self.enemy)
     Ball.draw(self.ball)
 
-    -- Score
+    -- Score (large font, centered on each half)
+    love.graphics.setNewFont(48)
     love.graphics.setColor(1, 1, 1, 0.3)
-    love.graphics.printf(tostring(self.playerScore), 0, 40, 350, "right")
-    love.graphics.printf(tostring(self.enemyScore), 0, 40, 450, "left")
+    love.graphics.printf(tostring(self.playerScore), 0, 40, 380, "right")
+    love.graphics.printf(tostring(self.enemyScore), 420, 40, 380, "left")
 
     -- Dotted center line
     for y = 0, 600, 20 do
@@ -539,9 +540,10 @@ function Game:draw()
     Paddle.draw(self.enemy)
     Ball.draw(self.ball)
 
+    love.graphics.setNewFont(48)
     love.graphics.setColor(1, 1, 1, 0.3)
-    love.graphics.printf(tostring(self.playerScore), 0, 40, 350, "right")
-    love.graphics.printf(tostring(self.enemyScore), 0, 40, 450, "left")
+    love.graphics.printf(tostring(self.playerScore), 0, 40, 380, "right")
+    love.graphics.printf(tostring(self.enemyScore), 420, 40, 380, "left")
 
     for y = 0, 600, 20 do
         love.graphics.rectangle("fill", 399, y, 2, 10)
