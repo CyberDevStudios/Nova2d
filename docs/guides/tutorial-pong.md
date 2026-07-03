@@ -266,11 +266,12 @@ function Ball.checkCollision(ax, ay, aw, ah, bx, by, bw, bh)
 end
 ```
 
-And add the collision block **inside** `Ball.update(ball, dt)`, **after** the `end` that closes the vertical bounce block and **before** the `-- If it goes off left or right` comment:
+And add the collision blocks **inside** `Ball.update(ball, dt)`, **after** the `end` that closes the vertical bounce block and **before** the `-- If it goes off left or right` comment:
 
 ```lua
-    -- Paddle collision
+    -- Paddle collisions (check BOTH paddles)
     if ball.parent then
+        -- Bounce off player paddle (left side)
         local p = ball.parent.player
         if p and Ball.checkCollision(ball.x, ball.y, ball.size, ball.size,
                                       p.x, p.y, p.w, p.h) then
@@ -278,6 +279,17 @@ And add the collision block **inside** `Ball.update(ball, dt)`, **after** the `e
             ball.vx = -ball.vx  -- reverse horizontal direction
             ball.vx = ball.vx * 1.05  -- speed up by 5%
             ball.vy = ball.vy + (love.math.random() - 0.5) * 50  -- add a bit of randomness
+        end
+
+        -- Bounce off enemy paddle (right side)
+        -- (safe to add now — it's ignored until the enemy paddle exists in Step 6)
+        local e = ball.parent.enemy
+        if e and Ball.checkCollision(ball.x, ball.y, ball.size, ball.size,
+                                      e.x, e.y, e.w, e.h) then
+            ball.x = e.x - ball.size
+            ball.vx = -ball.vx
+            ball.vx = ball.vx * 1.05
+            ball.vy = ball.vy + (love.math.random() - 0.5) * 50
         end
     end
 ```
@@ -298,12 +310,23 @@ function Ball.update(ball, dt)
         ball.vy = -ball.vy
     end
 
-    -- Paddle collision
+    -- Paddle collisions (check BOTH paddles)
     if ball.parent then
+        -- Bounce off player paddle (left side)
         local p = ball.parent.player
         if p and Ball.checkCollision(ball.x, ball.y, ball.size, ball.size,
                                       p.x, p.y, p.w, p.h) then
             ball.x = p.x + p.w
+            ball.vx = -ball.vx
+            ball.vx = ball.vx * 1.05
+            ball.vy = ball.vy + (love.math.random() - 0.5) * 50
+        end
+
+        -- Bounce off enemy paddle (right side)
+        local e = ball.parent.enemy
+        if e and Ball.checkCollision(ball.x, ball.y, ball.size, ball.size,
+                                      e.x, e.y, e.w, e.h) then
+            ball.x = e.x - ball.size
             ball.vx = -ball.vx
             ball.vx = ball.vx * 1.05
             ball.vy = ball.vy + (love.math.random() - 0.5) * 50
@@ -319,7 +342,7 @@ function Ball.update(ball, dt)
 end
 ```
 
-**Verify**: the ball bounces off the paddle, speeds up each time, and has a touch of
+**Verify**: the ball bounces off BOTH paddles, speeds up each time, and has a touch of
 randomness on the bounce.
 
 ---
@@ -652,6 +675,15 @@ function Ball.update(ball, dt)
         if p and Ball.checkCollision(ball.x, ball.y, ball.size, ball.size,
                                       p.x, p.y, p.w, p.h) then
             ball.x = p.x + p.w
+            ball.vx = -ball.vx
+            ball.vx = ball.vx * 1.05
+            ball.vy = ball.vy + (love.math.random() - 0.5) * 50
+        end
+
+        local e = ball.parent.enemy
+        if e and Ball.checkCollision(ball.x, ball.y, ball.size, ball.size,
+                                      e.x, e.y, e.w, e.h) then
+            ball.x = e.x - ball.size
             ball.vx = -ball.vx
             ball.vx = ball.vx * 1.05
             ball.vy = ball.vy + (love.math.random() - 0.5) * 50
