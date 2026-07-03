@@ -76,10 +76,10 @@ local SPEED = 400  -- pixels per second (fallback for keyboard)
 -- Using COLON syntax (Paddle:enter, self.xxx) would store state on the
 -- Paddle module table, making two paddles overwrite each other.
 
-function Paddle.enter(paddle, parent, side)
+function Paddle.enter(paddle, side, parent)
     -- paddle: the instance table (self.player, self.enemy)
-    -- parent: the Game state (for callbacks)
-    -- side: "left" or "right"
+    -- side: "left" or "right" — CRITICAL: must be second param
+    -- parent: the Game state (optional, for callbacks)
     paddle.side = side or "left"
     paddle.w = WIDTH
     paddle.h = HEIGHT
@@ -575,7 +575,7 @@ local HEIGHT = 80
 -- IMPORTANT: DOT syntax so each paddle call passes the instance explicitly.
 -- This lets player and enemy paddles have independent state.
 
-function Paddle.enter(paddle, parent, side)
+function Paddle.enter(paddle, side, parent)
     paddle.side = side or "left"
     paddle.w = WIDTH
     paddle.h = HEIGHT
