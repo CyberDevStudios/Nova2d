@@ -70,34 +70,42 @@ local WIDTH = 12
 local HEIGHT = 80
 local SPEED = 400  -- pixels per second (fallback for keyboard)
 
-function Paddle:enter(parent, side)
+-- IMPORTANT: we use DOT syntax for all Paddle functions.
+-- The paddl instance is passed explicitly as the first argument.
+-- This lets us have MULTIPLE paddles (player + enemy) with independent state.
+-- Using COLON syntax (Paddle:enter, self.xxx) would store state on the
+-- Paddle module table, making two paddles overwrite each other.
+
+function Paddle.enter(paddle, parent, side)
+    -- paddle: the instance table (self.player, self.enemy)
+    -- parent: the Game state (for callbacks)
     -- side: "left" or "right"
-    self.side = side or "left"
-    self.w = WIDTH
-    self.h = HEIGHT
+    paddle.side = side or "left"
+    paddle.w = WIDTH
+    paddle.h = HEIGHT
 
-    if self.side == "left" then
-        self.x = 30
+    if paddle.side == "left" then
+        paddle.x = 30
     else
-        self.x = 770
+        paddle.x = 770
     end
-    self.y = 300 - HEIGHT / 2
+    paddle.y = 300 - HEIGHT / 2
 
-    self.parent = parent  -- keep a reference to the Game state
+    paddle.parent = parent  -- keep a reference to the Game state
 end
 
-function Paddle:update(dt)
+function Paddle.update(paddle, dt)
     -- Mouse tracking in Y
-    self.y = love.mouse.getY() - self.h / 2
+    paddle.y = love.mouse.getY() - paddle.h / 2
 
     -- Clamp to screen
-    if self.y < 0 then self.y = 0 end
-    if self.y > 600 - self.h then self.y = 600 - self.h end
+    if paddle.y < 0 then paddle.y = 0 end
+    if paddle.y > 600 - paddle.h then paddle.y = 600 - paddle.h end
 end
 
-function Paddle:draw()
+function Paddle.draw(paddle)
     love.graphics.setColor(1, 1, 1)
-    love.graphics.rectangle("fill", self.x, self.y, self.w, self.h)
+    love.graphics.rectangle("fill", paddle.x, paddle.y, paddle.w, paddle.h)
 end
 
 return Paddle
@@ -114,16 +122,16 @@ local Game = {}
 
 function Game:enter()
     self.player = {}
-    Paddle:enter(self.player, "left")
+    Paddle.enter(self.player, "left")
 end
 
 function Game:update(dt)
-    Paddle:update(self.player, dt)
+    Paddle.update(self.player, dt)
 end
 
 function Game:draw()
     love.graphics.clear()
-    Paddle:draw(self.player)
+    Paddle.draw(self.player)
 end
 
 function Game:keyreleased(key)
@@ -206,20 +214,20 @@ local Game = {}
 
 function Game:enter()
     self.player = {}
-    Paddle:enter(self.player, "left")
+    Paddle.enter(self.player, "left")
 
     self.ball = {}
     Ball:enter(self.ball, self)
 end
 
 function Game:update(dt)
-    Paddle:update(self.player, dt)
+    Paddle.update(self.player, dt)
     Ball:update(self.ball, dt)
 end
 
 function Game:draw()
     love.graphics.clear()
-    Paddle:draw(self.player)
+    Paddle.draw(self.player)
     Ball:draw(self.ball)
 end
 
@@ -321,10 +329,10 @@ In `src/states/game.lua`, replace the entire `Game:enter()` function with (note 
 ```lua
 function Game:enter()
     self.player = {}
-    Paddle:enter(self.player, "left")
+    Paddle.enter(self.player, "left")
 
     self.enemy = {}
-    Paddle:enter(self.enemy, "right")
+    Paddle.enter(self.enemy, "right")
 
     self.ball = {}
     Ball:enter(self.ball, self)
@@ -335,43 +343,43 @@ Then replace the `Game:update(dt)` and `Game:draw()` functions in the same file 
 
 ```lua
 function Game:update(dt)
-    Paddle:update(self.player, dt)
-    Paddle:update(self.enemy, dt)  -- for now it stays still
+    Paddle.update(self.player, dt)
+    Paddle.update(self.enemy, dt)  -- for now it stays still
     Ball:update(self.ball, dt)
 end
 
 function Game:draw()
     love.graphics.clear()
-    Paddle:draw(self.player)
-    Paddle:draw(self.enemy)
+    Paddle.draw(self.player)
+    Paddle.draw(self.enemy)
     Ball:draw(self.ball)
 end
 ```
 
 **Verify**: there are two paddles, the right one stays still. Now we add AI
-behavior. Add this method to `src/entities/paddle.lua`, **after** the `Paddle:update(dt)` function (after the `end` on line 96) and **before** the `Paddle:draw()` function (before `function Paddle:draw()` on line 98):
+behavior. Add this method to `src/entities/paddle.lua`, **after** the `Paddle.update(paddle, dt)` function and **before** the `Paddle.draw(paddle)` function:
 
 ```lua
-function Paddle:aiUpdate(dt, ballY)
+function Paddle.aiUpdate(paddle, dt, ballY)
     -- The AI chases the ball, but it's not perfect
-    local paddleCenter = self.y + self.h / 2
+    local paddleCenter = paddle.y + paddle.h / 2
     local diff = ballY - paddleCenter
 
     if math.abs(diff) > 10 then  -- dead zone to prevent jitter
         local speed = 250  -- a bit slower than the mouse
-        self.y = self.y + math.max(-speed, math.min(speed, diff)) * dt
+        paddle.y = paddle.y + math.max(-speed, math.min(speed, diff)) * dt
     end
 
     -- Clamp to screen
-    if self.y < 0 then self.y = 0 end
-    if self.y > 600 - self.h then self.y = 600 - self.h end
+    if paddle.y < 0 then paddle.y = 0 end
+    if paddle.y > 600 - paddle.h then paddle.y = 600 - paddle.h end
 end
 ```
 
-And in `src/states/game.lua`, inside `Game:update(dt)`, find the line `Paddle:update(self.enemy, dt)` and change it to:
+And in `src/states/game.lua`, inside `Game:update(dt)`, find the line `Paddle.update(self.enemy, dt)` and change it to:
 
 ```lua
-    Paddle:aiUpdate(self.enemy, dt, self.ball.y)
+    Paddle.aiUpdate(self.enemy, dt, self.ball.y)
 ```
 
 **Verify**: the right paddle chases the ball. It's not perfect — it has a dead
@@ -392,10 +400,10 @@ function Game:enter()
     self.enemyScore = 0
 
     self.player = {}
-    Paddle:enter(self.player, "left")
+    Paddle.enter(self.player, "left")
 
     self.enemy = {}
-    Paddle:enter(self.enemy, "right")
+    Paddle.enter(self.enemy, "right")
 
     self.ball = {}
     Ball:enter(self.ball, self)
@@ -418,8 +426,8 @@ Then replace the entire `Game:draw()` function with:
 ```lua
 function Game:draw()
     love.graphics.clear()
-    Paddle:draw(self.player)
-    Paddle:draw(self.enemy)
+    Paddle.draw(self.player)
+    Paddle.draw(self.enemy)
     Ball:draw(self.ball)
 
     -- Score
@@ -508,25 +516,25 @@ function Game:enter()
     self.enemyScore = 0
 
     self.player = {}
-    Paddle:enter(self.player, "left")
+    Paddle.enter(self.player, "left")
 
     self.enemy = {}
-    Paddle:enter(self.enemy, "right")
+    Paddle.enter(self.enemy, "right")
 
     self.ball = {}
     Ball:enter(self.ball, self)
 end
 
 function Game:update(dt)
-    Paddle:update(self.player, dt)
-    Paddle:aiUpdate(self.enemy, dt, self.ball.y)
+    Paddle.update(self.player, dt)
+    Paddle.aiUpdate(self.enemy, dt, self.ball.y)
     Ball:update(self.ball, dt)
 end
 
 function Game:draw()
     love.graphics.clear()
-    Paddle:draw(self.player)
-    Paddle:draw(self.enemy)
+    Paddle.draw(self.player)
+    Paddle.draw(self.enemy)
     Ball:draw(self.ball)
 
     love.graphics.setColor(1, 1, 1, 0.3)
@@ -562,35 +570,38 @@ local Paddle = {}
 local WIDTH = 12
 local HEIGHT = 80
 
-function Paddle:enter(parent, side)
-    self.side = side or "left"
-    self.w = WIDTH
-    self.h = HEIGHT
-    if self.side == "left" then self.x = 30 else self.x = 770 end
-    self.y = 300 - HEIGHT / 2
-    self.parent = parent
+-- IMPORTANT: DOT syntax so each paddle call passes the instance explicitly.
+-- This lets player and enemy paddles have independent state.
+
+function Paddle.enter(paddle, parent, side)
+    paddle.side = side or "left"
+    paddle.w = WIDTH
+    paddle.h = HEIGHT
+    if paddle.side == "left" then paddle.x = 30 else paddle.x = 770 end
+    paddle.y = 300 - HEIGHT / 2
+    paddle.parent = parent
 end
 
-function Paddle:update(dt)
-    self.y = love.mouse.getY() - self.h / 2
-    if self.y < 0 then self.y = 0 end
-    if self.y > 600 - self.h then self.y = 600 - self.h end
+function Paddle.update(paddle, dt)
+    paddle.y = love.mouse.getY() - paddle.h / 2
+    if paddle.y < 0 then paddle.y = 0 end
+    if paddle.y > 600 - paddle.h then paddle.y = 600 - paddle.h end
 end
 
-function Paddle:aiUpdate(dt, ballY)
-    local paddleCenter = self.y + self.h / 2
+function Paddle.aiUpdate(paddle, dt, ballY)
+    local paddleCenter = paddle.y + paddle.h / 2
     local diff = ballY - paddleCenter
     if math.abs(diff) > 10 then
         local speed = 250
-        self.y = self.y + math.max(-speed, math.min(speed, diff)) * dt
+        paddle.y = paddle.y + math.max(-speed, math.min(speed, diff)) * dt
     end
-    if self.y < 0 then self.y = 0 end
-    if self.y > 600 - self.h then self.y = 600 - self.h end
+    if paddle.y < 0 then paddle.y = 0 end
+    if paddle.y > 600 - paddle.h then paddle.y = 600 - paddle.h end
 end
 
-function Paddle:draw()
+function Paddle.draw(paddle)
     love.graphics.setColor(1, 1, 1)
-    love.graphics.rectangle("fill", self.x, self.y, self.w, self.h)
+    love.graphics.rectangle("fill", paddle.x, paddle.y, paddle.w, paddle.h)
 end
 
 return Paddle
