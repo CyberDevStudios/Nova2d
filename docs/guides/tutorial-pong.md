@@ -31,7 +31,7 @@ Replace the entire content of `src/states/game.lua` with:
 
 ```lua
 local Gamestate = require("hump.gamestate")
-local Menu = require("states.menu")
+local Menu = require("src.states.menu")
 
 local Game = {}
 
@@ -115,8 +115,8 @@ Now update `src/states/game.lua` to use the paddle. Replace the entire content w
 
 ```lua
 local Gamestate = require("hump.gamestate")
-local Menu = require("states.menu")
-local Paddle = require("entities.paddle")
+local Menu = require("src.states.menu")
+local Paddle = require("src.entities.paddle")
 
 local Game = {}
 
@@ -209,9 +209,9 @@ Update `src/states/game.lua` to include the ball. Replace the entire content wit
 
 ```lua
 local Gamestate = require("hump.gamestate")
-local Menu = require("states.menu")
-local Paddle = require("entities.paddle")
-local Ball = require("entities.ball")
+local Menu = require("src.states.menu")
+local Paddle = require("src.entities.paddle")
+local Ball = require("src.entities.ball")
 
 local Game = {}
 
@@ -531,9 +531,9 @@ Complete reference files:
 **`src/states/game.lua`**:
 ```lua
 local Gamestate = require("hump.gamestate")
-local Menu = require("states.menu")
-local Paddle = require("entities.paddle")
-local Ball = require("entities.ball")
+local Menu = require("src.states.menu")
+local Paddle = require("src.entities.paddle")
+local Ball = require("src.entities.ball")
 
 local Game = {}
 

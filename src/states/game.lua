@@ -2,6 +2,7 @@
 -- src/states/game.lua
 
 local Gamestate = require "hump.gamestate"
+local Pause = require("src.states.pause")
 
 local State = {}
 
@@ -19,7 +20,7 @@ end
 
 function State:keyreleased(key)
     if key == "escape" then
-        Gamestate.push(require("src.states.pause"))
+        Gamestate.push(Pause)
     end
 end
 

@@ -1,5 +1,18 @@
 # Changelog
 
+## v0.5.2 — Require Path Consistency (2026-07-02)
+
+- Fixed double-instance bug in Pong tutorial caused by mixing `require("states.menu")` and
+  `require("src.states.menu")` — Lua treats them as different cache keys in `package.loaded`,
+  creating separate module tables with independent state
+- Moved lazy `require()` calls to top-level in `src/states/splash.lua`, `game.lua`,
+  `pause.lua`, and `credits.lua` for consistent module loading at init time
+- `src/states/menu.lua` keeps lazy requires with explanatory comment — moving them to
+  top would create circular dependencies (menu ↔ game ↔ pause and menu ↔ credits)
+- Updated all documentation code examples (`tutorial-pong.md`, `states.md`, `faq.md`) to
+  use the `src.` prefix convention for internal requires
+- Added require path convention comment to `main.lua`
+
 ## v0.5.1 — Documentation Content (2026-07-01)
 
 - Rewrote Quick Start with coherent step-by-step flow (steps 1–5, verifiable code)

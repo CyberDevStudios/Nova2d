@@ -59,7 +59,7 @@ You only need to define the callbacks your state uses — the rest are ignored.
 ```lua
 -- src/states/myState.lua
 local Gamestate = require("hump.gamestate")
-local Menu = require("states.menu")
+local Menu = require("src.states.menu")
 
 local MyState = {}
 

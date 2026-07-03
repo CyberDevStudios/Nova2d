@@ -4,6 +4,7 @@
 
 local hotreload = require("src.hotreload")
 local Gamestate = require "hump.gamestate"
+local Menu = require("src.states.menu")
 
 -- ---------------------------------------------------------------------------
 -- Constants
@@ -138,12 +139,12 @@ function State:update(dt)
     end
 
     if timer <= 0 then
-        Gamestate.switch(require("src.states.menu"))
+        Gamestate.switch(Menu)
     end
 end
 
 function State:keypressed()
-    Gamestate.switch(require("src.states.menu"))
+    Gamestate.switch(Menu)
 end
 State.mousepressed = State.keypressed
 

@@ -2,6 +2,7 @@
 -- src/states/pause.lua
 
 local Gamestate = require "hump.gamestate"
+local Menu = require("src.states.menu")
 
 local State = {}
 local pauseItems = { "Resume", "Return to Menu" }
@@ -86,7 +87,7 @@ function State:keyreleased(key)
         if pauseItems[selected] == "Resume" then
             Gamestate.pop()
         elseif pauseItems[selected] == "Return to Menu" then
-            Gamestate.switch(require("src.states.menu"))
+            Gamestate.switch(Menu)
         end
     end
 end
@@ -102,7 +103,7 @@ function State:mousepressed(x, y, button)
             if pauseItems[i] == "Resume" then
                 Gamestate.pop()
             elseif pauseItems[i] == "Return to Menu" then
-                Gamestate.switch(require("src.states.menu"))
+                Gamestate.switch(Menu)
             end
             return
         end

@@ -3,6 +3,7 @@
 -- src/states/credits.lua
 
 local Gamestate = require "hump.gamestate"
+local Menu = require("src.states.menu")
 
 -- ---------------------------------------------------------------------------
 -- Constants
@@ -171,12 +172,12 @@ end
 
 function State:keyreleased(key)
     if key == "escape" or key == "return" or key == "backspace" or key == "space" then
-        Gamestate.switch(require("src.states.menu"))
+        Gamestate.switch(Menu)
     end
 end
 
 function State:mousepressed(x, y, button)
-    Gamestate.switch(require("src.states.menu"))
+    Gamestate.switch(Menu)
 end
 
 return State

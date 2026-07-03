@@ -211,6 +211,10 @@ end
 -- Dispatch
 -- ---------------------------------------------------------------------------
 
+-- NOTE: requires are kept lazy here (inside function) instead of at module
+-- top to avoid circular dependencies: menu → game → pause → menu and
+-- menu → credits → menu. The other states (splash, game, pause, credits)
+-- have their cross-references at the top since they don't create cycles.
 function dispatchAction()
     local item = menuItems[selected]
     if item.label == "New Game" then
