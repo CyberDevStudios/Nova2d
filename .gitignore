@@ -6,7 +6,7 @@
 
 # Nova2D
 nova2d-lock.lua
-libs/*.zip
+libs/
 *.tmp
 
 # OS

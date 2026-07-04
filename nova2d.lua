@@ -6,28 +6,34 @@ return {
     dependencies = {
         ["bump.lua"] = {
             repo = "kikito/bump.lua",
-            version = "3.1.7",
+            version = "v3.1.7",
             type = "single",
             file = "bump.lua"
         },
         ["anim8"] = {
             repo = "kikito/anim8",
-            version = "2.3.0",
+            version = "v2.3.0",
             type = "multi"
         },
         ["hump"] = {
             repo = "vrld/hump",
-            version = "main",
+            version = "master",
             type = "multi"
         },
         ["lurker"] = {
             repo = "rxi/lurker",
-            version = "main",
+            version = "master",
             type = "multi"
+        },
+        ["lume"] = {
+            repo = "rxi/lume",
+            version = "v2.3.0",
+            type = "single",
+            file = "lume.lua"
         },
         ["lovebird"] = {
             repo = "rxi/lovebird",
-            version = "main",
+            version = "master",
             type = "multi"
         },
     },

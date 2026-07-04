@@ -1,5 +1,17 @@
 # Changelog
 
+## v0.5.4 — Gestor Overhaul & Dependency Fixes (2026-07-04)
+
+- **Fixed all 5 dependency URLs** — GitHub tags use `v` prefix (`v3.1.7` not `3.1.7`) and default branches are `master` not `main`
+- **Added `lume` as dependency** — required by lurker but wasn't listed
+- **Patched lurker nil crash** — `love.filesystem.getInfo()` can return `nil` in Love2D 11.x; lurker's `isdir()` and `lastmodified()` now handle it
+- **Migrated unzip to `io.popen`** — same sandbox-safe pattern as curl; `os.execute` can return `nil` in Snap/Flatpak environments
+- **Fixed `os.tmpname()` conflict** — `os.tmpname()` may create a file that prevents `mkdir -p`; added `os.remove()` before creating temp dir
+- **Upfront unzip check** — `love gestor/ install` now fails immediately with install instructions if `unzip` is missing and multi-file deps need it
+- **`libs/` removed from git tracking** — dependencies are downloaded via gestor, no longer committed to the repo
+- **Added `unzip` to prerequisites** in installer docs
+- **Docs site version bump** to v0.5.4
+
 ## v0.5.3 — Installer & Gestor Hardening (2026-07-03)
 
 - Redesigned install.sh welcome message with cleaner layout, border, and Cyber Dev Studios credit

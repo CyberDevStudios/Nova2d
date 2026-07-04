@@ -66,6 +66,7 @@ function download.multi_file(name, dep, libs_path)
 
     local tmp_zip = os.tmpname() .. ".zip"
     local tmp_dir = os.tmpname()
+    os.remove(tmp_dir)          -- os.tmpname() puede crear un archivo; lo borramos
     util.ensure_dir(tmp_dir)
 
     -- Download zip
@@ -76,10 +77,24 @@ function download.multi_file(name, dep, libs_path)
         return false, msg
     end
 
-    -- Extract
-    local extract_cmd = string.format("unzip -o %s -d %s", shell_quote(tmp_zip), shell_quote(tmp_dir))
-    local extract_ok = os.execute(extract_cmd)
-    if extract_ok ~= 0 then
+    -- Extract with io.popen (same approach as run_curl for sandbox compat)
+    local extract_cmd = string.format("unzip -o %s -d %s 2>&1; echo NOVA2D_EXIT:$?", shell_quote(tmp_zip), shell_quote(tmp_dir))
+    local handle = io.popen(extract_cmd)
+    if not handle then
+        os.remove(tmp_zip)
+        os.execute(shell_remove_dir(tmp_dir))
+        return false, "No se pudo lanzar unzip (io.popen falló)."
+    end
+    local extract_output = handle:read("*a")
+    handle:close()
+    local extract_code = tonumber(extract_output:match("NOVA2D_EXIT:(%-?%d+)"))
+    if not extract_code then
+        os.remove(tmp_zip)
+        os.execute(shell_remove_dir(tmp_dir))
+        return false, "No se pudo determinar el código de salida de unzip."
+    end
+    -- unzip exit codes: 0 = success, 1 = warning (files extracted), 2+ = error
+    if extract_code ~= 0 and extract_code ~= 1 then
         os.remove(tmp_zip)
         os.execute(shell_remove_dir(tmp_dir))
         return false, "Failed to extract archive. unzip may be missing or archive is corrupt."

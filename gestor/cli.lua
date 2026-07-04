@@ -65,6 +65,13 @@ function cmd_install(args)
         to_install = filtered
     end
 
+    -- Check unzip upfront if any multi-file dependency needs it
+    for _, item in ipairs(to_install) do
+        if item.dep.type == "multi" and not util.find_tool("unzip") then
+            return false, "unzip not found. " .. util.tool_instructions("unzip")
+        end
+    end
+
     local libs_path = root .. "/libs"
     util.ensure_dir(libs_path)
 
@@ -75,13 +82,7 @@ function cmd_install(args)
         if item.dep.type == "single" then
             ok, dlerr = download.single_file(item.name, item.dep, libs_path)
         else
-            if not util.find_tool("unzip") then
-                print("[WARN] unzip not found. " .. util.tool_instructions("unzip"))
-                print("[WARN] Skipping " .. item.name .. " (requires unzip for multi-file)")
-                dlerr = "unzip not available"
-            else
-                ok, dlerr = download.multi_file(item.name, item.dep, libs_path)
-            end
+            ok, dlerr = download.multi_file(item.name, item.dep, libs_path)
         end
 
         if ok then

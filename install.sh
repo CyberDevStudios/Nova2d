@@ -58,6 +58,18 @@ check_curl() {
     fi
 }
 
+check_unzip() {
+    if ! command -v unzip >/dev/null 2>&1; then
+        warn "unzip is recommended but not found."
+        info "Some dependencies (anim8, hump, lurker, lovebird) need unzip."
+        case "$OS" in
+            linux)  info "Install: sudo apt install unzip  (Debian/Ubuntu)" ;;
+            macos)  info "Install: brew install unzip" ;;
+            windows) info "Install: https://infozip.sourceforge.net/" ;;
+        esac
+    fi
+}
+
 check_love() {
     local found=0
 
@@ -204,6 +216,7 @@ main() {
 
     check_curl
     check_love
+    check_unzip
     download_framework
     install_deps
     welcome

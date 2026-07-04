@@ -203,7 +203,7 @@ Verify that:
 Try manually:
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/kikito/bump.lua/3.1.7/bump.lua
+curl -fsSL https://raw.githubusercontent.com/kikito/bump.lua/v3.1.7/bump.lua
 ```
 
 If that works, the issue is not network-related.

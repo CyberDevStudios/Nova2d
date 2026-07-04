@@ -48,4 +48,5 @@ git clone https://github.com/CyberDevStudios/Nova2d.git my-game
 |---|---|---|
 | Love2D | 11.x | `love --version` |
 | curl | any | `curl --version` |
+| unzip | any | `unzip --version` (needed for multi-file deps like anim8, hump) |
 | bash | 4.x+ | `bash --version` (Windows: Git Bash or WSL) |

@@ -6,6 +6,7 @@ Get Nova2D running and build a moving player in under 2 minutes.
 
 - [Love2D 11.x](https://love2d.org/) installed
 - `curl` (comes with Windows 10+, macOS, and most Linux)
+- `unzip` (needed for multi-file dependencies — install via your package manager)
 
 ## Step 1: Create a project
 
