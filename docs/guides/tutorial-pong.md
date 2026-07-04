@@ -13,9 +13,6 @@ Build a complete, playable Pong game using Nova2D. Each step produces a game tha
 ```bash
 curl -fsSL https://nova2d.pages.dev/install.sh | bash -s pong
 cd pong
-
-# Install dependencies (optional — not needed for this tutorial)
-love gestor/ install
 ```
 
 Run `love .` to verify you see the splash screen and menu. If it works, you have
