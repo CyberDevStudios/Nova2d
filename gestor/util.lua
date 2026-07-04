@@ -58,6 +58,8 @@ end
 
 function util.get_project_root()
     local source = love.filesystem.getSource()
+    -- Strip trailing slashes so the regex can strip the last path component
+    source = source:gsub("/+$", ""):gsub("\\+$", "")
     return source:match("^(.+)/[^/]+$") or source
 end
 
