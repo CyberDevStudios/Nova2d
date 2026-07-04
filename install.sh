@@ -101,15 +101,20 @@ check_love() {
 welcome() {
     cat <<EOF
 
-  ${BOLD}Nova2D${NC} — Framework for Love2D
-  ${GREEN}Installed successfully${NC}
+${BOLD}── Nova2D ────────────────────────────────────${NC}
+   Framework for Love2D
+   ${GREEN}✓ Installed successfully${NC}
 
-  ${BOLD}Next steps:${NC}
-    cd $PROJECT_NAME
-    love .
+   ${BOLD}Next steps:${NC}
+     cd $PROJECT_NAME
+     love .
 
-  ${BOLD}Documentation:${NC}
-    https://github.com/$REPO
+   ${BOLD}Created by Cyber Dev Studios${NC}
+
+   ${BOLD}Documentation:${NC}
+     https://nova2d.pages.dev/
+
+${BOLD}──────────────────────────────────────────────${NC}
 
 EOF
 }
@@ -179,7 +184,7 @@ download_framework() {
 install_deps() {
     if command -v love >/dev/null 2>&1; then
         info "Installing default dependencies..."
-        (cd "$INSTALL_DIR" && love gestor/ 2>/dev/null) || true
+        (cd "$INSTALL_DIR" && love gestor/ install 2>/dev/null) || true
         info "Dependencies ready."
     fi
 }
