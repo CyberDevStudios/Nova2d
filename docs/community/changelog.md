@@ -1,5 +1,17 @@
 # Changelog
 
+## v0.5.3 — Installer & Gestor Hardening (2026-07-03)
+
+- Redesigned install.sh welcome message with cleaner layout, border, and Cyber Dev Studios credit
+- Fixed ANSI escape codes not rendering in welcome heredoc — switched color vars to `printf -v` for real ESC bytes
+- Fixed `love gestor/` (no args) running instead of `love gestor/ install` during install_deps
+- Fixed `util.get_project_root()` returning path with trailing `/gestor/` — strips trailing slashes before regex
+- Fixed `util.normalize_exit_code()` crash when `os.execute` returns nil
+- Fixed `util.find_tool()` not finding curl in sandboxed Love2D environments (Snap/Flatpak) — added `io.open` fallback on common paths
+- Replaced Pong tutorial GIF with YouTube video embed (`<!-- youtube:snyD3X8_B5Q -->`)
+- Removed redundant `love gestor/ install` line from Pong tutorial (handled by install.sh)
+- Docs site: PageSpeed optimizations, YouTube embed support, llms.txt, light mode contrast fix, crawlable nav links
+
 ## v0.5.2 — Require Path Consistency (2026-07-02)
 
 - Fixed double-instance bug in Pong tutorial caused by mixing `require("states.menu")` and
