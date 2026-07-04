@@ -13,11 +13,11 @@ INSTALL_DIR="$PROJECT_NAME"
 # ──────────────────────────────────────────────
 # Colors
 # ──────────────────────────────────────────────
-RED='\033[0;31m'
-GREEN='\033[0;32m'
-YELLOW='\033[1;33m'
-BOLD='\033[1m'
-NC='\033[0m'
+printf -v RED   '\033[0;31m'
+printf -v GREEN '\033[0;32m'
+printf -v YELLOW '\033[1;33m'
+printf -v BOLD  '\033[1m'
+printf -v NC    '\033[0m'
 
 info()  { printf "  ${GREEN}${BOLD}→${NC} %s\n" "$1"; }
 warn()  { printf "  ${YELLOW}${BOLD}→${NC} %s\n" "$1"; }
