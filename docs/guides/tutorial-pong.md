@@ -511,9 +511,7 @@ In `src/entities/ball.lua`, **inside** `Ball.update(ball, dt)`, add this block i
 
 After completing step 7 (without sound), this is what you get:
 
-<div style="text-align: center;">
-  <img src="/images/demo-pong.gif" alt="Pong demo gameplay" style="width: 60%;" />
-</div>
+<!-- youtube:snyD3X8_B5Q -->
 
 ```
 src/
