@@ -18,8 +18,19 @@ function util.find_tool(name)
         r = os.execute("where " .. name .. ".exe >nul 2>nul")
         return r == 0
     else
+        -- Try command -v first (works in most environments)
         local r = os.execute("command -v " .. name .. " >/dev/null 2>&1")
-        return r == 0
+        if r == 0 then return true end
+
+        -- Fallback: check common paths directly via io.open
+        -- Love2D sandboxes (Snap/Flatpak) may restrict os.execute PATH
+        local common_dirs = {"/usr/bin/", "/usr/local/bin/", "/bin/", "/snap/bin/", "/opt/homebrew/bin/"}
+        for _, dir in ipairs(common_dirs) do
+            local f = io.open(dir .. name)
+            if f then f:close(); return true end
+        end
+
+        return false
     end
 end
 
