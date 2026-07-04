@@ -118,25 +118,41 @@ end
 
 function run_curl(cmd, dep_name)
     print("> " .. dep_name .. " -> downloading...")
-    local code = util.normalize_exit_code(os.execute(cmd))
-    if code ~= 0 then
-        return false, curl_error_message(code)
-    end
-    return true
-end
 
-function curl_error_message(code)
+    -- io.popen captura salida real + código de salida vía el shell,
+    -- evitando depender del valor de retorno de os.execute() que puede
+    -- devolver nil en entornos con sandbox (Snap/Flatpak).
+    local handle = io.popen(cmd .. " 2>&1; echo NOVA2D_EXIT:$?")
+    if not handle then
+        return false, "No se pudo lanzar el subproceso (io.popen falló). "
+            .. "Esto suele pasar cuando 'love' corre en un sandbox "
+            .. "(Snap/Flatpak) que restringe la ejecución de comandos "
+            .. "externos."
+    end
+    local output = handle:read("*a")
+    handle:close()
+
+    local code = tonumber(output:match("NOVA2D_EXIT:(%-?%d+)"))
+    if not code then
+        return false, "No se pudo determinar el código de salida de curl."
+    end
+    if code == 0 then return true end
+
     local messages = {
-        [6]  = "Could not resolve host. Check internet connection.",
-        [7]  = "Connection refused by server.",
-        [18] = "Download incomplete. Retry.",
-        [22] = "Not found. Check repo or version in nova2d.lua.",
-        [28] = "Connection timed out after 30s.",
-        [52] = "Server returned empty response.",
-        [56] = "Network failure. Check connection.",
-        [60] = "SSL certificate error. Update CA certs.",
+        [6]  = "No se pudo resolver el host (DNS)",
+        [7]  = "No se pudo conectar al servidor",
+        [22] = "Error HTTP (404/403) — revisa repo/version/file en nova2d.lua",
+        [28] = "Tiempo de espera agotado",
+        [35] = "Error de conexión SSL",
     }
-    return messages[code] or "curl failed with exit code " .. code
+    local detail = messages[code] or "curl falló con código " .. tostring(code)
+
+    -- Limpiar el marcador de la salida para el diagnóstico
+    local clean_output = output:gsub("NOVA2D_EXIT:.*\n?", "")
+    return false, string.format(
+        "%s\n  Comando: %s\n  Salida: %s",
+        detail, cmd, clean_output
+    )
 end
 
 return download
