@@ -76,6 +76,7 @@ function util.format_timestamp(ts)
 end
 
 function util.normalize_exit_code(code)
+    if not code then return -1 end
     if code == 0 then return 0 end
     if code < 0 then return code end
     if code % 256 == 0 then
