@@ -1,6 +1,6 @@
 # Changelog
 
-## v0.6.0-pre.1 — Core Systems: Jump, Health, Timer, Camera, Input (2026-07-10)
+## v0.6.0 — Core Systems: Jump, Health, Timer, Camera, Input (2026-07-10)
 
 - **Jump system** (`src/systems/jump.lua`) — configurable gravity, variable jump height, multi-jump, coyote time, jump buffer, event callbacks
 - **Health system** (`src/systems/health.lua`) — HP tracking, damage types, invincibility frames, death/respawn state, event callbacks
