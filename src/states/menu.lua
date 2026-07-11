@@ -172,7 +172,7 @@ function State:draw()
     -- Version
     love.graphics.setFont(ensureFont(fontVersion, 11))
     love.graphics.setColor(1, 1, 1, 0.12)
-    love.graphics.printf("v0.5", 0, H - 22, W, "center")
+    love.graphics.printf("v0.6", 0, H - 22, W, "center")
 
     love.graphics.setColor(1, 1, 1)
 end
