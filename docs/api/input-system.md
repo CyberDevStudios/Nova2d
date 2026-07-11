@@ -229,7 +229,7 @@ inp:bind("jump", "a")   -- Xbox A / PlayStation Cross
 
 If `love.joystick` is disabled or no gamepad is connected, the gamepad check is silently skipped.
 
-## ⚠️ Important: Do NOT use love.keypressed / love.keyreleased
+## [IMPORTANT] Do NOT use love.keypressed / love.keyreleased
 
 This system **internally hooks** `love.keypressed` and `love.keyreleased` to capture press timestamps for the buffer. Your `love.keypressed` and `love.keyreleased` callbacks are still called (the system chains to them automatically), but:
 
@@ -238,12 +238,12 @@ This system **internally hooks** `love.keypressed` and `love.keyreleased` to cap
 - If you need `love.keypressed` for non-input purposes (e.g., toggling fullscreen), define it **before** calling `input.new()` — the system will chain to it.
 
 ```lua
--- ❌ Wrong: gameplay logic in love.keypressed
+-- Wrong: gameplay logic in love.keypressed
 function love.keypressed(key)
     if key == "space" then player:jump() end
 end
 
--- ✅ Right: poll in love.update
+-- Right: poll in love.update
 function love.update(dt)
     if inp:isPressed("jump") then player:jump() end
     inp:update(dt)
