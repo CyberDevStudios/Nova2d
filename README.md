@@ -46,6 +46,11 @@ love .
 ## Features
 
 - **5 game states** — splash (animated), menu, game, pause (overlay), credits
+- **5 core systems** — input, timer, health, camera, and jump
+- **Input System** — action-based key bindings with gamepad support and press buffering
+- **Timer System** — countdown and stopwatch with tick/expired events
+- **Health System** — HP tracking, damage, healing, invincibility frames, and death state
+- **Camera System** — attach/detach with transform stacking
 - **Dependency manager** — install, update, remove libraries via `nova2d.lua`
 - **Hot reload** — edit `src/` files and see changes instantly (no restart)
 - **One-command installer** — `curl ... | bash` setup, no git required
@@ -62,7 +67,7 @@ my-game/
 ├── src/
 │   ├── states/           -- Screens (splash, menu, game, pause, credits)
 │   ├── entities/         -- Player, enemies, objects
-│   ├── systems/          -- Physics, audio, collisions
+│   ├── systems/          -- Input, timer, health, camera, jump
 │   ├── utils/            -- Helpers
 │   └── hotreload.lua     -- Hot reload bootstrapper
 ├── assets/
