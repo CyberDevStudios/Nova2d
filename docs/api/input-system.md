@@ -83,7 +83,7 @@ local inp = input.new({
 Add one or more keys to an action. Existing bindings are preserved. Duplicates are silently ignored.
 
 ```lua
-inp:bind("jump", "up", "w", "gp:facebottom")   -- jump now responds to up, w, or gamepad A
+inp:bind("jump", "up", "w", "a")   -- jump now responds to up, w, or gamepad A
 ```
 
 ### `input:unbind(action, key)`
@@ -216,7 +216,7 @@ print("Jump is bound to:", table.concat(jumpKeys, ", "))
 Multi-key support per action makes it easy to support both keyboard and gamepad simultaneously:
 
 ```lua
-inp:rebind("jump", "space", "up", "gp:facebottom")
+inp:rebind("jump", "space", "up", "a")
 ```
 
 ## Gamepad support
@@ -224,7 +224,7 @@ inp:rebind("jump", "space", "up", "gp:facebottom")
 When `love.joystick` is enabled in `conf.lua`, `isPressed()` also checks connected gamepads. No extra setup needed — pass gamepad button names (matching Love2D's `isGamepadDown` strings) as keys:
 
 ```lua
-inp:bind("jump", "gp:facebottom")   -- PlayStation X / Xbox A
+inp:bind("jump", "a")   -- Xbox A / PlayStation Cross
 ```
 
 If `love.joystick` is disabled or no gamepad is connected, the gamepad check is silently skipped.
@@ -257,4 +257,4 @@ Any string accepted by `love.keyboard.isDown` (keyboard) or `love.joystick:isGam
 | Type | Keys |
 |---|---|
 | Keyboard | `"space"`, `"left"`, `"right"`, `"up"`, `"down"`, `"return"`, `"x"`, `"z"`, `"a"`–`"z"` |
-| Gamepad | `"gp:facebottom"` (A / X), `"gp:faceright"` (B / Circle), `"gp:faceleft"` (X / Square), `"gp:gatop"` (Y / Triangle), `"gp:leftshoulder"`, `"gp:rightshoulder"` |
+| Gamepad | `"a"` (A / Cross), `"b"` (B / Circle), `"x"` (X / Square), `"y"` (Y / Triangle), `"leftshoulder"`, `"rightshoulder"`, `"start"`, `"back"`, `"dpup"`, `"dpdown"`, `"dpleft"`, `"dpright"` |
