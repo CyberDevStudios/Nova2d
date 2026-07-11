@@ -35,7 +35,7 @@ love .
 | **v0.3** — Hot reload (lurker) | Complete |
 | **v0.4** — One-command installer | Complete |
 | **v0.5** — Web documentation | Complete ([nova2d.pages.dev](https://nova2d.pages.dev/)) |
-| **v0.6** — Core Systems (jump, health, timer, camera, input) | Pre-release ([pre-release](https://github.com/CyberDevStudios/Nova2d/tree/pre-release)) |
+| **v0.6** — Core Systems (jump, health, timer, camera, input) | Released ([main](https://github.com/CyberDevStudios/Nova2d)) |
 | **v1.0** — Public release | Pending |
 
 ## Requirements
