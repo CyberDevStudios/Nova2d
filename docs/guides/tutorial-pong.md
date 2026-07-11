@@ -488,6 +488,9 @@ function Game:enter()
         up    = "up",
         down  = "down",
     }})
+
+    -- Create fonts ONCE (not every draw frame)
+    self.fontScore = love.graphics.newFont(48)
 end
 
 function Game:onPoint(scoringSide)
@@ -512,7 +515,7 @@ function Game:draw()
     Ball.draw(self.ball)
 
     -- Score (large font, centered on each half)
-    love.graphics.setNewFont(48)
+    love.graphics.setFont(self.fontScore)
     love.graphics.setColor(1, 1, 1, 0.3)
     love.graphics.printf(tostring(self.playerScore), 0, 40, 380, "right")
     love.graphics.printf(tostring(self.enemyScore), 420, 40, 380, "left")
@@ -610,6 +613,8 @@ function Game:enter()
         up    = "up",
         down  = "down",
     }})
+
+    self.fontScore = love.graphics.newFont(48)
 end
 
 function Game:update(dt)
@@ -630,7 +635,7 @@ function Game:draw()
     Paddle.draw(self.enemy)
     Ball.draw(self.ball)
 
-    love.graphics.setNewFont(48)
+    love.graphics.setFont(self.fontScore)
     love.graphics.setColor(1, 1, 1, 0.3)
     love.graphics.printf(tostring(self.playerScore), 0, 40, 380, "right")
     love.graphics.printf(tostring(self.enemyScore), 420, 40, 380, "left")
