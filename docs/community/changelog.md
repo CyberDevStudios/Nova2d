@@ -1,5 +1,16 @@
 # Changelog
 
+## v0.6.0-pre.1 — Core Systems: Jump, Health, Timer, Camera, Input (2026-07-10)
+
+- **Jump system** (`src/systems/jump.lua`) — configurable gravity, variable jump height, multi-jump, coyote time, jump buffer, event callbacks
+- **Health system** (`src/systems/health.lua`) — HP tracking, damage types, invincibility frames, death/respawn state, event callbacks
+- **Timer system** (`src/systems/timer.lua`) — countdown and stopwatch modes, pause/resume, frame-rate independent
+- **Camera system** (`src/systems/camera.lua`) — target follow with smoothing, screen shake, zoom clamping, map bounds, `attach/detach` transforms
+- **Input system** (`src/systems/input.lua`) — action-based key bindings with remapping, input buffer window, keyboard + gamepad support
+- All systems follow consistent API: `new(config)` / `update(dt)` / `reset()` / `on(event, cb)`
+- Zero external dependencies — pure Lua + Love2D 11.x APIs
+- Full API documentation with usage examples for each system
+
 ## v0.5.4 — Gestor Overhaul & Dependency Fixes (2026-07-04)
 
 - **Fixed all 5 dependency URLs** — GitHub tags use `v` prefix (`v3.1.7` not `3.1.7`) and default branches are `master` not `main`
