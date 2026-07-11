@@ -268,6 +268,113 @@ love gestor/ install
 
 ---
 
+## Core Systems
+
+### My character doesn't jump, what's wrong?
+
+Most likely you forgot to set `jump.grounded` each frame based on your collision logic:
+
+```lua
+function love.update(dt)
+    -- Your collision detection...
+    jump.grounded = myCollision.isOnGround
+    jump:update(dt)
+end
+```
+
+The jump system does NOT auto-detect ground — you must set `grounded = true` when your player is touching a platform. Also make sure you call `jump:jump()` on input and `jump:release()` on key release (for variable height).
+
+### How do multi-jumps work?
+
+Configure `maxJumps` in the config:
+
+```lua
+local jump = require("src.systems.jump").new({ maxJumps = 2 })
+```
+
+Each time the player lands, the jump counter resets. While airborne, they can jump up to `maxJumps` times. Single jump (`maxJumps = 1`) is the default.
+
+### How long do i-frames last after taking damage?
+
+By default, 1 second. Configure it:
+
+```lua
+local health = require("src.systems.health").new({ iFrameDuration = 2.0 })
+```
+
+The i-frame timer counts down in `update(dt)`. While invincible, `takeDamage()` is a no-op and the `iFramesStart`/`iFramesEnd` events fire on transition.
+
+### How do I know if the player is dead?
+
+Check `health:isDead()` or listen for the `died()` event:
+
+```lua
+health:on("died", function()
+    -- show game over screen
+end)
+```
+
+Once dead, all operations (damage, heal, events) are locked until you call `health:reset()`.
+
+### How do I loop a timer as a countdown?
+
+The timer fires `expired()` once. To loop, reset it in the callback:
+
+```lua
+local t = require("src.systems.timer").new({ duration = 5, mode = "countdown" })
+t:on("expired", function()
+    t:reset()  -- restart
+end)
+```
+
+For stopwatch mode, set `mode = "stopwatch"` — it counts up from 0 instead of down from duration.
+
+### Why is my camera not following the player?
+
+Make sure you:
+1. Call `camera:follow(player)` with a table that has `.x` and `.y`
+2. Call `camera:update(dt)` in your `love.update()`
+3. Wrap your draw calls with `attach()`/`detach()`:
+
+```lua
+function love.draw()
+    camera:attach()
+    -- draw everything here (player, enemies, map)
+    camera:detach()
+    -- draw HUD here (not affected by camera)
+end
+```
+
+### The camera shake doesn't work
+
+`startShake(intensity, duration)` decays over time. Make sure intensity is high enough for the effect to be visible:
+
+```lua
+camera:startShake(10, 0.5)  -- 10 pixels, 0.5 seconds
+```
+
+Also verify that `camera:update(dt)` is called every frame.
+
+### Can I use love.keypressed with the Input system?
+
+**No.** The Input system hooks `love.keypressed` internally to capture press timestamps for the buffer. Your gameplay logic must use `isPressed()` / `isBuffered()` in `love.update()` instead.
+
+If you need `love.keypressed` for non-gameplay purposes (e.g., toggling fullscreen), define it BEFORE calling `input.new()` — the system chains to it automatically.
+
+### How do I remap keys at runtime?
+
+```lua
+-- Replace jump binding with a single key
+inp:rebind("jump", "space")
+
+-- Add a secondary key (jump also responds to up)
+inp:bind("jump", "up")
+```
+
+Call `bind()` to add keys, `rebind()` to replace all bindings for an action, and `unbind(action, key)` to remove a specific key.
+
+---
+
 ## Compatibility
 
 ### What version of Love2D do I need?
