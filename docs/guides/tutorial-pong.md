@@ -29,11 +29,28 @@ Replace the entire content of `src/states/game.lua` with:
 ```lua
 local Gamestate = require("hump.gamestate")
 local Menu = require("src.states.menu")
+local input = require("src.systems.input")
 
 local Game = {}
 
 function Game:enter()
     love.graphics.setBackgroundColor(0.039, 0.039, 0.059)
+
+    -- Nova2D Input System: bind actions to keys
+    self.inp = input.new({ defaultBindings = {
+        pause = "escape",
+        up    = "up",
+        down  = "down",
+    }})
+end
+
+function Game:update(dt)
+    self.inp:update(dt)
+
+    -- Poll the "pause" action each frame
+    if self.inp:isPressed("pause") then
+        Gamestate.switch(Menu)
+    end
 end
 
 function Game:draw()
@@ -42,15 +59,15 @@ function Game:draw()
     love.graphics.printf("PONG", 0, 280, 800, "center")
 end
 
-function Game:keyreleased(key)
-    if key == "escape" then Gamestate.switch(Menu) end
-end
-
 return Game
 ```
 
+> **Input System hot take**: No more `love.keyreleased` or `love.keypressed` spaghetti
+> for gameplay logic. You bind actions to keys once, then poll `inp:isPressed("action")`
+> in `update()`. Clean, portable, and gamepad-ready.
+
 **Verify**: run `love .`, navigate to New Game, and you should see "PONG" centered on the
-screen. Escape returns to the menu.
+screen. Press Escape to return to the menu.
 
 ---
 
@@ -65,10 +82,10 @@ local Paddle = {}
 
 local WIDTH = 12
 local HEIGHT = 80
-local SPEED = 400  -- pixels per second (fallback for keyboard)
+local SPEED = 400
 
 -- IMPORTANT: we use DOT syntax for all Paddle functions.
--- The paddl instance is passed explicitly as the first argument.
+-- The paddle instance is passed explicitly as the first argument.
 -- This lets us have MULTIPLE paddles (player + enemy) with independent state.
 -- Using COLON syntax (Paddle:enter, self.xxx) would store state on the
 -- Paddle module table, making two paddles overwrite each other.
@@ -91,9 +108,14 @@ function Paddle.enter(paddle, side, parent)
     paddle.parent = parent  -- keep a reference to the Game state
 end
 
-function Paddle.update(paddle, dt)
-    -- Mouse tracking in Y
-    paddle.y = love.mouse.getY() - paddle.h / 2
+function Paddle.update(paddle, dt, inp)
+    -- Keyboard control via Nova2D Input System
+    if inp:isPressed("up") then
+        paddle.y = paddle.y - SPEED * dt
+    end
+    if inp:isPressed("down") then
+        paddle.y = paddle.y + SPEED * dt
+    end
 
     -- Clamp to screen
     if paddle.y < 0 then paddle.y = 0 end
@@ -108,11 +130,12 @@ end
 return Paddle
 ```
 
-Now update `src/states/game.lua` to use the paddle. Replace the entire content with (note the new `Paddle` entity on line 3):
+Now update `src/states/game.lua` to use the paddle and pass the input instance. Replace the entire content with:
 
 ```lua
 local Gamestate = require("hump.gamestate")
 local Menu = require("src.states.menu")
+local input = require("src.systems.input")
 local Paddle = require("src.entities.paddle")
 
 local Game = {}
@@ -120,10 +143,23 @@ local Game = {}
 function Game:enter()
     self.player = {}
     Paddle.enter(self.player, "left")
+
+    self.inp = input.new({ defaultBindings = {
+        pause = "escape",
+        up    = "up",
+        down  = "down",
+    }})
 end
 
 function Game:update(dt)
-    Paddle.update(self.player, dt)
+    self.inp:update(dt)
+
+    if self.inp:isPressed("pause") then
+        Gamestate.switch(Menu)
+    end
+
+    -- Pass input instance to paddle for keyboard control
+    Paddle.update(self.player, dt, self.inp)
 end
 
 function Game:draw()
@@ -131,15 +167,11 @@ function Game:draw()
     Paddle.draw(self.player)
 end
 
-function Game:keyreleased(key)
-    if key == "escape" then Gamestate.switch(Menu) end
-end
-
 return Game
 ```
 
-**Verify**: run `love .`, enter the game. Move your mouse vertically — the white paddle
-follows the cursor.
+**Verify**: run `love .`, enter the game. Press UP and DOWN arrows — the white paddle
+moves. Escape still returns to the menu.
 
 ---
 
@@ -202,11 +234,12 @@ end
 return Ball
 ```
 
-Update `src/states/game.lua` to include the ball. Replace the entire content with (note the new `Ball` entity on line 4):
+Update `src/states/game.lua` to include the ball. Replace the entire content with:
 
 ```lua
 local Gamestate = require("hump.gamestate")
 local Menu = require("src.states.menu")
+local input = require("src.systems.input")
 local Paddle = require("src.entities.paddle")
 local Ball = require("src.entities.ball")
 
@@ -218,10 +251,22 @@ function Game:enter()
 
     self.ball = {}
     Ball.enter(self.ball, self)
+
+    self.inp = input.new({ defaultBindings = {
+        pause = "escape",
+        up    = "up",
+        down  = "down",
+    }})
 end
 
 function Game:update(dt)
-    Paddle.update(self.player, dt)
+    self.inp:update(dt)
+
+    if self.inp:isPressed("pause") then
+        Gamestate.switch(Menu)
+    end
+
+    Paddle.update(self.player, dt, self.inp)
     Ball.update(self.ball, dt)
 end
 
@@ -229,10 +274,6 @@ function Game:draw()
     love.graphics.clear()
     Paddle.draw(self.player)
     Ball.draw(self.ball)
-end
-
-function Game:keyreleased(key)
-    if key == "escape" then Gamestate.switch(Menu) end
 end
 
 return Game
@@ -358,6 +399,12 @@ function Game:enter()
 
     self.ball = {}
     Ball.enter(self.ball, self)
+
+    self.inp = input.new({ defaultBindings = {
+        pause = "escape",
+        up    = "up",
+        down  = "down",
+    }})
 end
 ```
 
@@ -365,7 +412,13 @@ Then replace the `Game:update(dt)` and `Game:draw()` functions in the same file 
 
 ```lua
 function Game:update(dt)
-    Paddle.update(self.player, dt)
+    self.inp:update(dt)
+
+    if self.inp:isPressed("pause") then
+        Gamestate.switch(Menu)
+    end
+
+    Paddle.update(self.player, dt, self.inp)
     Paddle.update(self.enemy, dt)  -- for now it stays still
     Ball.update(self.ball, dt)
 end
@@ -413,7 +466,7 @@ zone so it can be beaten.
 
 Add score to the Game state and an `onPoint` method. In `src/states/game.lua`:
 
-- **Replace** `Game:enter()` with the version below (note the `self.playerScore` and `self.enemyScore` at the top)
+- **Replace** `Game:enter()` with the version below (note the `self.playerScore` and `self.enemyScore` at the top and the input instance)
 - **Add** the new `Game:onPoint()` function **after** `Game:enter()` and **before** `Game:update(dt)`
 
 ```lua
@@ -429,6 +482,12 @@ function Game:enter()
 
     self.ball = {}
     Ball.enter(self.ball, self)
+
+    self.inp = input.new({ defaultBindings = {
+        pause = "escape",
+        up    = "up",
+        down  = "down",
+    }})
 end
 
 function Game:onPoint(scoringSide)
@@ -517,7 +576,7 @@ src/
 │   ├── splash.lua      -- Unchanged
 │   └── menu.lua        -- Unchanged
 └── entities/
-    ├── paddle.lua      -- Paddle (player mouse + AI)
+    ├── paddle.lua      -- Paddle (player keyboard + AI)
     └── ball.lua        -- Ball with physics and collisions
 ```
 
@@ -527,6 +586,7 @@ Complete reference files:
 ```lua
 local Gamestate = require("hump.gamestate")
 local Menu = require("src.states.menu")
+local input = require("src.systems.input")
 local Paddle = require("src.entities.paddle")
 local Ball = require("src.entities.ball")
 
@@ -544,10 +604,22 @@ function Game:enter()
 
     self.ball = {}
     Ball.enter(self.ball, self)
+
+    self.inp = input.new({ defaultBindings = {
+        pause = "escape",
+        up    = "up",
+        down  = "down",
+    }})
 end
 
 function Game:update(dt)
-    Paddle.update(self.player, dt)
+    self.inp:update(dt)
+
+    if self.inp:isPressed("pause") then
+        Gamestate.switch(Menu)
+    end
+
+    Paddle.update(self.player, dt, self.inp)
     Paddle.aiUpdate(self.enemy, dt, self.ball.y)
     Ball.update(self.ball, dt)
 end
@@ -578,10 +650,6 @@ function Game:onPoint(scoringSide)
     Ball.enter(self.ball, self)
 end
 
-function Game:keyreleased(key)
-    if key == "escape" then Gamestate.switch(Menu) end
-end
-
 return Game
 ```
 
@@ -591,6 +659,7 @@ local Paddle = {}
 
 local WIDTH = 12
 local HEIGHT = 80
+local SPEED = 400
 
 -- IMPORTANT: DOT syntax so each paddle call passes the instance explicitly.
 -- This lets player and enemy paddles have independent state.
@@ -604,8 +673,14 @@ function Paddle.enter(paddle, side, parent)
     paddle.parent = parent
 end
 
-function Paddle.update(paddle, dt)
-    paddle.y = love.mouse.getY() - paddle.h / 2
+function Paddle.update(paddle, dt, inp)
+    -- Keyboard control via Nova2D Input System
+    if inp:isPressed("up") then
+        paddle.y = paddle.y - SPEED * dt
+    end
+    if inp:isPressed("down") then
+        paddle.y = paddle.y + SPEED * dt
+    end
     if paddle.y < 0 then paddle.y = 0 end
     if paddle.y > 600 - paddle.h then paddle.y = 600 - paddle.h end
 end
@@ -700,11 +775,59 @@ end
 return Ball
 ```
 
-## Next steps
+## Next steps — go further with Nova2D systems
 
-- Add a power-up that spawns every 10 seconds
-- Make the ball speed increase gradually over time
-- Add a pause menu with a "Restart" option
-- Replace rectangles with sprites (load images from `assets/images/`)
-- Sound with Love2D: generate tones or load `.wav`/`.ogg` files
-- Use `bump.lua` for more complex collisions: `love gestor/ install bump.lua`
+Now that you know the basics, here are concrete challenges using the other Nova2D systems.
+
+### Timer: power-up every 10 seconds
+
+Use `src.systems.timer` to spawn a power-up every 10 seconds:
+
+```lua
+local timer = require("src.systems.timer")
+
+function Game:enter()
+    -- ... existing setup ...
+    self.powerUpTimer = timer.new({ duration = 10 })
+    self.powerUpTimer:on("expired", function()
+        -- Spawn power-up at random position
+        self.powerUp = {
+            x = math.random(100, 700),
+            y = math.random(50, 550),
+            active = true,
+        }
+        self.powerUpTimer:reset()  -- restart for next cycle
+    end)
+end
+
+function Game:update(dt)
+    self.powerUpTimer:update(dt)
+    -- ... rest of update ...
+end
+```
+
+### Health: lives system
+
+Replace the flat score with `src.systems.health` for lives. Each point scored
+against you costs one life. Three lives and it's game over:
+
+```lua
+local health = require("src.systems.health")
+
+function Game:enter()
+    self.playerHealth = health.new({ maxHp = 3, iFrameDuration = 1.5 })
+    self.playerHealth:on("died", function()
+        -- Show game over screen, then reset
+    end)
+end
+
+-- When opponent scores: self.playerHealth:takeDamage(1, "goal")
+```
+
+### More ideas
+
+- **Paddle speed boost**: timer for temporary speed multiplier
+- **Controls menu**: let the player rebind keys with `input:rebind()`
+- **Replace rectangles with sprites**: load images from `assets/images/`
+- **Sound**: Love2D procedural tones (see Step 8) or `.wav`/`.ogg` files
+- **bump.lua** for complex collisions: install via `love gestor install bump.lua`
