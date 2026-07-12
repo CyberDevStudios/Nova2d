@@ -47,8 +47,8 @@ function timer:update(dt)
     self:_fire("tick", self:getElapsed(), self:getRemaining())
 
     -- Check expiration (countdown only)
-    if self._mode == "countdown" and self._elapsed >= self._duration then
-        self._elapsed = self._duration  -- clamp
+    if self.mode == "countdown" and self._elapsed >= self.duration then
+        self._elapsed = self.duration  -- clamp
         self._expired = true
         self:_fire("expired")
     end
@@ -120,8 +120,8 @@ end
 --- Time remaining in seconds (countdown mode only).
 -- @return number|nil  Remaining seconds, or nil in stopwatch mode
 function timer:getRemaining()
-    if self._mode == "countdown" then
-        return math.max(0, self._duration - self._elapsed)
+    if self.mode == "countdown" then
+        return math.max(0, self.duration - self._elapsed)
     end
     return nil
 end
@@ -129,13 +129,13 @@ end
 --- Progress toward completion as a 0–1 value (countdown mode only).
 -- @return number|nil  0 at start, 1 when expired, or nil in stopwatch mode
 function timer:getProgress()
-    if self._mode ~= "countdown" then
+    if self.mode ~= "countdown" then
         return nil
     end
-    if self._duration <= 0 then
+    if self.duration <= 0 then
         return self._expired and 1 or 0
     end
-    return math.min(1, self._elapsed / self._duration)
+    return math.min(1, self._elapsed / self.duration)
 end
 
 --- Whether the timer is actively running (not paused, not expired).
@@ -146,7 +146,7 @@ end
 --- Whether the timer has expired (countdown reached zero).
 -- Always false in stopwatch mode.
 function timer:isExpired()
-    if self._mode == "countdown" then
+    if self.mode == "countdown" then
         return self._expired
     end
     return false
