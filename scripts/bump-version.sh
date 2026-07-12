@@ -47,6 +47,18 @@ echo "  → nova2d.lua       (v$LATEST)"
 sed -i 's/^> Status: v[0-9.]* — /> Status: v'"$LATEST"' — /' docs/guides/installer.md
 echo "  → docs/guides/installer.md  (v$LATEST)"
 
+# ---- 4. Nova2dDocs website (index.html) ----
+DOCS_REPO="../../Nova2d/Page"  # sibling dir — update path if moved
+if [ -f "$DOCS_REPO/index.html" ]; then
+    sed -i 's/v[0-9.]*<\(\/sup>\|<\/span>\)/v'"$LATEST"'<\1/' "$DOCS_REPO/index.html"
+    echo "  → $DOCS_REPO/index.html  (v$LATEST)"
+else
+    echo "  ⚠ Nova2dDocs repo not found at $DOCS_REPO — skipping"
+fi
+
 echo ""
 echo "=== Done. All current-version references updated to v$LATEST ==="
-echo "Remember to commit the changes."
+echo ""
+echo "Next steps:"
+echo "  1. cd ../Nova2d/Page && git add index.html && git commit -m \"chore: bump version to v$LATEST\" && git push origin main"
+echo "  2. cd - && git add . && git commit -m \"chore: bump version to v$LATEST\" && git push"
