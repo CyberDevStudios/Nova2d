@@ -14,9 +14,9 @@ It provides a ready-to-run skeleton with 5 game states, a built-in package manag
 
 | Feature | Status |
 |---|---|
-| 5 game states (splash, menu, game, pause, credits) | v0.1 |
-| Dependency manager with lockfile | v0.2 |
-| Hot reload | v0.3 |
-| One-command installer | v0.4 |
-| Web documentation | v0.5 (live at [nova2d.pages.dev](https://nova2d.pages.dev/)) |
-| Core Systems (jump, health, timer, camera, input) | v0.6 |
+| 5 game states (splash, menu, game, pause, credits) | v0.1+ |
+| Dependency manager with lockfile | v0.2+ |
+| Hot reload | v0.3+ |
+| One-command installer | v0.4+ |
+| Web documentation | v0.5+ (live at [nova2d.pages.dev](https://nova2d.pages.dev/)) |
+| Core Systems (jump, health, timer, camera, input) | v0.6+ |

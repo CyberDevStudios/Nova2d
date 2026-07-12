@@ -5,6 +5,7 @@
 local hotreload = require("src.hotreload")
 local Gamestate = require "hump.gamestate"
 local Menu = require("src.states.menu")
+local VERSION = require("src.version")
 
 -- ---------------------------------------------------------------------------
 -- Constants
@@ -195,7 +196,7 @@ function State:draw()
     -- Version
     love.graphics.setFont(fontInfo)
     love.graphics.setColor(1, 1, 1, 0.20 * ia)
-    love.graphics.printf("v0.6", 0, CENTER_Y + 88, W, "center")
+    love.graphics.printf("v" .. VERSION, 0, CENTER_Y + 88, W, "center")
 
     -- Tagline
     love.graphics.setFont(fontTagline)

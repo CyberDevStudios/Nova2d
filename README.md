@@ -93,11 +93,11 @@ my-game/
 
 | Library | Purpose | Added |
 |---|---|---|
-| **hump.gamestate** | Screen and scene management | v0.1 |
-| **bump.lua** | AABB collision detection | v0.2 |
-| **anim8** | Sprite animations | v0.2 |
-| **lovebird** | In-browser debug panel | v0.2 |
-| **lurker** | Hot reload | v0.3 |
+| **hump.gamestate** | Screen and scene management | v0.1+ |
+| **bump.lua** | AABB collision detection | v0.2+ |
+| **anim8** | Sprite animations | v0.2+ |
+| **lovebird** | In-browser debug panel | v0.2+ |
+| **lurker** | Hot reload | v0.3+ |
 
 ## Conventions
 
