@@ -24,7 +24,7 @@ function health.new(config)
     end
 
     -- Internal state
-    self._hp         = self.maxHp
+    self._currentHp         = self.maxHp
     self._state      = "alive"       -- alive | dead | invincible
     self._iFrameTimer = 0
     self._callbacks  = {}
@@ -70,7 +70,7 @@ function health:takeDamage(amount, type)
     end
 
     -- Apply damage
-    self._hp = math.max(0, self._hp - amount)
+    self._currentHp = math.max(0, self._currentHp - amount)
     type = type or "generic"
 
     -- Fire damaged event before state transitions
@@ -78,8 +78,8 @@ function health:takeDamage(amount, type)
     self:_fire("damaged", amount, type)
 
     -- Check for death
-    if self._hp <= 0 then
-        self._hp = 0
+    if self._currentHp <= 0 then
+        self._currentHp = 0
         self._state = "dead"
         self:_fire("died")
         return true
@@ -110,9 +110,9 @@ function health:heal(amount)
         return false
     end
 
-    local before = self._hp
-    self._hp = math.min(self.maxHp, self._hp + amount)
-    local actual = self._hp - before
+    local before = self._currentHp
+    self._currentHp = math.min(self.maxHp, self._currentHp + amount)
+    local actual = self._currentHp - before
 
     if actual > 0 then
         self:_fire("healed", actual)
@@ -124,7 +124,7 @@ end
 --- Reset all state to initial values.
 -- @return self  (for chaining)
 function health:reset()
-    self._hp         = self.maxHp
+    self._currentHp         = self.maxHp
     self._state      = "alive"
     self._iFrameTimer = 0
     return self
@@ -158,13 +158,25 @@ end
 -- ── Getters ─────────────────────────────────────────────────────────
 
 --- Current HP value.
-function health:getHp()
-    return self._hp
+function health:getCurrentHp()
+    return self._currentHp
 end
 
 --- Maximum HP value.
 function health:getMaxHp()
     return self.maxHp
+end
+
+--- Set a new maximum HP value.
+-- Re-clamps _currentHp if it exceeds the new max.
+-- Does nothing if newMax is <= 0.
+-- @param newMax  New maximum HP (must be > 0)
+function health:setMaxHp(newMax)
+    if newMax <= 0 then return end
+    self.maxHp = newMax
+    if self._currentHp > newMax then
+        self._currentHp = newMax
+    end
 end
 
 --- Whether the entity is dead (HP = 0, all operations locked).

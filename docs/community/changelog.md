@@ -1,5 +1,15 @@
 # Changelog
 
+## v0.6.1 — Timer Bugfix & Health API Clarity (2026-07-12)
+
+- **Fixed critical timer bug** (`src/systems/timer.lua`) — constructor set `self.mode`/`self.duration` but methods accessed `self._mode`/`self._duration` (always nil). Fixed in `update()`, `getRemaining()`, `getProgress()`, and `isExpired()`
+- **Health refactor** (`src/systems/health.lua`):
+  - Renamed `self._hp` → `self._currentHp` for explicit naming
+  - Renamed `getHp()` → `getCurrentHp()` — clearer intent
+  - Added `setMaxHp(newMax)` — updates maxHp and re-clamps current HP
+- All existing public API preserved (`getMaxHp()`, events, etc.)
+- Updated docs, game state, and test file for renamed method
+
 ## v0.6.0 — Core Systems: Jump, Health, Timer, Camera, Input (2026-07-10)
 
 - **Jump system** (`src/systems/jump.lua`) — configurable gravity, variable jump height, multi-jump, coyote time, jump buffer, event callbacks

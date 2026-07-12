@@ -27,7 +27,7 @@ function love.update(dt)
         local applied = h:takeDamage(25, "slash")
         if applied then
             flash_screen_red()     -- visual feedback
-            print("Ouch! HP:", h:getHp())
+            print("Ouch! HP:", h:getCurrentHp())
         end
     end
 
@@ -40,7 +40,7 @@ end
 function love.draw()
     -- Draw a simple health bar
     local barWidth = 200
-    local ratio = h:getHp() / h:getMaxHp()
+    local ratio = h:getCurrentHp() / h:getMaxHp()
     love.graphics.setColor(1, 0, 0)
     love.graphics.rectangle("fill", 10, 10, barWidth * ratio, 20)
 end
@@ -171,7 +171,7 @@ end)
 
 | Method | Returns | Description |
 |---|---|---|
-| `:getHp()` | number | Current HP |
+| `:getCurrentHp()` | number | Current HP |
 | `:getMaxHp()` | number | Maximum HP (from config) |
 | `:isDead()` | boolean | `true` when HP is 0, all operations locked |
 | `:isInvincible()` | boolean | `true` while i-frames are active |
@@ -251,7 +251,7 @@ h:on("died", function()
     -- Show death screen, wait for input, then:
     love.timer.after(2, function()
         h:reset()
-        print("Respawned with", h:getHp(), "HP")
+        print("Respawned with", h:getCurrentHp(), "HP")
     end)
 end)
 
