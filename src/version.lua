@@ -4,4 +4,4 @@
 -- Auto-updated by scripts/bump-version.sh from docs/community/changelog.md.
 -- To bump: run `bash scripts/bump-version.sh` after editing changelog.
 
-return "0.6.1-pre.1"
+return "0.6.1"

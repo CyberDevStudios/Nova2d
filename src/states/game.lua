@@ -4,7 +4,7 @@
 -- No game logic here — just a clean starting point.
 
 local Gamestate = require "hump.gamestate"
-local Menu = require("src.states.menu")
+local Pause  = require("src.states.pause")
 local VERSION = require("src.version")
 
 local State = {}
@@ -57,7 +57,7 @@ end
 
 function State:keyreleased(key)
     if key == "escape" then
-        Gamestate.switch(Menu)
+        Gamestate.push(Pause)
     end
 end
 
