@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 #
 # Nova2D Installer
-# Usage: curl -fsSL https://nova2d.pages.dev/install.sh | bash
-# Or:    curl -fsSL https://nova2d.pages.dev/install.sh | bash -s my-game
+# Usage: curl -fsSL https://nova2d.dev/install.sh | bash
+# Or:    curl -fsSL https://nova2d.dev/install.sh | bash -s my-game
 #
 set -e
 
@@ -124,7 +124,7 @@ ${BOLD}── Nova2D ───────────────────�
    ${BOLD}Created by Cyber Dev Studios${NC}
 
    ${BOLD}Documentation:${NC}
-     https://nova2d.pages.dev/
+     https://nova2d.dev/
 
 ${BOLD}──────────────────────────────────────────────${NC}
 

@@ -2,11 +2,11 @@
 
 ## Problem
 
-`curl -fsSL https://nova2d.pages.dev/install.sh | bash -s my-game` returns HTML (the docs page) instead of the shell script.
+`curl -fsSL https://nova2d.dev/install.sh | bash -s my-game` returns HTML (the docs page) instead of the shell script.
 
 ## Root cause
 
-`install.sh` is in the **framework repo** (`CyberDevStudios/Nova2d`), but the docs site at `nova2d.pages.dev` deploys from a **separate repo** (`CyberDevStudios/Nova2dDocs`). Cloudflare Pages only serves files that are in the build output (`dist/`) of the docs repo.
+`install.sh` is in the **framework repo** (`CyberDevStudios/Nova2d`), but the docs site at `nova2d.dev` deploys from a **separate repo** (`CyberDevStudios/Nova2dDocs`). Cloudflare Pages only serves files that are in the build output (`dist/`) of the docs repo.
 
 Copying `install.sh` between repos would create drift. The correct solution is to tell Cloudflare Pages to proxy the file from the framework repo without duplicating it.
 
@@ -24,9 +24,9 @@ Create `Page/public/_redirects` with this single rule:
 |---|---|
 | `Page/public/_redirects` | Static file that Vite copies to `dist/` as-is |
 | Cloudflare Pages `_redirects` | Native feature — intercepts requests and proxies content from another URL |
-| `200` status code | Tells Cloudflare to serve the remote content **transparently** — the browser sees `nova2d.pages.dev/install.sh` as if it were a local file |
+| `200` status code | Tells Cloudflare to serve the remote content **transparently** — the browser sees `nova2d.dev/install.sh` as if it were a local file |
 
-This is not a browser redirect. The user runs `curl -fsSL https://nova2d.pages.dev/install.sh` and gets the script content directly, with no 301/302 redirect.
+This is not a browser redirect. The user runs `curl -fsSL https://nova2d.dev/install.sh` and gets the script content directly, with no 301/302 redirect.
 
 ### Why not copy the file
 
@@ -52,7 +52,7 @@ git push origin main
 After the deploy, test:
 
 ```bash
-curl -fsSL https://nova2d.pages.dev/install.sh | head -3
+curl -fsSL https://nova2d.dev/install.sh | head -3
 ```
 
 Expected output: `#!/usr/bin/env bash`

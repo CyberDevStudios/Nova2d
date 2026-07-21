@@ -1,6 +1,6 @@
 # Nova2D Documentation
 
-> Web version: [nova2d.pages.dev](https://nova2d.pages.dev/)
+> Web version: [nova2d.dev](https://nova2d.dev/)
 
 ## Getting Started
 - [Introduction](getting-started/introduction.md)

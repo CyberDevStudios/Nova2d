@@ -11,7 +11,7 @@
 ```bash
 # One command — no git needed
 # (use Git Bash on Windows — PowerShell's curl is an alias for Invoke-WebRequest)
-curl -fsSL https://nova2d.pages.dev/install.sh | bash -s my-game
+curl -fsSL https://nova2d.dev/install.sh | bash -s my-game
 cd my-game
 love .
 ```
@@ -34,7 +34,7 @@ love .
 | **v0.2** — Dependency manager (gestor) | Complete |
 | **v0.3** — Hot reload (lurker) | Complete |
 | **v0.4** — One-command installer | Complete |
-| **v0.5** — Web documentation | Complete ([nova2d.pages.dev](https://nova2d.pages.dev/)) |
+| **v0.5** — Web documentation | Complete ([nova2d.dev](https://nova2d.dev/)) |
 | **v0.6** — Core Systems (jump, health, timer, camera, input) | Released ([main](https://github.com/CyberDevStudios/Nova2d)) |
 | **v1.0** — Public release | Pending |
 

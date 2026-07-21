@@ -1,11 +1,11 @@
-# Fix: `nova2d.pages.dev/install.sh` not serving the script
+# Fix: `nova2d.dev/install.sh` not serving the script
 
 ## Problem
 
 Running the documented install command:
 
 ```bash
-curl -fsSL https://nova2d.pages.dev/install.sh | bash -s my-game
+curl -fsSL https://nova2d.dev/install.sh | bash -s my-game
 ```
 
 returns HTML instead of the shell script, producing:
@@ -32,7 +32,7 @@ git commit -m "fix: move install.sh to public/ so Cloudflare Pages serves it"
 git push origin main
 ```
 
-After the push, Cloudflare Pages auto-deploys and `https://nova2d.pages.dev/install.sh` starts serving the script again.
+After the push, Cloudflare Pages auto-deploys and `https://nova2d.dev/install.sh` starts serving the script again.
 
 ## Why this works
 
@@ -46,7 +46,7 @@ Files in `public/` are copied verbatim to `dist/` during `vite build`. By moving
 
 ## Prevention
 
-Any static file that needs to be served at the root of `nova2d.pages.dev` must go in `Page/public/`. Examples:
+Any static file that needs to be served at the root of `nova2d.dev` must go in `Page/public/`. Examples:
 
 - `public/install.sh`
 - `public/robots.txt`
@@ -57,7 +57,7 @@ Any static file that needs to be served at the root of `nova2d.pages.dev` must g
 After the deploy completes, test with:
 
 ```bash
-curl -fsSL https://nova2d.pages.dev/install.sh | head -5
+curl -fsSL https://nova2d.dev/install.sh | head -5
 ```
 
 Expected output starts with `#!/usr/bin/env bash`.

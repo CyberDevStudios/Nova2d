@@ -255,7 +255,7 @@ Nova2D doesn't have an `update` command yet. The recommended way is:
 
 ```bash
 # Clone the new version into a different directory
-curl -fsSL https://nova2d.pages.dev/install.sh | bash -s my-game-updated
+curl -fsSL https://nova2d.dev/install.sh | bash -s my-game-updated
 
 # Copy your src/ and assets/ code to the new project
 cp -r my-game/src my-game-updated/

@@ -14,7 +14,7 @@
 
 ```bash
 # Windows users: use Git Bash, not PowerShell (curl alias conflict)
-curl -fsSL https://nova2d.pages.dev/install.sh | bash -s my-game
+curl -fsSL https://nova2d.dev/install.sh | bash -s my-game
 ```
 
 > **PowerShell gotcha**: PowerShell has a built-in `curl` alias that maps to `Invoke-WebRequest` and doesn't support `-fsSL` flags. Use Git Bash, WSL, or the manual install below.

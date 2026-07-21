@@ -13,7 +13,7 @@ Get Nova2D running and build a moving player in under 2 minutes.
 **Option A — One-command install (recommended):**
 
 ```bash
-curl -fsSL https://nova2d.pages.dev/install.sh | bash -s my-game
+curl -fsSL https://nova2d.dev/install.sh | bash -s my-game
 cd my-game
 ```
 

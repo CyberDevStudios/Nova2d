@@ -11,7 +11,7 @@ Build a complete, playable Pong game using Nova2D. Each step produces a game tha
 ## Step 1: Create the project
 
 ```bash
-curl -fsSL https://nova2d.pages.dev/install.sh | bash -s pong
+curl -fsSL https://nova2d.dev/install.sh | bash -s pong
 cd pong
 ```
 

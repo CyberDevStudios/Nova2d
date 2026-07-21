@@ -70,7 +70,7 @@
 
 ## v0.5 — Web Documentation (2026-06-23)
 
-- Launched documentation website at [nova2d.pages.dev](https://nova2d.pages.dev/)
+- Launched documentation website at [nova2d.dev](https://nova2d.dev/)
 - Full docs site structure with getting started, guides, API reference, and community pages
 - One-command install URL points to production web
 - Added `beta` branch for pre-release builds

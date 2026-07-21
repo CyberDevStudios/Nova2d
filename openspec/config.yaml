@@ -17,7 +17,7 @@ context: |
     v0.2 Dependency manager (gestor) (2026-06-22),
     v0.3 Hot reload (lurker) (2026-06-22),
     v0.4 Installer (install.sh) (2026-06-22),
-    v0.5 Web documentation (nova2d.pages.dev) (2026-06-23)
+    v0.5 Web documentation (nova2d.dev) (2026-06-23)
   Plan phases: v1.0 Release
 
 rules:

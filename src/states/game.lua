@@ -49,7 +49,7 @@ function State:draw()
     love.graphics.setColor(1, 1, 1, 0.3)
     love.graphics.printf("Available systems: camera · input · timer · jump · health",
                          0, h * 0.22 + 116, w, "center")
-    love.graphics.printf("Documentation: nova2d.pages.dev",
+    love.graphics.printf("Documentation: nova2d.dev",
                          0, h - 32, w, "center")
 
     love.graphics.setColor(1, 1, 1)
