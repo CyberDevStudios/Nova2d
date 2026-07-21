@@ -1,5 +1,15 @@
 # Changelog
 
+## v0.6.2 — Domain Migration (2026-07-21)
+
+- Migrated official domain from `nova2d.pages.dev` to `nova2d.dev`
+- Updated install command: `curl -fsSL https://nova2d.dev/install.sh | bash`
+- Updated all docs, README, AGENTS, sitemap, robots.txt, OG metadata, and LLMs.txt
+- Removed `google-site-verification` meta tag (now using domain verification)
+- Updated Cloudflare Pages Function ORIGIN and SSR meta injection
+- Updated `game.lua` documentation text
+- Removed obsolete fix-installer troubleshooting docs
+
 ## v0.6.1 — Timer Bugfix & Health API Clarity (2026-07-12)
 
 - **Fixed critical timer bug** (`src/systems/timer.lua`) — constructor set `self.mode`/`self.duration` but methods accessed `self._mode`/`self._duration` (always nil). Fixed in `update()`, `getRemaining()`, `getProgress()`, and `isExpired()`
