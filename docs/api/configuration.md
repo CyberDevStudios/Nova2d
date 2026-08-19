@@ -1,6 +1,6 @@
 # Configuration
 
-Nova2D has three configuration files at the project root.
+Configure your Love2D game with a single table: Nova2D's `conf.lua` sets identity, window, audio, and modules with sensible defaults. Two more files extend it — `nova2d.lua` declares project metadata and dependencies, and `nova2d-lock.lua` locks exact versions.
 
 ---
 

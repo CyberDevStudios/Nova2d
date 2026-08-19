@@ -1,6 +1,6 @@
 # Input System
 
-A standalone action-based input system that maps game actions (like `jump`, `left`, `action`) to keys and gamepad buttons. Supports **binding remapping**, **press buffering**, and **per-frame polling** — no event-driven spaghetti.
+Handle keyboard and gamepad input in Love2D with action-based bindings: Nova2D's Input system maps game actions (like `jump`, `left`, `action`) to keys and gamepad buttons. Supports **binding remapping**, **press buffering**, and **per-frame polling** — no event-driven spaghetti.
 
 ```lua
 local input = require("src.systems.input")

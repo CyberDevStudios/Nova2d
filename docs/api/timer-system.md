@@ -1,6 +1,6 @@
 # Timer System
 
-A standalone module for **countdown** and **stopwatch** timing — pause, resume, tick events, and expiration detection. Works with any game loop, no external dependencies.
+Build timers in Love2D with Nova2D's Timer system: countdown and stopwatch modes, pause/resume, and frame-rate independent callbacks. It's a standalone module — it works with any game loop and has no external dependencies.
 
 ```lua
 local timer = require("src.systems.timer")

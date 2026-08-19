@@ -1,8 +1,6 @@
 # State Machine API
 
-Nova2D uses **hump.gamestate** for state management (screens). The `Gamestate` object
-is the only global reference in the framework and is connected to Love2D's callbacks
-automatically.
+Switch between game states in Love2D with Nova2D's state machine, a wrapper around hump.gamestate. The `Gamestate` object is the only global reference in the framework and is connected to Love2D's callbacks automatically.
 
 ## Global
 
