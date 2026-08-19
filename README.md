@@ -36,6 +36,7 @@ love .
 | **v0.4** — One-command installer | Complete |
 | **v0.5** — Web documentation | Complete ([nova2d.dev](https://nova2d.dev/)) |
 | **v0.6** — Core Systems (jump, health, timer, camera, input) | Released ([main](https://github.com/CyberDevStudios/Nova2d)) |
+| **v0.7** — Core Systems II (animation, audio, collision) | Released ([main](https://github.com/CyberDevStudios/Nova2d)) |
 | **v1.0** — Public release | Pending |
 
 ## Requirements
@@ -46,11 +47,14 @@ love .
 ## Features
 
 - **5 game states** — splash (animated), menu, game, pause (overlay), credits
-- **5 core systems** — input, timer, health, camera, and jump
+- **8 core systems** — input, timer, health, camera, jump, animation, audio, collision
 - **Input System** — action-based key bindings with gamepad support and press buffering
 - **Timer System** — countdown and stopwatch with tick/expired events
 - **Health System** — HP tracking, damage, healing, invincibility frames, and death state
 - **Camera System** — attach/detach with transform stacking
+- **Animation System** — sprite-sheet animation with fps control, looping, and frame/complete events
+- **Audio System** — channel-based sound effects and music with volume, fades, and playback events
+- **Collision System** — AABB collision world with move/check/query and collision events
 - **Dependency manager** — install, update, remove libraries via `nova2d.lua`
 - **Hot reload** — edit `src/` files and see changes instantly (no restart)
 - **One-command installer** — `curl ... | bash` setup, no git required
@@ -67,7 +71,7 @@ my-game/
 ├── src/
 │   ├── states/           -- Screens (splash, menu, game, pause, credits)
 │   ├── entities/         -- Player, enemies, objects
-│   ├── systems/          -- Input, timer, health, camera, jump
+│   ├── systems/          -- Input, timer, health, camera, jump, animation, audio, collision
 │   ├── utils/            -- Helpers
 │   └── hotreload.lua     -- Hot reload bootstrapper
 ├── assets/

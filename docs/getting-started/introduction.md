@@ -20,6 +20,7 @@ It provides a ready-to-run skeleton with 5 game states, a built-in package manag
 | One-command installer | v0.4+ |
 | Web documentation | v0.5+ (live at [nova2d.dev](https://nova2d.dev/)) |
 | Core Systems (jump, health, timer, camera, input) | v0.6+ |
+| Core Systems II (animation, audio, collision) | v0.7+ |
 
 ## Community
 
