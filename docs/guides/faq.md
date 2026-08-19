@@ -373,6 +373,167 @@ inp:bind("jump", "up")
 
 Call `bind()` to add keys, `rebind()` to replace all bindings for an action, and `unbind(action, key)` to remove a specific key.
 
+### My animation stays on the first frame
+
+Make sure you call `animation:update(dt)` in `love.update()` AND start playback with `play()` after creating it:
+
+```lua
+local anim = require("src.systems.animation").new({
+    image = playerImage, frameWidth = 32, frameHeight = 32, frames = { 1, 2, 3, 4 },
+})
+anim:play()
+
+function love.update(dt)
+    anim:update(dt)
+end
+```
+
+A new animation starts paused on frame 1 — without `play()` it never advances. Also verify the `frames` indices match your sprite-sheet grid (1-based, row-major).
+
+### How do I play an animation once and stop?
+
+Set `loop = false` and listen for `complete`:
+
+```lua
+local anim = require("src.systems.animation").new({
+    image = playerImage, frameWidth = 32, frameHeight = 32, frames = { 1, 2, 3, 4 },
+    loop = false,
+})
+anim:on("complete", function()
+    -- e.g. destroy the explosion entity
+end)
+```
+
+With `loop = false` the animation plays through and fires `complete` exactly once; `update(dt)` then no-ops until you call `play()` again.
+
+### How do I flip my sprite?
+
+Use `flipX` / `flipY` in the config:
+
+```lua
+local anim = require("src.systems.animation").new({
+    image = playerImage, frameWidth = 32, frameHeight = 32, frames = { 1, 2 },
+    flipX = true,  -- face left
+})
+```
+
+To flip at runtime based on movement direction, mutate the fields directly: `anim.flipX = movingLeft`.
+
+### How do I draw the current frame?
+
+`getQuad()` returns an anim8 Quad ready for `love.graphics.draw`:
+
+```lua
+function love.draw()
+    love.graphics.draw(anim.image, anim:getQuad(), x, y)
+end
+```
+
+Use `getDimensions()` for the frame size (e.g. to center the sprite) and `getFrame()` for the current 1-based frame index.
+
+### I don't hear any sound
+
+Nova2D disables the audio module by default in `conf.lua` to improve startup time — enable it first:
+
+```lua
+t.modules.audio = true   -- change from false to true
+```
+
+Then make sure you create the audio manager and that the source is loaded:
+
+```lua
+local audio = require("src.systems.audio").new()
+local sfx = love.audio.newSource("assets/sounds/jump.wav", "static")
+audio:play("sfx", sfx)
+```
+
+Also verify the volume chain: `setMasterVolume()` × channel volume × the per-play `options.volume` all multiply together — any of them at 0 silences the sound.
+
+### How do I play music that doesn't overlap itself?
+
+Use `music()` (single-track semantics) instead of `play()`: it stops whatever is playing on the channel first:
+
+```lua
+local audio = require("src.systems.audio").new()
+audio:music("music", musicSource)
+```
+
+The default `music` channel has `pool = 1` — a second `music()` call replaces the current track. `play()` is for overlapping sound effects (pooled with least-recently-used slot stealing).
+
+### How do I fade audio in or out?
+
+`fade(channel, target, duration)` animates the channel volume:
+
+```lua
+audio:fade("music", 0, 2)  -- fade out over 2 seconds
+audio:on("fade-complete", function(channel, target)
+    if target == 0 then
+        audio:stop(channel)  -- fully stopped after fading out
+    end
+end)
+```
+
+Call `audio:update(dt)` in `love.update()` — fades and `ended` detection are driven from it.
+
+### How do I know when a sound finished playing?
+
+Listen for the `ended` event (channel, source):
+
+```lua
+audio:on("ended", function(channel, source)
+    -- e.g. advance a dialogue queue
+end)
+```
+
+The audio system polls playing slots in `update(dt)` — don't forget to call it, or `ended` never fires.
+
+### My player passes through walls
+
+`move()` returns the resolved position — you must write it back (or use the system's automatic write-back). Verify the entity is in the world AND you use the returned coordinates:
+
+```lua
+local world = require("src.systems.collision").new()
+
+function love.update(dt)
+    local actualX, actualY, collided = world:move(player, player.x + vx * dt, player.y + vy * dt)
+    if not collided then
+        player.x, player.y = actualX, actualY
+    end
+end
+```
+
+The system writes resolved coordinates back into `entity.collider` (or `entity.x/y` when there is no collider) automatically, but if you read `player.x` from a different table than the one you passed to `move()`, you'll see the un-resolved position.
+
+### How do I know what my player collided with?
+
+Listen for the `collision` event — it fires with the other entity and the collision info (normal, touch, overlap):
+
+```lua
+world:on("collision", function(entity, other, col)
+    if other.tag == "coin" then
+        collectCoin(other)
+    elseif col.normal.y < 0 then
+        -- hit something above (ceiling)
+    end
+end)
+```
+
+`world:check(entity, gx, gy)` is a non-moving probe that returns `true`/`false` for "would collide at that position" — useful for ledge detection before committing a move.
+
+### How do I find entities in an area?
+
+Use `query(x, y, w, h)` for a rectangle and `queryPoint(x, y)` for a point:
+
+```lua
+-- enemies within the explosion radius
+local hit = world:query(explosion.x - 50, explosion.y - 50, 100, 100)
+for _, entity in ipairs(hit) do
+    entity:takeDamage(10)
+end
+```
+
+For pure math checks without a world, the helpers `box()`, `overlaps()`, and `contains()` are available on the module itself.
+
 ---
 
 ## Compatibility
