@@ -1,5 +1,7 @@
 # Changelog
 
+Every release of Nova2D, from the initial v0.1 base structure to the latest core systems. Each entry lists new features, bug fixes, and breaking changes so you can plan upgrades with confidence.
+
 ## v0.6.2 — Domain Migration (2026-07-21)
 
 - Migrated official domain from `nova2d.pages.dev` to `nova2d.dev`

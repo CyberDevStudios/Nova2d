@@ -20,3 +20,10 @@ It provides a ready-to-run skeleton with 5 game states, a built-in package manag
 | One-command installer | v0.4+ |
 | Web documentation | v0.5+ (live at [nova2d.dev](https://nova2d.dev/)) |
 | Core Systems (jump, health, timer, camera, input) | v0.6+ |
+
+## Community
+
+- [GitHub](https://nova2d.dev/community/github) — source code, issues, and contributions
+- [Discord](https://nova2d.dev/community/discord) — support and discussion with other developers
+- [Changelog](https://nova2d.dev/community/changelog) — release history and upgrade notes
+- [License](https://nova2d.dev/community/license) — MIT terms
