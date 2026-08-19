@@ -2,6 +2,14 @@
 
 Every release of Nova2D, from the initial v0.1 base structure to the latest core systems. Each entry lists new features, bug fixes, and breaking changes so you can plan upgrades with confidence.
 
+## v0.7.0 — Core Systems II: Animation, Audio, Collision (2026-08-19)
+
+- **Animation system** (`src/systems/animation.lua`) — sprite-sheet animation over anim8: configurable grid/fps/frames, `loop`/`flipX`/`flipY`, `frame` and `complete` events, `getQuad()` for drawing
+- **Audio system** (`src/systems/audio.lua`) — channel-based audio manager: source pooling with slot stealing, per-channel and master volume, fades, `ended` and `fade-complete` events
+- **Collision system** (`src/systems/collision.lua`) — AABB collision world over bump.lua: spatial hash, `move`/`check`/`query`/`queryPoint`, `collision` events with normals, automatic position write-back, plus pure `box`/`overlaps`/`contains` helpers
+- **Fixed dependency naming bug** — `bump.lua` dependency renamed to `bump` in `nova2d.lua`: the gestor now installs `libs/bump/bump.lua`, making the documented `require("bump")` resolve through conf.lua paths (previously the installed path was unreachable)
+- Full API documentation for each new system
+
 ## v0.6.2 — Domain Migration (2026-07-21)
 
 - Migrated official domain from `nova2d.pages.dev` to `nova2d.dev`

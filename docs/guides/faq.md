@@ -240,7 +240,7 @@ Nova2D extends `package.path` automatically via `conf.lua` so you can do:
 ```lua
 local Player = require("src.entities.player") -- src/entities/player.lua
 local Menu   = require("src.states.menu")     -- src/states/menu.lua
-local bump   = require("bump")                -- libs/bump.lua
+local bump   = require("bump")                -- libs/bump/bump.lua
 ```
 
 ### Can I delete gestor/ for release?

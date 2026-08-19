@@ -58,6 +58,8 @@ Los siguientes skills del sistema Gentle AI aplican a este proyecto:
 | v0.3 | Hot reload (lurker) | Completado |
 | v0.4 | Installer script (curl) | Completado |
 | v0.5 | Web documentation | Completado ([nova2d.dev](https://nova2d.dev/)) |
+| v0.6 | Core Systems: jump, health, timer, camera, input | Completado |
+| v0.7 | Core Systems II: animation, audio, collision | Completado |
 | v1.0 | Public release | Pendiente |
 
 ## Engram

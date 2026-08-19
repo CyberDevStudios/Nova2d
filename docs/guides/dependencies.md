@@ -54,7 +54,7 @@ The gestor now performs safe shell quoting for URLs and file paths on both Windo
 ```lua
 -- Generated automatically. Do not edit.
 return {
-    ["bump.lua"] = { version = "3.1.7", installed = 1750617600 },
+    ["bump"]    = { version = "3.1.7", installed = 1750617600 },
     ["anim8"]    = { version = "2.3.0", installed = 1750617600 },
 }
 ```

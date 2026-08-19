@@ -1,10 +1,10 @@
 return {
     name    = "Nova2D",
-    version = "0.6.2",
+    version = "0.7.0",
     author  = "Cyber Dev Studio",
 
     dependencies = {
-        ["bump.lua"] = {
+        ["bump"] = {
             repo = "kikito/bump.lua",
             version = "v3.1.7",
             type = "single",
