@@ -12,6 +12,6 @@ Join the **Cyber Dev Studio** community on Discord! This is the official gatheri
 
 ## Join the server
 
-<a href="https://discord.gg/SC672ceFX" target="_blank" rel="noopener" class="discord-invite">Join the Cyber Dev Studio Discord →</a>
+<a href="https://discord.gg/aAJqPm9vQ" target="_blank" rel="noopener" class="discord-invite">Join the Cyber Dev Studio Discord →</a>
 
 The invite link is permanent — save it and share it with anyone interested in Nova2D.

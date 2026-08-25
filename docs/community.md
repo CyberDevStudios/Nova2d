@@ -14,7 +14,7 @@ The official gathering place for Nova2D developers — support, development upda
 - **Collaborate** — find contributors, team up on projects, or just chat about game dev
 - **Direct feedback** — talk directly with the maintainers and help shape Nova2D's future
 
-<a href="https://discord.gg/SC672ceFX" target="_blank" rel="noopener" class="discord-invite">Join the Cyber Dev Studio Discord →</a>
+<a href="https://discord.gg/aAJqPm9vQ" target="_blank" rel="noopener" class="discord-invite">Join the Cyber Dev Studio Discord →</a>
 
 The invite link is permanent — save it and share it with anyone interested in Nova2D.
 
