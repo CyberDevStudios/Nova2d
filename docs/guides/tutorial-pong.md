@@ -6,6 +6,10 @@ Build a complete, playable Pong game using Nova2D. Each step produces a game tha
 **Estimated time**: 30-45 minutes.
 **Requirements**: Love2D 11.x, Nova2D installed.
 
+This is the finished game running — watch it first, then build it step by step:
+
+<!-- youtube:snyD3X8_B5Q -->
+
 ---
 
 ## Step 1: Create the project
@@ -568,9 +572,8 @@ In `src/entities/ball.lua`, **inside** `Ball.update(ball, dt)`, add this block i
 
 ## Result
 
-After completing step 7 (without sound), this is what you get:
-
-<!-- youtube:snyD3X8_B5Q -->
+After completing step 7 (without sound), this is what you get —
+[watch the final run on YouTube](https://www.youtube.com/watch?v=snyD3X8_B5Q).
 
 ```
 src/
