@@ -18,6 +18,8 @@ local BLUE    = {0.231, 0.510, 0.965}
 local BTN_W = 240
 local BTN_H = 42
 local BTN_R = 8
+local MENU_START_Y = 230
+local MENU_SPACING = 72
 
 -- ---------------------------------------------------------------------------
 -- State
@@ -37,6 +39,11 @@ local stars = {}
 local fontTitle
 local fontItems
 local fontVersion
+
+-- Forward declaration: the input handlers below reference this function,
+-- which is defined at the bottom of the module (after the states that
+-- require() it are resolvable without circular dependencies).
+local dispatchAction
 
 local function ensureFont(font, size)
     if font then
@@ -162,12 +169,10 @@ function State:draw()
     love.graphics.printf("Nova2D", 0, 130, W, "center")
 
     -- Menu buttons (more spacing, lower position)
-    local startY = 230
-    local spacing = 72
     love.graphics.setFont(ensureFont(fontItems, 22))
 
     for i, item in ipairs(menuItems) do
-        drawButton(item.label, CX, startY + (i - 1) * spacing, i == selected)
+        drawButton(item.label, CX, MENU_START_Y + (i - 1) * MENU_SPACING, i == selected)
     end
 
     -- Version
@@ -182,7 +187,7 @@ end
 -- Input
 -- ---------------------------------------------------------------------------
 
-function State:keyreleased(key)
+function State:keypressed(key)
     if key == "up" or key == "w" then
         selected = selected - 1
         if selected < 1 then selected = #menuItems end
@@ -196,11 +201,12 @@ end
 
 function State:mousepressed(x, y, button)
     if button ~= 1 then return end
-    local startY = 23
-    local spacing = 72
+    -- Hit-test against the exact rectangle drawButton() renders:
+    -- top = cy - BTN_H / 8, height = BTN_H (see the draw section).
     for i in ipairs(menuItems) do
-        local cy = startY + (i - 1) * spacing
-        if math.abs(y - cy) < BTN_H / 2 + 6 then
+        local cy = MENU_START_Y + (i - 1) * MENU_SPACING
+        local top = cy - BTN_H / 8
+        if y >= top and y <= top + BTN_H then
             selected = i
             dispatchAction()
             return

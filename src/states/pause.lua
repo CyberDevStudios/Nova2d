@@ -74,7 +74,7 @@ function State:draw()
     love.graphics.setColor(1, 1, 1)
 end
 
-function State:keyreleased(key)
+function State:keypressed(key)
     if key == "escape" then
         Gamestate.pop()
     elseif key == "up" or key == "w" then
@@ -94,11 +94,13 @@ end
 
 function State:mousepressed(x, y, button)
     if button ~= 1 then return end
+    -- Hit-test against the exact rectangle draw() renders: top = y,
+    -- height = 36 (see the draw section).
     local startY = 260
     local spacing = 60
     for i in ipairs(pauseItems) do
         local cy = startY + (i - 1) * spacing
-        if y >= cy - 18 and y <= cy + 18 then
+        if y >= cy and y <= cy + 36 then
             selected = i
             if pauseItems[i] == "Resume" then
                 Gamestate.pop()

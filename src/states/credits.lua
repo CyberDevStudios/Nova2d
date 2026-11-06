@@ -170,7 +170,7 @@ end
 -- Input
 -- ---------------------------------------------------------------------------
 
-function State:keyreleased(key)
+function State:keypressed(key)
     if key == "escape" or key == "return" or key == "backspace" or key == "space" then
         Gamestate.switch(Menu)
     end
