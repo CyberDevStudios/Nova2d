@@ -1,0 +1,10 @@
+-- busted configuration — run from the repository root:
+--   busted
+return {
+    default = {
+        ROOT = { "tests" },
+        -- Resolve src.*, libs/* and test helpers from the repo root,
+        -- both locally and in CI.
+        lpath = "?.lua;?/init.lua;libs/?.lua;libs/?/?.lua;libs/?/init.lua;src/?.lua;src/?/?.lua;src/?/init.lua",
+    },
+}
