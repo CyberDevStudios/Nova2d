@@ -22,9 +22,15 @@ function jump.new(config)
     config = config or {}
     local self = setmetatable({}, jump)
 
-    -- Merge config over defaults
+    -- Merge config over defaults. Explicit nil-check: `a and b or c` is
+    -- avoided because it breaks when the config value is `false`
+    -- (e.g. variableHeight = false would fall back to the default true).
     for k, v in pairs(DEFAULTS) do
-        self[k] = (config[k] ~= nil) and config[k] or v
+        if config[k] ~= nil then
+            self[k] = config[k]
+        else
+            self[k] = v
+        end
     end
 
     -- Writable properties — user sets each frame

@@ -22,10 +22,19 @@ function camera.new(config)
     config = config or {}
     local self = setmetatable({}, camera)
 
-    -- Merge config over defaults
+    -- Merge config over defaults. Explicit nil-check: `a and b or c` is
+    -- avoided because it breaks when the config value is `false`.
     for k, v in pairs(DEFAULTS) do
-        self[k] = (config[k] ~= nil) and config[k] or v
+        if config[k] ~= nil then
+            self[k] = config[k]
+        else
+            self[k] = v
+        end
     end
+
+    -- `bounds` defaults to nil, so the loop above never visits it —
+    -- copy it explicitly or camera.new({ bounds = ... }) is ignored.
+    self.bounds = config.bounds
 
     -- Internal state
     self._x              = 0
