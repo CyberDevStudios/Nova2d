@@ -1,6 +1,6 @@
 return {
     name    = "Nova2D",
-    version = "0.7.0",
+    version = "0.8.0",
     author  = "Cyber Dev Studio",
 
     dependencies = {

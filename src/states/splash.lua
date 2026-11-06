@@ -86,6 +86,10 @@ end
 function State:enter()
     hotreload.patch()
 
+    -- Window title shows the framework version (from the single source
+    -- of truth in src/version.lua) instead of a hardcoded string.
+    love.window.setTitle("Nova2D v" .. VERSION)
+
     -- Force window icon (most reliable method across platforms)
     local ok, img = pcall(love.image.newImageData, "assets/images/icon32.png")
     if ok then love.window.setIcon(img) end

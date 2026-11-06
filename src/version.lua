@@ -1,7 +1,8 @@
 -- Nova2D — Framework Version
 -- src/version.lua
 -- Central source of truth for the current framework version.
--- Auto-updated by scripts/bump-version.sh from docs/community/changelog.md.
--- To bump: run `bash scripts/bump-version.sh` after editing changelog.
+-- Every UI surface (splash, menu, game HUD, window title) reads this
+-- value — never hardcode a version string anywhere else.
+-- To bump: edit this file, nova2d.lua, and docs/community/changelog.md.
 
-return "0.7.0"
+return "0.8.0"
