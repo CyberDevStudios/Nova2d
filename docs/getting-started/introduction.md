@@ -21,6 +21,9 @@ It provides a ready-to-run skeleton with 5 game states, a built-in package manag
 | Web documentation | v0.5+ (live at [nova2d.dev](https://nova2d.dev/)) |
 | Core Systems (jump, health, timer, camera, input) | v0.6+ |
 | Core Systems II (animation, audio, collision) | v0.7+ |
+| EntityManager + playable platformer demo | v0.8+ |
+| Test suite & CI (busted, luacheck, boot smoke test) | v0.8+ |
+| Installers for bash and PowerShell, with checksums | v0.8+ |
 
 ## Community
 

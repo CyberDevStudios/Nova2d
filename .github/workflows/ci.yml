@@ -25,6 +25,15 @@ jobs:
           luarocks install luacheck
           luarocks install busted
 
+      - name: Install framework dependencies (gestor)
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y love unzip xvfb
+          # libs/ is gitignored by design — the gestor downloads it.
+          # System specs (animation, collision, docs examples) require
+          # anim8 and bump from libs/.
+          xvfb-run -a love gestor/ install
+
       - name: Lint
         run: luacheck src main.lua tests
 
@@ -40,7 +49,10 @@ jobs:
       - name: Install Love2D and Xvfb
         run: |
           sudo apt-get update
-          sudo apt-get install -y love xvfb
+          sudo apt-get install -y love xvfb unzip
+
+      - name: Install framework dependencies (gestor)
+        run: xvfb-run -a love gestor/ install
 
       - name: Boot the game for a few seconds
         run: |
