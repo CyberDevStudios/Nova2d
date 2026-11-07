@@ -43,8 +43,6 @@ local nebulaLayers = {}
 -- Helpers
 -- ---------------------------------------------------------------------------
 
-local function lerp(a, b, t) return a + (b - a) * t end
-
 local function clamp(v, lo, hi) return math.max(lo, math.min(hi, v)) end
 
 local function spawnStars(count)
@@ -95,8 +93,8 @@ function State:enter()
     if ok then love.window.setIcon(img) end
 
     -- Load white vector logo
-    local ok, img = pcall(love.graphics.newImage, "assets/images/logo.png")
-    logo = ok and img or nil
+    local okLogo, logoImg = pcall(love.graphics.newImage, "assets/images/logo.png")
+    logo = okLogo and logoImg or nil
 
     -- Reset
     timer = SPLASH_DURATION

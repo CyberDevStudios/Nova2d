@@ -101,7 +101,7 @@ function input:_onKeyPressed(key)
 end
 
 --- Reserved for future use (e.g., release-based buffering).
-function input:_onKeyReleased(key)
+function input:_onKeyReleased(_key)
     -- no-op
 end
 

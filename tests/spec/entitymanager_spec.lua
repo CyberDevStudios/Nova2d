@@ -12,7 +12,7 @@ local function ent(name, log)
         leave = function(self)
             log[#log + 1] = "leave:" .. self.name
         end,
-        update = function(self, dt)
+        update = function(self)
             log[#log + 1] = "update:" .. self.name
         end,
         draw = function(self)
@@ -89,7 +89,7 @@ describe("Entity manager", function()
 
         local b
         local a = ent("a", log)
-        a.update = function(self, dt)
+        a.update = function()
             log[#log + 1] = "update:a"
             em:remove(b)              -- schedule removal of b mid-iteration
         end

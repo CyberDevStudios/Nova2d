@@ -17,7 +17,7 @@ end
 
 -- Called from splash.lua's enter() AFTER Gamestate.registerEvents()
 -- has set up love.update. This is the correct timing.
-function patch_update()
+local function patch_update()
     local original_update = love.update
     love.update = function(dt)
         lurker.update()

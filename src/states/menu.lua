@@ -199,7 +199,7 @@ function State:keypressed(key)
     end
 end
 
-function State:mousepressed(x, y, button)
+function State:mousepressed(_, y, button)
     if button ~= 1 then return end
     -- Hit-test against the exact rectangle drawButton() renders:
     -- top = cy - BTN_H / 8, height = BTN_H (see the draw section).

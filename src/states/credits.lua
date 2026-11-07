@@ -176,7 +176,7 @@ function State:keypressed(key)
     end
 end
 
-function State:mousepressed(x, y, button)
+function State:mousepressed()
     Gamestate.switch(Menu)
 end
 

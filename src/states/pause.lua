@@ -92,7 +92,7 @@ function State:keypressed(key)
     end
 end
 
-function State:mousepressed(x, y, button)
+function State:mousepressed(_, y, button)
     if button ~= 1 then return end
     -- Hit-test against the exact rectangle draw() renders: top = y,
     -- height = 36 (see the draw section).
