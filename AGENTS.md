@@ -8,7 +8,7 @@ Este archivo define cómo los agentes de IA deben trabajar en este proyecto.
 - **Framework**: Nova2D sobre Love2D
 - **Gestión de estados**: hump.gamestate
 - **Gestor de dependencias**: Nova2D propio (v0.2+)
-- **Testing**: No hay test runner disponible (Lua puro)
+- **Testing**: busted (`busted` desde la raíz, specs en `tests/spec/`) + luacheck
 
 ## Convenciones de Código
 
@@ -60,6 +60,7 @@ Los siguientes skills del sistema Gentle AI aplican a este proyecto:
 | v0.5 | Web documentation | Completado ([nova2d.dev](https://nova2d.dev/)) |
 | v0.6 | Core Systems: jump, health, timer, camera, input | Completado |
 | v0.7 | Core Systems II: animation, audio, collision | Completado |
+| v0.8 | EntityManager, demo, tests & CI, instaladores | Completado |
 | v1.0 | Public release | Pendiente |
 
 ## Engram

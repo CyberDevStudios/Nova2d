@@ -35,7 +35,7 @@ state receives `enter(previous, ...)`.
 ```lua
 Gamestate.switch(menu)
 Gamestate.switch(game, score, level)
-Gamestate.switch(require("states.results"), self.score)
+Gamestate.switch(require("src.states.results"), self.score)
 ```
 
 **Returns**: the previous state (the one that was replaced).
@@ -115,8 +115,9 @@ Called when the state becomes active. Initialize variables and load resources he
 function Game:enter(previous, levelName)
     self.level = levelName
     self.score = 0
-    self.player = {}
-    Player:enter(self.player)
+    self.player = Player.new(400, 300)
+    self.entities = EntityManager.new()
+    self.entities:add(self.player)
 end
 ```
 

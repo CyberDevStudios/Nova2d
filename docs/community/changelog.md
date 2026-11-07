@@ -2,6 +2,22 @@
 
 Every release of Nova2D, from the initial v0.1 base structure to the latest core systems. Each entry lists new features, bug fixes, and breaking changes so you can plan upgrades with confidence.
 
+## v0.8.0 — EntityManager, Demo, Tests & CI (2026-11-06)
+
+- **EntityManager** (`src/systems/entitymanager.lua`) — entity registry with `add`/`remove`, deferred removal (safe inside update loops), `clear`/`reset`, layer-based update/draw order, `tags` + `getByTag`/`query`, `added`/`removed` events, and system composition through `attach`/`detach` (systems update before the entity)
+- **Playable platformer demo** — `src/states/game.lua`, `src/entities/player.lua` and `src/entities/hazard.lua` wire Input, Jump, Collision, Health, Camera, Animation and EntityManager into a complete level with spikes, i-frames, pit respawn, HP HUD and camera shake
+- **Entity pattern corrected** — all entity docs now use the metatable constructor (`Player.new(x, y)`), matching the built-in systems; the old blueprint / DOT-syntax pattern is gone
+- **Fixed config merge in systems** — `jump`, `health`, `timer` and `camera` used `config[k] ~= nil and config[k] or default`, which silently dropped `false` values (`variableHeight = false`); constructors now use an explicit nil-check
+- **Fixed `camera.new({ bounds = ... })`** — `bounds` was never copied from the config
+- **Fixed menu input and hitboxes** — menu/pause/credits use `keypressed` (no more repeated actions while held); mouse hitboxes match the drawn buttons
+- **Centralized version** — `src/version.lua` is the single source of truth; the splash screen sets the window title to `Nova2D v0.8.0`
+- **Test suite** — 92 busted specs for every system, the EntityManager and the documented examples; Love2D stubs allow headless runs
+- **CI** — GitHub Actions: luacheck + busted, Love2D boot smoke test under Xvfb, installer checksum guard
+- **Installers** — rewritten `install.sh` (`--version`, correct `main` fallback, cleanup) and new `install.ps1`; `.gitattributes` keeps development files out of source archives; `install.sh.sha256` published
+- **Docs** — new EntityManager, platformer, packaging and testing pages; installer guide covers Windows, checksums and reading before running; Quick Start, 5-minute and Pong tutorials updated to the constructor pattern
+- **Hot reload** — `patch_update` is now local; splash no longer crashes on stray Windows `*:Zone.Identifier` files
+- **Breaking** — entities written with the old blueprint/DOT pattern must migrate to `Module.new(...)`; `attach()` stores systems as `entity.<name>` (`player.jump`, not `player.systems.jump`)
+
 ## v0.7.0 — Core Systems II: Animation, Audio, Collision (2026-08-19)
 
 - **Animation system** (`src/systems/animation.lua`) — sprite-sheet animation over anim8: configurable grid/fps/frames, `loop`/`flipX`/`flipY`, `frame` and `complete` events, `getQuad()` for drawing

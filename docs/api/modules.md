@@ -10,10 +10,32 @@ Reference of all Nova2D modules and their public APIs.
 | conf | `conf.lua` | Love2D window configuration. |
 | splash | `src/states/splash.lua` | Splash screen with animated logo, nebula, and particle stars. |
 | menu | `src/states/menu.lua` | Main menu with keyboard + mouse navigation. |
-| game | `src/states/game.lua` | **Placeholder** — replace with your game code. |
+| game | `src/states/game.lua` | Playable mini-platformer demo — replace with your game code. |
 | pause | `src/states/pause.lua` | Semi-transparent overlay with Resume / Return to Menu. |
 | credits | `src/states/credits.lua` | Credits listing dependencies and authors. |
 | hotreload | `src/hotreload.lua` | Lurker bootstrapper with deferred patching from `splash.enter()`. |
+| version | `src/version.lua` | Single source of truth for the framework version. |
+| entities/player | `src/entities/player.lua` | Demo player entity (constructor pattern + attached systems). |
+| entities/hazard | `src/entities/hazard.lua` | Demo spike hazard entity. |
+
+## Systems
+
+| Module | File | Purpose |
+|---|---|---|
+| entitymanager | `src/systems/entitymanager.lua` | Entity registry: layers, lifecycle, tags, queries, deferred removal, system composition. |
+| input | `src/systems/input.lua` | Keyboard/gamepad actions and input buffering. |
+| jump | `src/systems/jump.lua` | Gravity, coyote time, jump buffering, variable jump height. |
+| health | `src/systems/health.lua` | HP, damage types, i-frames, death events. |
+| timer | `src/systems/timer.lua` | Countdown/stopwatch timers with events. |
+| camera | `src/systems/camera.lua` | Smooth follow, bounds, zoom, shake. |
+| animation | `src/systems/animation.lua` | anim8 wrapper with events and playback control. |
+| audio | `src/systems/audio.lua` | Channels, volume, fades, music, pooling. |
+| collision | `src/systems/collision.lua` | bump.lua wrapper: move/check/query plus AABB helpers. |
+
+System APIs: [EntityManager](entity-manager.md), [Input](input-system.md),
+[Jump](jump-system.md), [Health](health-system.md), [Timer](timer-system.md),
+[Camera](camera-system.md), [Animation](animation-system.md), [Audio](audio-system.md),
+[Collision](collision-system.md).
 
 > The game engine modules are documented in detail in their respective API pages:
 > [State Machine](state-machine.md), [Entity API](entity-api.md), [Configuration](configuration.md).

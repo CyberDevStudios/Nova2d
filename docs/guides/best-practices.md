@@ -17,10 +17,14 @@
 
 ## Entities
 
-- Prefer composition over inheritance
+- Use the constructor pattern: `local self = setmetatable({}, Module)` and return it
 - Keep `update()` focused on logic, `draw()` on rendering only
 - Pass `dt` for frame-independent movement
-- Use `self` for entity state
+- Keep state on the instance (`self`), never on the module
+- Register entities in an `EntityManager` when you need layers, tags or safe removal
+- Attach systems (`Jump`, `Health`, `Animation`) through the manager and read them as
+  `self.jump`, `self.health`, `self.animation`
+- Prefer composition over inheritance
 
 ## Project structure
 

@@ -1,131 +1,137 @@
 # Entities
 
-Entities are game objects — players, enemies, items, and anything else that exists in your
-game world. Each entity is a Lua module that acts as a **blueprint** (a collection of
-methods), and you create **instances** as separate tables.
+Entities are game objects — players, enemies, items, and anything else that lives in your
+game world. In Nova2D an entity is a Lua module that returns a **constructor**, and every
+object you create is an independent **instance** of it.
 
-## How it works
+## The constructor pattern
 
-In Lua, `obj:method(args)` is sugar for `obj.method(obj, args)`. An entity module defines
-methods with `self`, and when you create an instance table and pass it with colon syntax,
-`self` points to that instance:
-
-```lua
-local Player = {}
-
-function Player:enter()
-    -- self is the instance table, NOT the Player module
-    self.x = 400
-    self.y = 300
-    self.speed = 200
-end
-
--- In your state you create an instance and pass it:
-local playerInstance = {}
-Player:enter(playerInstance)
--- now playerInstance.x == 400, playerInstance.y == 300
-```
-
-The entity module (`Player`) is never modified. Each instance is its own table. This
-means you can create multiple enemies from the same module:
-
-```lua
-local goblin1 = {}
-local goblin2 = {}
-Enemy:enter(goblin1, 100, 200)
-Enemy:enter(goblin2, 300, 400)
--- Each goblin has its own x, y, hp
-```
-
-## Entity structure
+Each entity module follows the same shape:
 
 ```lua
 -- src/entities/player.lua
 local Player = {}
+Player.__index = Player
 
-function Player:enter(parent, args)
-    self.x = 400
-    self.y = 300
+function Player.new(x, y)
+    local self = setmetatable({}, Player)
+    self.x = x
+    self.y = y
     self.speed = 200
-    self.hp = 100
+    return self
 end
 
 function Player:update(dt)
-    if love.keyboard.isDown("left") then
-        self.x = self.x - self.speed * dt
-    elseif love.keyboard.isDown("right") then
-        self.x = self.x + self.speed * dt
-    end
+    self.x = self.x + self.speed * dt
 end
 
 function Player:draw()
-    love.graphics.setColor(1, 1, 1)
-    love.graphics.circle("fill", self.x, self.y, 20)
+    love.graphics.circle("fill", self.x, self.y, 16)
 end
 
 return Player
 ```
 
+`Player.new(400, 300)` returns a new table whose metatable is the `Player` module. Method
+lookups go to the module through `__index`, but **state lives on the instance** — the
+module is never modified:
+
+```lua
+local p1 = Player.new(0, 0)
+local p2 = Player.new(100, 0)
+
+p1:update(1)
+-- p1.x == 200, p2.x == 100, Player.x == nil
+```
+
+This is the same pattern used by the built-in systems (`Jump.new()`, `Health.new()`,
+`Camera.new()`), so there is only one mental model for the whole framework.
+
 ## Entity lifecycle
+
+Entities registered in an [EntityManager](../api/entity-manager.md) receive:
 
 | Method | Purpose |
 |---|---|
-| `enter(parent, ...)` | Initialize entity state. `parent` is the owning state or manager |
+| `enter(parent)` | Called once when the entity is added. `parent` is the manager |
 | `update(dt)` | Per-frame logic |
 | `draw()` | Per-frame rendering |
-| `leave()` | Cleanup when removed |
+| `leave()` | Cleanup when the entity is removed |
 
-### `enter(parent, ...)`
+`enter` and `leave` are optional. If you use entities without a manager, you simply call
+`entity:update(dt)` / `entity:draw()` yourself and skip the lifecycle hooks.
 
-Called when the entity is created. `parent` is the table that owns this entity — usually
-the state that created it (useful for accessing shared state or switching screens).
+## Registering entities
 
 ```lua
-function Enemy:enter(parent, x, y)
-    self.x = x
-    self.y = y
-    self.parent = parent  -- save reference to owning state
-end
+local EntityManager = require("src.systems.entitymanager")
+local Player = require("src.entities.player")
 
-function Enemy:update(dt)
-    -- Access the owning state through parent
-    if self.x < 0 then
-        self.parent:onEnemyOffscreen(self)
-    end
-end
+local entities = EntityManager.new({ layers = { "actors", "hazards" } })
+local player = Player.new(64, 544)
+
+entities:add(player, "actors")
+entities:update(dt)   -- updates every entity in layer order
+entities:draw()       -- draws every entity in layer order
 ```
+
+The manager keeps update and draw order stable per layer, supports tags and queries, and
+defers removals so you can call `remove()` from inside an update loop. See the
+[EntityManager API](../api/entity-manager.md) for the full surface.
+
+## Systems on entities
+
+The manager can attach a system instance to an entity. Attached systems update **before**
+the entity's own `update(dt)`, so the entity reads fresh system state in the same frame:
+
+```lua
+local Jump = require("src.systems.jump")
+
+entities:attach(player, "jump", Jump.new({ jumpVelocity = -450 }))
+
+-- inside Player:update(dt)
+self.jump.grounded = self.world:check(self, self.x, self.y + 1)
+if input:isPressed("jump") then self.jump:jump() end
+self.y = self.y + self.jump:getVelocity() * dt
+```
+
+| System | Entity field | Typical use |
+|---|---|---|
+| `Jump` | `self.jump` | gravity, coyote time, jump buffering |
+| `Health` | `self.health` | HP, damage, i-frames, death |
+| `Animation` | `self.animation` | sprite frames |
+| `Timer` | `self.timer` | cooldowns, durations |
 
 ## Conventions
 
-- `PascalCase` for entity module names
-- One file per entity under `src/entities/`
-- Each file returns a table
-- `local` everywhere, no globals
-- `update(dt)` for logic, `draw()` for rendering
-- `enter()` for initialization
+- `PascalCase` for entity module names, one file per entity under `src/entities/`
+- `local` everywhere; the module is returned at the end
+- `update(dt)` for logic, `draw()` for rendering — never draw in `update`
+- Keep state on the instance (`self`), never on the module
+- Requires of project modules use the `src.` prefix: `require("src.entities.player")`
 
 ## Complete example: player + game state
 
 ```lua
 -- src/entities/player.lua
 local Player = {}
+Player.__index = Player
 
-function Player:enter()
-    self.x = 400
-    self.y = 300
+function Player.new(x, y)
+    local self = setmetatable({}, Player)
+    self.x, self.y = x, y
     self.speed = 200
+    self.w, self.h = 16, 16
+    return self
 end
 
 function Player:update(dt)
     if love.keyboard.isDown("left")  then self.x = self.x - self.speed * dt end
     if love.keyboard.isDown("right") then self.x = self.x + self.speed * dt end
-    if love.keyboard.isDown("up")    then self.y = self.y - self.speed * dt end
-    if love.keyboard.isDown("down")  then self.y = self.y + self.speed * dt end
 end
 
 function Player:draw()
-    love.graphics.setColor(0.2, 0.6, 1)
-    love.graphics.circle("fill", self.x, self.y, 25)
+    love.graphics.rectangle("fill", self.x, self.y, self.w, self.h)
 end
 
 return Player
@@ -134,33 +140,35 @@ return Player
 ```lua
 -- src/states/game.lua
 local Gamestate = require("hump.gamestate")
-local Player = require("entities.player")
+local EntityManager = require("src.systems.entitymanager")
+local Player = require("src.entities.player")
 
 local Game = {}
 
 function Game:enter()
-    self.player = {}
-    Player:enter(self.player)
+    self.entities = EntityManager.new({ layers = { "actors" } })
+    self.player = Player.new(400, 300)
+    self.entities:add(self.player, "actors")
 end
 
 function Game:update(dt)
-    Player:update(self.player, dt)
+    self.entities:update(dt)
 end
 
 function Game:draw()
     love.graphics.clear()
-    Player:draw(self.player)
+    self.entities:draw()
 end
 
-function Game:keyreleased(key)
+function Game:keypressed(key)
     if key == "escape" then
-        Gamestate.push(require("states.pause"))
+        Gamestate.push(require("src.states.pause"))
     end
 end
 
 return Game
 ```
 
-> **Note**: `Player:enter(self.player)` passes `self.player` (the empty instance table) as
-> `self` inside the method. After `enter()`, `self.player` has `x`, `y`, and `speed` set
-> on it. `Player` itself is unchanged.
+> The playable demo in `src/states/game.lua` is a full version of this example: it wires
+> Input, Jump, Collision, Health, Camera and Animation. The
+> [platformer tutorial](../guides/tutorial-platformer.md) walks through it step by step.

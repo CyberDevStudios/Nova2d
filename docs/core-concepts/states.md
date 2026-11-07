@@ -41,9 +41,9 @@ You only need to define the callbacks your state uses — the rest are ignored.
 - Enter/Space or click to select
 
 ### Game
-- **Placeholder state** — replace this with your game code
-- By default shows a "Your game goes here" message
-- Escape pushes the pause overlay
+- **Playable mini-platformer demo** — replace it with your own game code
+- Wires Input, Jump, Collision, Health, Camera, Animation and the EntityManager
+- Arrows/WASD to move, Space to jump, Escape to pause
 
 ### Pause
 - Semi-transparent overlay (game continues updating underneath)
@@ -90,44 +90,44 @@ return MyState
 
 ## Wiring entities into a state
 
-Game objects (entities) are created in `enter()` and updated/drawn every frame. The
-entity module acts as a blueprint — you create an instance table and pass it to the
-entity's methods with colon syntax:
+Entities use the constructor pattern: `Player.new(x, y)` returns an instance, and the
+[EntityManager](../api/entity-manager.md) drives its lifecycle:
 
 ```lua
 -- src/states/game.lua
 local Gamestate = require("hump.gamestate")
-local Player = require("entities.player")
+local EntityManager = require("src.systems.entitymanager")
+local Player = require("src.entities.player")
 
 local Game = {}
 
 function Game:enter()
-    -- Create an instance table and initialize it
-    self.player = {}
-    Player:enter(self.player)
+    self.entities = EntityManager.new({ layers = { "actors" } })
+    self.player = Player.new(400, 300)
+    self.entities:add(self.player, "actors")
 end
 
 function Game:update(dt)
-    Player:update(self.player, dt)
+    self.entities:update(dt)
 end
 
 function Game:draw()
     love.graphics.clear()
-    Player:draw(self.player)
+    self.entities:draw()
 end
 
-function Game:keyreleased(key)
+function Game:keypressed(key)
     if key == "escape" then
-        Gamestate.push(require("states.pause"))
+        Gamestate.push(require("src.states.pause"))
     end
 end
 
 return Game
 ```
 
-> The colon syntax `Player:enter(self.player)` is equivalent to
-> `Player.enter(self.player)`. Inside `Player:enter()`, `self` refers to the instance
-> table, not the `Player` module. See [Entities](entities.md) for details.
+> The manager calls `enter(parent)` when the entity is added, `update(dt)` and `draw()`
+> every frame, and `leave()` when it is removed. Without a manager you can call those
+> methods yourself. See [Entities](entities.md) for details.
 
 ## State transitions
 
@@ -154,7 +154,7 @@ can pass data naturally:
 
 ```lua
 -- From game state, switch to results:
-Gamestate.switch(require("states.results"), self.score)
+Gamestate.switch(require("src.states.results"), self.score)
 
 -- In results state:
 function Results:enter(previous, score)

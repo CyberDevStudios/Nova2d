@@ -16,9 +16,12 @@
 ## Guides
 - [Tutorial: 5 Minute Game](guides/tutorial-5min.md)
 - [Tutorial: Build Pong](guides/tutorial-pong.md)
+- [Tutorial: Platformer Demo](guides/tutorial-platformer.md) *(v0.8+)*
 - [Dependencies](guides/dependencies.md)
 - [Hot Reload](guides/hot-reload.md) *(v0.3+)*
 - [Installer](guides/installer.md) *(v0.4+)*
+- [Testing](guides/testing.md) *(v0.8+)*
+- [Packaging & Distribution](guides/packaging.md) *(v0.8+)*
 - [Best Practices](guides/best-practices.md)
 - [FAQ & Troubleshooting](guides/faq.md)
 
@@ -26,6 +29,7 @@
 - [Modules](api/modules.md)
 - [Configuration](api/configuration.md)
 - [Entity API](api/entity-api.md)
+- [EntityManager](api/entity-manager.md) *(v0.8+)*
 - [State Machine](api/state-machine.md)
 
 ## Community

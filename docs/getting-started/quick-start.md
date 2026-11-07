@@ -44,11 +44,13 @@ Create `src/entities/player.lua`:
 
 ```lua
 local Player = {}
+Player.__index = Player
 
-function Player:enter()
-    self.x = 400
-    self.y = 300
+function Player.new(x, y)
+    local self = setmetatable({}, Player)
+    self.x, self.y = x, y
     self.speed = 200
+    return self
 end
 
 function Player:update(dt)
@@ -61,10 +63,14 @@ end
 function Player:draw()
     love.graphics.setColor(0.2, 0.6, 1)
     love.graphics.circle("fill", self.x, self.y, 25)
+    love.graphics.setColor(1, 1, 1)
 end
 
 return Player
 ```
+
+`Player.new(x, y)` returns an independent instance; the module itself is never modified.
+See [Entities](../core-concepts/entities.md) for the full pattern.
 
 ## Step 4: Wire the player into the game state
 
@@ -72,36 +78,38 @@ Open `src/states/game.lua` and replace its contents:
 
 ```lua
 local Gamestate = require("hump.gamestate")
-local Player = require("entities.player")
+local EntityManager = require("src.systems.entitymanager")
+local Player = require("src.entities.player")
 
 local Game = {}
 
 function Game:enter()
-    self.player = {}
-    Player:enter(self.player)
+    self.entities = EntityManager.new({ layers = { "actors" } })
+    self.player = Player.new(400, 300)
+    self.entities:add(self.player, "actors")
 end
 
 function Game:update(dt)
-    Player:update(self.player, dt)
+    self.entities:update(dt)
 end
 
 function Game:draw()
     love.graphics.clear()
-    Player:draw(self.player)
+    self.entities:draw()
 end
 
-function Game:keyreleased(key)
+function Game:keypressed(key)
     if key == "escape" then
-        Gamestate.push(require("states.pause"))
+        Gamestate.push(require("src.states.pause"))
     end
 end
 
 return Game
 ```
 
-> `Player:enter(self.player)` passes the empty instance table as `self` inside
-> `Player:enter()`. After that call, `self.player` has `x`, `y`, and `speed` set on it.
-> See [Entities](../core-concepts/entities.md) for the full explanation.
+> The manager calls `enter`, `update`, `draw` and `leave` on each entity. You can also call
+> `self.player:update(dt)` directly if you don't need layers, tags or deferred removal.
+> See [EntityManager](../api/entity-manager.md).
 
 ## Step 5: Run it
 

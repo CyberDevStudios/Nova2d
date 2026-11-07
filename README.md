@@ -37,6 +37,7 @@ love .
 | **v0.5** — Web documentation | Complete ([nova2d.dev](https://nova2d.dev/)) |
 | **v0.6** — Core Systems (jump, health, timer, camera, input) | Released ([main](https://github.com/CyberDevStudios/Nova2d)) |
 | **v0.7** — Core Systems II (animation, audio, collision) | Released ([main](https://github.com/CyberDevStudios/Nova2d)) |
+| **v0.8** — EntityManager, platformer demo, tests & CI, installers | Released ([main](https://github.com/CyberDevStudios/Nova2d)) |
 | **v1.0** — Public release | Pending |
 
 ## Requirements
@@ -46,8 +47,10 @@ love .
 
 ## Features
 
-- **5 game states** — splash (animated), menu, game, pause (overlay), credits
-- **8 core systems** — input, timer, health, camera, jump, animation, audio, collision
+- **5 game states** — splash (animated), menu, game (playable platformer demo), pause (overlay), credits
+- **9 core systems** — entitymanager, input, timer, health, camera, jump, animation, audio, collision
+- **EntityManager** — layers/z-order, tags, queries, deferred removal, system composition
+- **Playable demo** — mini-platformer wiring every system together
 - **Input System** — action-based key bindings with gamepad support and press buffering
 - **Timer System** — countdown and stopwatch with tick/expired events
 - **Health System** — HP tracking, damage, healing, invincibility frames, and death state
@@ -57,7 +60,8 @@ love .
 - **Collision System** — AABB collision world with move/check/query and collision events
 - **Dependency manager** — install, update, remove libraries via `nova2d.lua`
 - **Hot reload** — edit `src/` files and see changes instantly (no restart)
-- **One-command installer** — `curl ... | bash` setup, no git required
+- **One-command installer** — `install.sh` (Linux/macOS/WSL) and `install.ps1` (Windows), with `--version` pinning and checksums
+- **Test suite + CI** — busted specs, luacheck and a Love2D boot smoke test
 - **main.lua frozen** — never modify the entry point
 
 ## Project Structure
@@ -70,8 +74,8 @@ my-game/
 ├── nova2d-lock.lua       -- Auto-generated lockfile
 ├── src/
 │   ├── states/           -- Screens (splash, menu, game, pause, credits)
-│   ├── entities/         -- Player, enemies, objects
-│   ├── systems/          -- Input, timer, health, camera, jump, animation, audio, collision
+│   ├── entities/         -- Player, hazard (constructor pattern)
+│   ├── systems/          -- EntityManager, input, timer, health, camera, jump, animation, audio, collision
 │   ├── utils/            -- Helpers
 │   └── hotreload.lua     -- Hot reload bootstrapper
 ├── assets/
@@ -80,7 +84,8 @@ my-game/
 │   └── fonts/            -- Fonts
 ├── libs/                 -- External dependencies (managed by gestor)
 ├── gestor/               -- Dependency manager tool
-└── openspec/             -- SDD artifacts (specs, designs, tasks)
+├── tests/                -- busted specs (run: busted)
+└── docs/                 -- Documentation sources
 ```
 
 ## Screens
@@ -89,7 +94,7 @@ my-game/
 |---|---|
 | **Splash** | Animated title with particle effects, auto-transitions after 3s or skip with any key |
 | **Main Menu** | New Game, Credits, Quit — keyboard and mouse navigation |
-| **Game** | Empty placeholder ready for your game code |
+| **Game** | Playable mini-platformer demo — replace it with your game |
 | **Pause** | Semi-transparent overlay, toggled with Escape |
 | **Credits** | Included libraries and their authors |
 

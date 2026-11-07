@@ -67,8 +67,12 @@ Lurker forces `require()` to re-execute a module by clearing its entry from `pac
 ```lua
 -- Good: state lives on instances, created at runtime
 local Player = {}
-function Player:enter(instance)
-    instance.x = 0
+Player.__index = Player
+
+function Player.new(x)
+    local self = setmetatable({}, Player)
+    self.x = x
+    return self
 end
 return Player
 
@@ -81,7 +85,8 @@ end
 return Player
 ```
 
-Keep per-game state in instance tables created inside `enter()`/`love.load()` — not in module-level variables — and reloading stays safe.
+Keep per-game state on instances (`Player.new()`) or in state tables — not in
+module-level variables — and reloading stays safe.
 
 > **Note:** `main.lua` and `conf.lua` never hot reload in Love2D — they run once at boot. Code that must change there still requires a restart.
 

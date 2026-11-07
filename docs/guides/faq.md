@@ -153,9 +153,12 @@ end
 **Good** (state on the instance):
 ```lua
 local Enemy = {}
+Enemy.__index = Enemy
 
-function Enemy:enter()
+function Enemy.new()
+    local self = setmetatable({}, Enemy)
     self.counter = 0  -- ← each instance has its own counter
+    return self
 end
 
 function Enemy:update(dt)

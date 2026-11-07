@@ -5,6 +5,13 @@ Build a simple moving circle game in 5 minutes.
 ## Step 1: Create a project
 
 ```bash
+curl -fsSL https://nova2d.dev/install.sh | bash -s my-game
+cd my-game
+```
+
+Or clone the repository manually:
+
+```bash
 git clone https://github.com/CyberDevStudios/Nova2d.git my-game
 cd my-game
 ```
@@ -15,11 +22,13 @@ Create `src/entities/player.lua`:
 
 ```lua
 local Player = {}
+Player.__index = Player
 
-function Player:enter()
-    self.x = 400
-    self.y = 300
+function Player.new(x, y)
+    local self = setmetatable({}, Player)
+    self.x, self.y = x, y
     self.speed = 200
+    return self
 end
 
 function Player:update(dt)
@@ -38,6 +47,7 @@ end
 function Player:draw()
     love.graphics.setColor(0.2, 0.6, 1)
     love.graphics.circle("fill", self.x, self.y, 25)
+    love.graphics.setColor(1, 1, 1)
 end
 
 return Player
@@ -49,26 +59,29 @@ Edit `src/states/game.lua`:
 
 ```lua
 local Gamestate = require("hump.gamestate")
-local Player = require("entities.player")
+local EntityManager = require("src.systems.entitymanager")
+local Player = require("src.entities.player")
 
 local Game = {}
 
 function Game:enter()
-    self.player = {}
-    Player:enter(self.player)
+    self.entities = EntityManager.new({ layers = { "actors" } })
+    self.player = Player.new(400, 300)
+    self.entities:add(self.player, "actors")
 end
 
 function Game:update(dt)
-    Player:update(self.player, dt)
+    self.entities:update(dt)
 end
 
 function Game:draw()
-    Player:draw(self.player)
+    love.graphics.clear()
+    self.entities:draw()
 end
 
-function Game:keyreleased(key)
+function Game:keypressed(key)
     if key == "escape" then
-        Gamestate.push(require("states.pause"))
+        Gamestate.push(require("src.states.pause"))
     end
 end
 
@@ -81,7 +94,8 @@ return Game
 love .
 ```
 
-You should see a blue circle you can move with arrow keys. Press Escape to pause.
+Navigate to **New Game**. You should see a blue circle you can move with the arrow keys.
+Press Escape to pause.
 
 ## Step 5: Install dependencies (optional)
 
@@ -90,3 +104,9 @@ love gestor/ install
 ```
 
 This installs bump.lua for collisions, anim8 for animations, and lovebird for debugging.
+
+## Next steps
+
+- [Entities](../core-concepts/entities.md) — the constructor pattern in depth
+- [EntityManager](../api/entity-manager.md) — layers, tags and deferred removal
+- [Platformer tutorial](tutorial-platformer.md) — the demo explained step by step
