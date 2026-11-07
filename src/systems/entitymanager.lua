@@ -81,8 +81,8 @@ function entitymanager:_updateSystems(entity, dt)
     local order = entity._systemOrder
     if not order then return end
     for i = 1, #order do
-        local system = entity.systems[order[i]]
-        if system.update then
+        local system = entity[order[i]]
+        if system and system.update then
             system:update(dt)
         end
     end
@@ -221,24 +221,29 @@ end
 -- ── Composition ─────────────────────────────────────────────────────
 
 --- Attach a system instance to an entity under a name.
--- Attached systems are updated automatically before the entity's own
--- update(dt). The entity reaches them as `entity.systems[name]` —
--- in the demo the player uses self.jump / self.health / self.animation.
+-- The system becomes `entity[name]` (the demo uses player.jump,
+-- player.health, player.animation) and is updated automatically before
+-- the entity's own update(dt). Pick names that do not collide with the
+-- entity's own fields or methods.
 -- @param entity  Entity instance
 -- @param name    Key to store the system under (e.g. "jump")
 -- @param system  System instance (any table with an update(dt) method)
 -- @return system
 function entitymanager:attach(entity, name, system)
-    if not entity.systems then
-        entity.systems = {}
-    end
     if not entity._systemOrder then
         entity._systemOrder = {}
     end
-    if not entity.systems[name] then
+    local known = false
+    for i = 1, #entity._systemOrder do
+        if entity._systemOrder[i] == name then
+            known = true
+            break
+        end
+    end
+    if not known then
         entity._systemOrder[#entity._systemOrder + 1] = name
     end
-    entity.systems[name] = system
+    entity[name] = system
     return system
 end
 
@@ -247,14 +252,16 @@ end
 -- @param name    Key used in attach()
 -- @return system|nil  The detached system
 function entitymanager:detach(entity, name)
-    if not entity.systems or not entity.systems[name] then
+    local system = entity[name]
+    if not system then
         return nil
     end
-    local system = entity.systems[name]
-    entity.systems[name] = nil
-    for i = #entity._systemOrder, 1, -1 do
-        if entity._systemOrder[i] == name then
-            table.remove(entity._systemOrder, i)
+    entity[name] = nil
+    if entity._systemOrder then
+        for i = #entity._systemOrder, 1, -1 do
+            if entity._systemOrder[i] == name then
+                table.remove(entity._systemOrder, i)
+            end
         end
     end
     return system

@@ -248,13 +248,14 @@ describe("Entity manager", function()
 
         em:add(e)
         assert.equals(system, em:attach(e, "health", system))
-        assert.equals(system, e.systems.health)
+        assert.equals(system, e.health)      -- reachable as entity.<name>
 
         clear(log)
         em:update(0.016)
         assert.are.same({ "sys", "update:e" }, log)
 
         assert.equals(system, em:detach(e, "health"))
+        assert.is_nil(e.health)
         clear(log)
         em:update(0.016)
         assert.are.same({ "update:e" }, log)
