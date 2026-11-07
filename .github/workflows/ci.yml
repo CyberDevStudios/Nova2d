@@ -1,0 +1,66 @@
+name: CI
+
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main, develop]
+
+jobs:
+  lint-and-test:
+    name: Lint & tests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install Lua 5.1 and LuaRocks
+        uses: leafo/gh-actions-lua@v10
+        with:
+          luaVersion: "5.1"
+
+      - uses: leafo/gh-actions-luarocks@v4
+
+      - name: Install luacheck and busted
+        run: |
+          luarocks install luacheck
+          luarocks install busted
+
+      - name: Lint
+        run: luacheck src main.lua tests
+
+      - name: Test
+        run: busted --verbose
+
+  love-smoke:
+    name: Love2D boot smoke test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install Love2D and Xvfb
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y love xvfb
+
+      - name: Boot the game for a few seconds
+        run: |
+          # A boot error exits non-zero; a healthy game keeps running until
+          # timeout kills it (exit code 124).
+          set +e
+          timeout 8 xvfb-run -a love .
+          code=$?
+          if [ "$code" -eq 124 ]; then
+            echo "Game booted and ran until the timeout."
+            exit 0
+          fi
+          echo "Unexpected exit code: $code"
+          exit "$code"
+
+  installer-checksum:
+    name: Installer checksum
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Verify install.sh matches install.sh.sha256
+        run: sha256sum -c install.sh.sha256
