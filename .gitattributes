@@ -1,0 +1,10 @@
+# Source archives (.tar.gz) honor these rules: development-only files
+# are not shipped to installer users.
+openspec export-ignore
+AGENTS.md export-ignore
+.atl export-ignore
+
+# Keep line endings stable — install.sh.sha256 depends on the exact bytes.
+* text=auto
+install.sh text eol=lf
+*.lua text eol=lf
